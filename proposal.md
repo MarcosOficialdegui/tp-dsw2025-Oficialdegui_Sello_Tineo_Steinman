@@ -9,7 +9,7 @@
 * 51662 - Alejo - Steinman
 
 ### Repositorios
-* [fullstack app]: (https://github.com/TomasTineo/Complejos-futbol)
+* [fullstack app](https://github.com/TomasTineo/Complejos-futbol)
 
 ## Tema
 ### 
