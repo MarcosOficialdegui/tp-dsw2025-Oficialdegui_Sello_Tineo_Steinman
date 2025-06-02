@@ -34,5 +34,5 @@ Regularidad:
 
 |Req|Detalle|
 |:-|:-|
-|CRUD simple|1. CRUD Propietario de Canchas.<br> 2. CRUD Cancha. <br> 3. CRUD Reserva. <br> 4. CRUD Usuario.  <br> 5. CRUD Tipo de cancha, <br> 6.CRUD Localidad. <br> 7. Gestión de Reservas. <br> 8. CRUD Cuota Mensual 
+|CRUD simple|1. CRUD Propietario de Canchas.<br> 2. CRUD Cancha. <br> 3. CRUD Reserva. <br> 4. CRUD Usuario.  <br> 5. CRUD Tipo de cancha, <br> 6. CRUD Localidad. <br> 7. Gestión de Reservas. <br> 8. CRUD Cuota Mensual 
 |CUU/Epic| 1.Registro de propietarios. <br> 2.Publicar canchas.<br> 3. Registro usuarios. <br> 4. Reservar cancha. <br> 5. Pago reserva. <br> 6. Gestion de reservas.
