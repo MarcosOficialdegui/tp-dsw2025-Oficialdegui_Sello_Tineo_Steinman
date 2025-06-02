@@ -14,7 +14,7 @@
 ## Tema
 ### 
 ### Descripcion 
-Aplicación web para realizar alquileres de canchas de fútbol 5, fútbol 7, pádel y tenis. Los propietarios tendrán la opción de publicar sus respectivas canchas. Los usuarios podrán visualizar su disponibilidad y su precio. Los usuarios ademas podran abonar las reservas por la misma.
+Aplicación web para realizar alquileres de canchas de fútbol 5, fútbol 7, pádel y tenis. El propietario, quien puede poseer varios complejos, tendrá la opción de publicar sus respectivas canchas. Los usuarios podrán visualizar su disponibilidad y su precio. Los usuarios ademas podran abonar las reservas por la misma.
 
 ### Modelo de Dominio
  ![md-dsw.png](https://i.postimg.cc/0Nj3SvBb/MDCanchas.jpg)
