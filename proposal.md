@@ -28,7 +28,7 @@ Regularidad:
 |:-|:-|
 |CRUD simple|1. CRUD Complejo.<br> 2. CRUD Cancha. <br> 3. CRUD Reserva. <br> |
 |CRUD dependiente|1. CRUD Tipo de cancha {depende de} CRUD Cancha. <br>2. CRUD Localidad {depende de} CRUD Complejo|
-|CUU/Epic|1. Registrarse como propietario de canchas. <br>2. Publicar una cancha. <br> 3. Reservar una cancha|
+|CUU/Epic|1. Registrarse como propietario de canchas. <br>2. Publicar una cancha. <br> 3. Registrarse como Usuario <br> 4. Reservar una cancha <br> 5. Realizar el pago de una reserva <br> 6. Gestionar reservas como propietario o usuario|
 
 ### Adicional Para Aprobacion 
 
