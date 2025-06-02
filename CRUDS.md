@@ -1,20 +1,20 @@
-## CRUD Propietario de Canchas:
-* Crear: Permite a los propietarios de canchas registrarse en la plataforma proporcionando información básica como nombre, dirección y tipo de canchas que ofrecen.
-* Leer: Permite ver los detalles de los propietarios registrados, incluyendo información sobre las canchas que administran.
-* Actualizar: Permite a los propietarios actualizar la información de su perfil o las características de las canchas que ofrecen.
-* Eliminar: Permite a los propietarios eliminar su cuenta y las canchas asociadas si ya no desean utilizar la plataforma.
+## CRUD Complejo de Canchas:
+* Crear: Permite al propietario de las canchas registrar sus complejos en la plataforma proporcionando información básica como dirección, cantidad y tipo de canchas que ofrecen.
+* Leer: Permite ver los detalles del complejo registrado, incluyendo información sobre las canchas que administran.
+* Actualizar: Permite a los propietarios actualizar la información de los complejos.
+* Eliminar: Permite a los propietarios eliminar complejos.
 
 ## CRUD Cancha:
 * Crear: Los propietarios pueden agregar nuevas canchas a la plataforma, especificando detalles como el tipo de deporte, tipo de césped, ubicación y precio de alquiler.
 * Leer: Los usuarios pueden buscar y ver las canchas disponibles, filtrando por criterios como tipo de deporte, ubicación y precio.
 * Actualizar: Los propietarios pueden actualizar la disponibilidad horaria y los precios de sus canchas en la plataforma.
-Eliminar: Los propietarios pueden retirar una cancha de la plataforma si ya no está disponible para alquiler.
+* Eliminar: Los propietarios pueden retirar una cancha de la plataforma si ya no está disponible para alquiler.
 
 ## CRUD Usuario:
 * Crear: Permite a los usuarios registrarse en la plataforma proporcionando información básica como nombre, correo electrónico y número de teléfono.
 * Leer: Los usuarios pueden ver su perfil y detalles de su cuenta.
 * Actualizar: Los usuarios pueden actualizar su información personal o preferencias en la plataforma.
-Eliminar: Los usuarios pueden eliminar su cuenta si ya no desean utilizar la plataforma.
+* Eliminar: Los usuarios pueden eliminar su cuenta si ya no desean utilizar la plataforma.
 
 ## CRUD Reserva:
 * Crear: Permite a los usuarios reservar una cancha seleccionando la fecha, hora y duración del alquiler.
@@ -22,20 +22,8 @@ Eliminar: Los usuarios pueden eliminar su cuenta si ya no desean utilizar la pla
 * Actualizar: Tanto los usuarios como los propietarios pueden solicitar cambios en las reservas existentes, como modificar la fecha o la duración del alquiler.
 * Eliminar: Los usuarios pueden cancelar sus reservas, y los propietarios pueden cancelar reservas en caso de emergencia o circunstancias especiales.
 
-## CRUD Cuota Mensual:
-* Crear: Permite a los propietarios pagar la cuota mensual para mantener sus canchas publicadas en la plataforma.
-* Leer: Los propietarios pueden ver el estado de su suscripción y el historial de pagos de cuotas mensuales.
-* Actualizar: Los propietarios pueden actualizar su método de pago o la información de facturación asociada a la cuota mensual.
-* Eliminar: No aplica.
-
-## CRUD Gestión de Reservas:
-* Crear: No aplica.
-* Leer: Los propietarios y usuarios pueden ver y gestionar sus reservas existentes en la plataforma.
-* Actualizar: Tanto los propietarios como los usuarios pueden solicitar cambios en las reservas existentes.
-* Eliminar: Los propietarios pueden cancelar reservas en caso de emergencia o circunstancias especiales, y los usuarios pueden cancelar sus reservas dentro de un período de tiempo especificado.
-
 ## Casos de Uso/Epic:
-* Registrarse como propietario de canchas: Permite a los propietarios de canchas registrarse en la plataforma y publicar sus canchas.
+* Registrarse como propietario de canchas: Permite a los propietarios de canchas registrarse en la plataforma como administrador y publicar sus canchas.
 * Publicar una cancha: Permite a los propietarios agregar nuevas canchas a la plataforma.
 * Registrarse como usuario: Permite a los usuarios registrarse en la plataforma para buscar y reservar canchas.
 * Reservar una cancha: Permite a los usuarios reservar una cancha para una fecha y hora específicas.
