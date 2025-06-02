@@ -26,8 +26,8 @@ Aplicación web para realizar alquileres de canchas de fútbol 5, fútbol 7, pá
 Regularidad:
 |Req|Detalle|
 |:-|:-|
-|CRUD simple|1. CRUD Propietario.<br> 2. CRUD Cancha. <br> 3. CRUD Reserva. <br> |
-|CRUD dependiente|1. CRUD Tipo de cancha {depende de} CRUD Cancha. <br>2. CRUD Localidad {depende de} CRUD Propietario|
+|CRUD simple|1. CRUD Complejo.<br> 2. CRUD Cancha. <br> 3. CRUD Reserva. <br> |
+|CRUD dependiente|1. CRUD Tipo de cancha {depende de} CRUD Cancha. <br>2. CRUD Localidad {depende de} CRUD Complejo|
 |CUU/Epic|1. Registrarse como propietario de canchas. <br>2. Publicar una cancha. <br> 3. Reservar una cancha|
 
 ### Adicional Para Aprobacion 
