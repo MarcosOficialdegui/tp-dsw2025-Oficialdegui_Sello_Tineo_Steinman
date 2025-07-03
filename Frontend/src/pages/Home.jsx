@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import api from '../services/api';
 import CanchaCard from '../components/CanchaCard';
-import './Home.css'; // importar el CSS
+import './Home.css';
 
 function Home() {
   const [canchas, setCanchas] = useState([]);

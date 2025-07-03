@@ -9,3 +9,6 @@ app.get('/api', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });
+
+const complejosRoutes = require('./routes/complejos');
+app.use('/api/complejos', complejosRoutes);
