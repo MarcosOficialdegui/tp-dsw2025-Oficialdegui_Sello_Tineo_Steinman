@@ -1,4 +1,4 @@
-// Backend/models/Cancha.js
+
 const mongoose = require('mongoose');
 
 const canchaSchema = new mongoose.Schema({
