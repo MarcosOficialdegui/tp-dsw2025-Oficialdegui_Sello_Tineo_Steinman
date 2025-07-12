@@ -16,12 +16,12 @@
 * Actualizar: Los usuarios pueden actualizar su información personal o preferencias en la plataforma.
 * Eliminar: Los usuarios pueden eliminar su cuenta si ya no desean utilizar la plataforma.
 
-## CRUD Reserva:
-* Crear: Permite a los usuarios reservar una cancha seleccionando la fecha, hora y duración del alquiler.
-* Leer: Los usuarios y propietarios pueden ver las reservas existentes, incluyendo detalles como la fecha, hora y duración del alquiler.
-* Actualizar: Tanto los usuarios como los propietarios pueden solicitar cambios en las reservas existentes, como modificar la fecha o la duración del alquiler.
-* Eliminar: Los usuarios pueden cancelar sus reservas, y los propietarios pueden cancelar reservas en caso de emergencia o circunstancias especiales.
-
+## CRUD Reseña:
+* Crear: Permite a los usuarios crear reseñas anonimas sobre la empresa de complejos deportivos.
+* Leer: Los demás usuarios pueden leer las reseñas ya escritas por otros.
+* Actualizar: Permite al usuario que escribió una reseña modificarla.
+* Eliminar: Permite al usuario que escribió una reseña eliminarla.
+  
 ## Casos de Uso/Epic:
 * Registrarse como propietario de canchas: Permite a los propietarios de canchas registrarse en la plataforma como administrador y publicar sus canchas.
 * Publicar una cancha: Permite a los propietarios agregar nuevas canchas a la plataforma.
@@ -41,3 +41,9 @@
 * Leer: Los propietarios pueden ver las localidades asociadas con sus instalaciones.
 * Actualizar: Los propietarios pueden actualizar la información sobre la localidad de sus instalaciones.
 * Eliminar: Los propietarios pueden eliminar localidades si ya no son relevantes para sus instalaciones.
+
+## CRUD Reserva (Dependiente de Cancha):
+* Crear: Permite a los usuarios reservar una cancha seleccionando la fecha, hora y duración del alquiler. Genera un número de reserva.
+* Leer: Los usuarios y propietarios pueden ver las reservas existentes, incluyendo detalles como la fecha, hora y duración del alquiler.
+* Actualizar: Tanto los usuarios como los propietarios pueden solicitar cambios en las reservas existentes, como modificar la fecha o la duración del alquiler.
+* Eliminar: Los usuarios pueden cancelar sus reservas, y los propietarios pueden cancelar reservas en caso de emergencia o circunstancias especiales.
