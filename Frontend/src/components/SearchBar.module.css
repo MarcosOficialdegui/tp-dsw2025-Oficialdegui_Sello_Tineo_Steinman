@@ -1,0 +1,40 @@
+.searchBar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.2rem;
+  background-color: #f5fff6;
+  border: 1px solid #d1e7dd;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 128, 0, 0.1);
+  margin: 2rem auto;
+  max-width: 950px;
+  flex-wrap: wrap;
+}
+
+.searchBar select,
+.dateInput {
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #ffffff;
+  color: #333;
+  transition: all 0.2s ease-in-out;
+  min-width: 180px;
+  cursor: pointer;
+}
+
+.searchBar select:hover,
+.dateInput:hover {
+  border-color: #52b788;
+  box-shadow: 0 0 5px rgba(82, 183, 136, 0.4);
+}
+
+.searchBar select:focus,
+.dateInput:focus {
+  outline: none;
+  border-color: #40916c;
+  box-shadow: 0 0 8px rgba(64, 145, 108, 0.5);
+}
