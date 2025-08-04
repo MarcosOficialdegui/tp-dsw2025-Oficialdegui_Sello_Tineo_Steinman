@@ -4,23 +4,24 @@ import styles from "./SearchBar.module.css";
 type Props = {
   filters: {
     ciudad: string;
-    deporte: string;
+    tipoCancha: string;
     fecha: string;
   };
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  onSearch: () => void; 
 };
 
-const SearchBar: React.FC<Props> = ({ filters, onChange }) => {
+const SearchBar: React.FC<Props> = ({ filters, onChange, onSearch }) => {
   return (
     <div className={styles.searchBar}>
       <select name="ciudad" value={filters.ciudad} onChange={onChange}>
         <option value="" disabled>📍Ciudad</option>
         <option value="Rosario">Rosario</option>
-        <option value="Córdoba">Córdoba</option>
-        <option value="Buenos Aires">Buenos Aires</option>
+        <option value="Funes">Funes</option>
+        <option value="Roldan">Roldan</option>
       </select>
 
-      <select name="deporte" value={filters.deporte} onChange={onChange}>
+      <select name="tipoCancha" value={filters.tipoCancha} onChange={onChange}>
         <option value="" disabled>🏃 Deporte</option>
         <option value="futbol5">⚽Fútbol 5</option>
         <option value="futbol7">⚽Fútbol 7</option>
@@ -33,6 +34,8 @@ const SearchBar: React.FC<Props> = ({ filters, onChange }) => {
         value={filters.fecha}
         onChange={onChange}
       />
+
+      <button onClick={onSearch}>🔍 Buscar</button>
     </div>
   );
 };
