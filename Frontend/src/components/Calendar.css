@@ -1,0 +1,117 @@
+/* Estilos para el componente Calendar */
+
+.calendar-container {
+  background-color: var(--card);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--card-foreground);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.calendar-section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--card-foreground);
+  margin-bottom: 1rem;
+}
+
+.calendar-date-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 0.5rem;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.calendar-date-btn {
+  padding: 0.75rem 0.5rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background-color: var(--background);
+  color: var(--foreground);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.calendar-date-btn.selected {
+  border: 2px solid var(--primary);
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.calendar-date-btn .day {
+  font-weight: 600;
+}
+
+.calendar-date-btn .month,
+.calendar-date-btn .weekday {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.calendar-time-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 0.5rem;
+}
+
+.calendar-time-btn {
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background-color: var(--background);
+  color: var(--foreground);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+  opacity: 1;
+}
+
+.calendar-time-btn.selected {
+  border: 2px solid var(--primary);
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.calendar-time-btn.unavailable {
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.calendar-reserve-section {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.calendar-reserve-btn {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: var(--radius);
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.calendar-reserve-btn:hover {
+  background-color: var(--secondary);
+}
+
+.calendar-reserve-info {
+  margin-top: 1rem;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}

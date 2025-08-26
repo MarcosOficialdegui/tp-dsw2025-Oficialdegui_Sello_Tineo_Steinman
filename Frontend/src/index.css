@@ -8,3 +8,41 @@ body {
   font-family: sans-serif;
   background-color: #f9f9f9;
 }
+
+:root {
+  --background: #ffffff;
+  --foreground: #475569;
+  --card: #f1f5f9;
+  --card-foreground: #374151;
+  --popover: #ffffff;
+  --popover-foreground: #475569;
+  --primary: #059669;
+  --primary-foreground: #ffffff;
+  --secondary: #10b981;
+  --secondary-foreground: #ffffff;
+  --muted: #f1f5f9;
+  --muted-foreground: #374151;
+  --accent: #10b981;
+  --accent-foreground: #ffffff;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #e5e7eb;
+  --input: #f9fafb;
+  --ring: rgba(5, 150, 105, 0.5);
+  --chart-1: #34d399;
+  --chart-2: #22c55e;
+  --chart-3: #16a34a;
+  --chart-4: #15803d;
+  --chart-5: #059669;
+  --radius: 0.5rem;
+  --sidebar: #f1f5f9;
+  --sidebar-foreground: #374151;
+  --sidebar-primary: #ffffff;
+  --sidebar-primary-foreground: #475569;
+  --sidebar-accent: #10b981;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #e5e7eb;
+  --sidebar-ring: rgba(5, 150, 105, 0.5);
+}
+
+
