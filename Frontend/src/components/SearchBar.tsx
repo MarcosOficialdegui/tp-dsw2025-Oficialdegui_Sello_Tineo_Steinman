@@ -1,41 +1,58 @@
 import React from "react";
 import styles from "./SearchBar.module.css";
 
-type Props = {
-  filters: {
-    ciudad: string;
-    tipoCancha: string;
-    fecha: string;
-  };
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
-  onSearch: () => void; 
+type Filtros = {
+  ciudad: string;
+  tipoCancha: string;
+  fecha: string;
 };
 
-const SearchBar: React.FC<Props> = ({ filters, onChange, onSearch }) => {
+type SearchBarProps = {
+  filters: Filtros;
+  onChange: (name: keyof Filtros, value: string) => void;
+  onSearch: () => void;
+};
+
+const SearchBar: React.FC<SearchBarProps> = ({ filters, onChange, onSearch }) => {
   return (
-    <div className={styles.searchBar}>
-      <select name="ciudad" value={filters.ciudad} onChange={onChange}>
-        <option value="" disabled>📍Ciudad</option>
+    <div className={styles.container}>
+      {/* Ciudad */}
+      <select
+        value={filters.ciudad}
+        onChange={(e) => onChange("ciudad", e.target.value)}
+        className={styles.select}
+      >
+        <option value="">🌆 Seleccionar ciudad</option>
         <option value="Rosario">Rosario</option>
-        <option value="Funes">Funes</option>
-        <option value="Roldan">Roldan</option>
+        <option value="Buenos Aires">Buenos Aires</option>
+        <option value="Córdoba">Córdoba</option>
       </select>
 
-      <select name="tipoCancha" value={filters.tipoCancha} onChange={onChange}>
-        <option value="" disabled>🏃 Deporte</option>
-        <option value="futbol5">⚽Fútbol 5</option>
-        <option value="futbol7">⚽Fútbol 7</option>
-        <option value="padel">🎾Pádel</option>
+      {/* Tipo de Cancha */}
+      <select
+        value={filters.tipoCancha}
+        onChange={(e) => onChange("tipoCancha", e.target.value)}
+        className={styles.select}
+      >
+        <option value="">⚽ Seleccionar deporte</option>
+        <option value="futbol5">Fútbol 5</option>
+        <option value="futbol7">Fútbol 7</option>
+        <option value="padel">Pádel</option>
+        <option value="tenis">Tenis</option>
       </select>
 
+      {/* Fecha */}
       <input
         type="date"
-        name="fecha"
         value={filters.fecha}
-        onChange={onChange}
+        onChange={(e) => onChange("fecha", e.target.value)}
+        className={styles.input}
       />
 
-      <button onClick={onSearch}>🔍 Buscar</button>
+      {/* Botón de búsqueda */}
+      <button onClick={onSearch} className={styles.button}>
+        🔍 Buscar
+      </button>
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import SearchBar from '../components/SearchBar';
+import Footer from '../components/Footer';
 
 type Complejo = {
   _id: string;
@@ -47,10 +48,10 @@ const Home = () => {
   return (
     <div>
       <SearchBar
-        filters={filters}
-        onChange={handleFilterChange}
-        onSearch={() => buscarComplejos(filters)}
-      />
+  filters={filters}
+  onChange={handleFilterChange}
+  onSearch={() => buscarComplejos(filters)}
+/>
 
       <div>
         <h2>Complejos encontrados:</h2>
@@ -68,6 +69,7 @@ const Home = () => {
           </ul>
         )}
       </div>
+      <Footer></Footer>
     </div>
   );
 };

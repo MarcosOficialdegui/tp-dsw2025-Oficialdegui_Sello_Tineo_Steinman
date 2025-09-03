@@ -1,40 +1,56 @@
-.searchBar {
+.container {
   display: flex;
-  justify-content: center;
+  gap: 12px;
   align-items: center;
-  gap: 1rem;
-  padding: 1.2rem;
-  background-color: #f5fff6;
-  border: 1px solid #d1e7dd;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 128, 0, 0.1);
-  margin: 2rem auto;
-  max-width: 950px;
-  flex-wrap: wrap;
-}
-
-.searchBar select,
-.dateInput {
-  padding: 0.7rem 1rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
+  padding: 12px;
+  background-color: #f9f9f9;
   border-radius: 10px;
-  background-color: #ffffff;
-  color: #333;
-  transition: all 0.2s ease-in-out;
-  min-width: 180px;
-  cursor: pointer;
+  margin-bottom: 20px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.searchBar select:hover,
-.dateInput:hover {
-  border-color: #52b788;
-  box-shadow: 0 0 5px rgba(82, 183, 136, 0.4);
+.select {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background-color: white;
+  transition: border 0.2s ease-in-out;
 }
 
-.searchBar select:focus,
-.dateInput:focus {
+.select:focus {
+  border: 1px solid #2e7d32;
   outline: none;
-  border-color: #40916c;
-  box-shadow: 0 0 8px rgba(64, 145, 108, 0.5);
+}
+
+.input {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  transition: border 0.2s ease-in-out;
+}
+
+.input:focus {
+  border: 1px solid #2e7d32;
+  outline: none;
+}
+
+.button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  background-color: #2e7d32;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.button:hover {
+  background-color: #1b5e20;
+}
+
+.button:active {
+  transform: scale(0.97);
 }
