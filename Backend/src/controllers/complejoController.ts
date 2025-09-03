@@ -1,17 +1,11 @@
-import { Request, Response } from 'express';
-import Complejo from '../models/Complejo';
+import { Request, Response } from "express";
+import Complejo from "../models/Complejo";
 
-export const getComplejos = async (req: Request, res: Response) => {
+export const getComplejos = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { ciudad, tipo } = req.query;
-
-    const query: any = {};
-    if (ciudad) query.ciudad = ciudad;
-    if (tipo) query['canchas.tipo'] = tipo;
-
-    const complejos = await Complejo.find(query);
+    const complejos = await Complejo.find().populate("canchas");
     res.json(complejos);
-  } catch (err) {
-    res.status(500).json({ error: 'Error al obtener complejos' });
+  } catch (error) {
+    res.status(500).json({ error: "Error al obtener complejos" });
   }
 };

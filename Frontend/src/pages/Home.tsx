@@ -1,75 +1,72 @@
-import { useState } from 'react';
-import SearchBar from '../components/SearchBar';
-import Footer from '../components/Footer';
+import { useEffect, useState } from "react";
+import SearchBar from "../components/SearchBar";
+import Footer from "../components/Footer";
+
+type Cancha = {
+  _id: string;
+  tipoCancha: string;
+  precioHora: number;
+};
 
 type Complejo = {
   _id: string;
   nombre: string;
   direccion: string;
   localidad: string;
-};
-
-type Filtros = {
-  ciudad: string;
-  tipoCancha: string;
-  fecha: string;
+  canchas: Cancha[];
 };
 
 const Home = () => {
-  const [filters, setFilters] = useState<Filtros>({
-    ciudad: '',
-    tipoCancha: '',
-    fecha: '',
-  });
-
   const [complejos, setComplejos] = useState<Complejo[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleFilterChange = (name: keyof Filtros, value: string) => {
-    setFilters((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  useEffect(() => {
+    const fetchComplejos = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/complejos");
+        const data = await res.json();
+        setComplejos(data);
+      } catch (error) {
+        console.error("Error al traer complejos", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const buscarComplejos = async (filtros: Filtros) => {
-    console.log('Buscando con filtros:', filtros);
-    try {
-      const res = await fetch(
-        `http://localhost:3000/api/complejos?ciudad=${filtros.ciudad}&tipo=${filtros.tipoCancha}`
-      );
-      const data = await res.json();
-      console.log('Recibidos:', data);
-      setComplejos(data);
-    } catch (error) {
-      console.error('Error al buscar complejos', error);
-    }
-  };
+    fetchComplejos();
+  }, []);
 
   return (
     <div>
       <SearchBar
-  filters={filters}
-  onChange={handleFilterChange}
-  onSearch={() => buscarComplejos(filters)}
-/>
+        filters={{ ciudad: "", tipoCancha: "", fecha: "" }}
+        onChange={() => {}}
+        onSearch={() => {}}
+      />
 
       <div>
-        <h2>Complejos encontrados:</h2>
-        {complejos.length === 0 ? (
-          <p>No se encontraron complejos</p>
+        <h2>Complejos disponibles:</h2>
+        {loading ? (
+          <p>Cargando...</p>
+        ) : complejos.length === 0 ? (
+          <p>No hay complejos cargados.</p>
         ) : (
           <ul>
-            {complejos.map((complejo) => (
-              <li key={complejo._id}>
-                <h3>{complejo.nombre}</h3>
-                <p>Dirección: {complejo.direccion}</p>
-                <p>Ciudad: {complejo.localidad}</p>
+            {complejos.map((c) => (
+              <li key={c._id}>
+                <h3>{c.nombre}</h3>
+                <p>📍 {c.localidad} – {c.direccion}</p>
+                <p>
+                  Canchas:{" "}
+                  {c.canchas.map((cancha) => cancha.tipoCancha).join(", ")}
+                </p>
               </li>
             ))}
           </ul>
         )}
       </div>
-      <Footer></Footer>
+
+      <Footer />
     </div>
   );
 };
