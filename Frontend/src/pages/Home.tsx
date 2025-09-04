@@ -23,7 +23,7 @@ const Home = () => {
   useEffect(() => {
     const fetchComplejos = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/complejos");
+        const res = await fetch("http://localhost:3000/api/complejos");
         const data = await res.json();
         setComplejos(data);
       } catch (error) {
