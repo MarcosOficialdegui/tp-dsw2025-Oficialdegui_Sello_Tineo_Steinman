@@ -1,28 +1,29 @@
-import { Schema, model } from 'mongoose';
+import mongoose, { Schema, Document } from "mongoose";
 
-interface Cancha {
-  tipo: 'futbol5' | 'futbol7' | 'padel';
-  cantidad: number;
+interface ICancha {
+  tipoCancha: string;
+  precioHora: number;
+  disponible: boolean;
 }
 
-interface Complejo {
+export interface IComplejo extends Document {
   nombre: string;
-  ciudad: string;
   direccion: string;
-  canchas: Cancha[];
+  ciudad: string; 
+  canchas: ICancha[];
 }
 
-const canchaSchema = new Schema<Cancha>({
-  tipo: { type: String, enum: ['futbol5', 'futbol7', 'padel'], required: true },
-  cantidad: { type: Number, required: true },
+const CanchaSchema = new Schema<ICancha>({
+  tipoCancha: { type: String, required: true },
+  precioHora: { type: Number, required: true },
+  disponible: { type: Boolean, default: true },
 });
 
-const complejoSchema = new Schema<Complejo>({
+const ComplejoSchema = new Schema<IComplejo>({
   nombre: { type: String, required: true },
-  ciudad: { type: String, required: true },
   direccion: { type: String, required: true },
-  canchas: [canchaSchema],
+  ciudad: { type: String, required: true }, 
+  canchas: [CanchaSchema],
 });
 
-export default model<Complejo>('Complejo', complejoSchema);
-
+export default mongoose.model<IComplejo>("Complejo", ComplejoSchema);
