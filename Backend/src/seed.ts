@@ -1,4 +1,7 @@
 
+
+
+
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import Complejo from "./models/Complejo";
@@ -55,4 +58,5 @@ async function seed() {
   }
 }
 
-seed();
+seed(); 
+

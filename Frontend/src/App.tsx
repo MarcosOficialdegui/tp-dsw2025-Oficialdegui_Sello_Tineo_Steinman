@@ -1,14 +1,20 @@
 import Header from './components/Header';
 import Home from './pages/Home';
+import UsuarioFormRegistro from './pages/UsuarioFormRegistro';
 
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
     <>
+      
+      <BrowserRouter>
       <Header />
-      <Home/>
-      <main>
-      </main>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/registrarse" element={<UsuarioFormRegistro />} />
+      </Routes>
+      </BrowserRouter>
     </>
   );
 }

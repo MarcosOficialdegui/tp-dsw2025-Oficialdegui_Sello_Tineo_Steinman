@@ -5,6 +5,7 @@ import cors from "cors";
 
 import complejosRoutes from "./routes/complejos";
 import canchasRoutes from "./routes/canchas";
+import usuariosRoutes from "./routes/usuarios";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 // Rutas
 app.use("/api/complejos", complejosRoutes);
 app.use("/api/canchas", canchasRoutes);
+app.use("/api/usuarios", usuariosRoutes);
 
 
 const PORT = process.env.PORT || 5000;
