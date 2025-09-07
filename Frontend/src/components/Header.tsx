@@ -18,7 +18,7 @@ export default function Header() {
           <a href="/complejos">Complejos</a>
           <a href="/contacto">Contacto</a>
           <a href="/registrarse">Registrarse</a>
-          <a href="/registrarse">Iniciar Sesion</a>
+          <a href="/login">Iniciar Sesion</a>
         </nav>
       </div>
     </header>

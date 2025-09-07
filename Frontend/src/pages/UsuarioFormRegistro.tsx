@@ -1,4 +1,4 @@
-import "./UsuarioFormRegistro.css";
+import "./UsuarioForm.css";
 import { useState } from "react";
 
 
@@ -14,7 +14,7 @@ export default function UsuarioFormRegistro() {
         apellido: "",
         email: "",
         password: "",
-        rol: "usuario" 
+        rol: "usuario"
     });
 
 
@@ -40,7 +40,16 @@ export default function UsuarioFormRegistro() {
             }
         };
 
-        enviarDatos();
+        const verificarPassword = () => {
+            if (formData.password !== (document.getElementById("passwordCheck") as HTMLInputElement).value) {
+                alert("Las contraseñas no coinciden");
+                return false;
+            } else { return true }
+        }
+
+        if (verificarPassword()) {
+            enviarDatos();
+        }
     }
 
 
@@ -49,29 +58,34 @@ export default function UsuarioFormRegistro() {
 
     return (
         <>
-            <form className="main-content" onSubmit={handleSubmit}>
-                <h1>Registro de Usuario</h1>
 
-                <input type="text" id="nombre" name="nombre" placeholder="Nombre"
-                    onChange={e => setFormData({ ...formData, nombre: e.target.value })} required />
-                <br />
-                <input type="text" id="apellido" name="apellido" placeholder="Apellido"
-                    onChange={e => setFormData({ ...formData, apellido: e.target.value })} required />
-                <br />
-                <input type="email" id="email" name="email" placeholder="Email"
-                    onChange={e => setFormData({ ...formData, email: e.target.value })} required />
-                <br />
-                <input type="password" id="password" name="password" placeholder="Contraseña"
-                    onChange={e => setFormData({ ...formData, password: e.target.value })} required />
-                <br />
-                <input type="password" id="passwordCheck" name="passwordCheck" placeholder="Confirmar contraseña"
-                />
-                <br />
+            <div className="form-container">
 
-                <button type="submit">Registrarse</button>
 
-                <p>Al registrarse acepta los <a className="texto-resaltado" onClick={handleContactoClick}>Terminos y Condiciones.</a></p>
-            </form>
+                <form className="main-content" onSubmit={handleSubmit}>
+                    <h1>Registro de Usuario</h1>
+
+                    <input type="text" id="nombre" name="nombre" placeholder="Nombre"
+                        onChange={e => setFormData({ ...formData, nombre: e.target.value })} required />
+                    <br />
+                    <input type="text" id="apellido" name="apellido" placeholder="Apellido"
+                        onChange={e => setFormData({ ...formData, apellido: e.target.value })} required />
+                    <br />
+                    <input type="email" id="email" name="email" placeholder="Email"
+                        onChange={e => setFormData({ ...formData, email: e.target.value })} required />
+                    <br />
+                    <input type="password" id="password" name="password" placeholder="Contraseña"
+                        onChange={e => setFormData({ ...formData, password: e.target.value })} required />
+                    <br />
+                    <input type="password" id="passwordCheck" name="passwordCheck" placeholder="Confirmar contraseña"
+                    />
+                    <br />
+
+                    <button type="submit">Registrarse</button>
+
+                    <p>Al registrarse acepta los <a className="texto-resaltado" onClick={handleContactoClick}>Terminos y Condiciones.</a></p>
+                </form>
+            </div>
         </>
     );
 };

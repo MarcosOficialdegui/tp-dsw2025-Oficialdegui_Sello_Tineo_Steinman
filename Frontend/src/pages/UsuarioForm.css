@@ -3,7 +3,7 @@ form{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 50vh;
+    
 }
 
 button{
@@ -40,4 +40,17 @@ label {
   color: blue;
   text-decoration:underline;
   cursor: pointer;
+}
+
+.form-container {
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  height: auto;
+  background-color: #58ff585d;;
+  border-radius: 40px;
+  box-shadow: 0 0 10px #007d02;
+  padding-bottom: 80px;
+  margin-top: 40px;
 }
