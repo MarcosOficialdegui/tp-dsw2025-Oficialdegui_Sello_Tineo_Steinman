@@ -8,7 +8,6 @@ import "./Complejo.css"
 export default function Home() {
   return (
     <div className="complejo-container">
-      <Header />
 
 
 
