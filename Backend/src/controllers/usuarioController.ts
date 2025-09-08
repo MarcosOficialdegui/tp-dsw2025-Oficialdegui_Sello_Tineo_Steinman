@@ -1,5 +1,9 @@
 import { Request, Response } from 'express';
 import Usuario from '../models/Usuario';
+import jwt from "jsonwebtoken";
+
+
+const SECRET_KEY = "tu_clave_secreta_aqui"; // Cambiar esto por una clave  segura y mantenerla en un entorno seguro
 
 
 // Crear un nuevo usuario
@@ -35,11 +39,21 @@ export const findUsuario = async (req: Request, res: Response): Promise<void> =>
 
         const usuario = await Usuario.findOne({ email, password });
         if (usuario) {
-            res.status(200).json(usuario);
+            
+
+            // Generar token
+            const token = jwt.sign(
+                { id: usuario._id, email: usuario.email, rol: usuario.rol },
+                SECRET_KEY,
+                { expiresIn: '1h' });
+                 
+            res.json({ token });
+
+
         } else {
             res.status(404).json({ error: 'Usuario no encontrado o credenciales incorrectas' });
         }
-        
+
 
     } catch (error) {
         res.status(500).json({ error: 'Error al buscar el usuario' });

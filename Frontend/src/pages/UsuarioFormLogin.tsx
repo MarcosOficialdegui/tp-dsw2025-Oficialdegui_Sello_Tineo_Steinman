@@ -5,7 +5,7 @@ import { useState } from "react";
 
 export default function UsuarioFormLogin() {
 
-    
+
 
     const [formData, setFormData] = useState({
         email: "",
@@ -25,11 +25,23 @@ export default function UsuarioFormLogin() {
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(formData)
                 });
+
+                const data = await res.json();
+                
+
+
+
                 if (res.ok) {
                     alert("Inicio de sesion exitoso");
-                } else {
+                    console.log("Respuesta del servidor:", data.token);
+                    localStorage.setItem("token", data.token);
+                    window.location.href = "/"; // Redirigir a la página principal
+                    
+
+                } else {    
                     alert("El usuario no existe o las credenciales son incorrectas");
                 }
+                
             } catch (err) {
                 alert("Error de conexión");
             }
@@ -51,14 +63,14 @@ export default function UsuarioFormLogin() {
                 <form className="main-content" onSubmit={handleSubmit}>
                     <h1>Iniciar Sesion</h1>
 
-                    
+
                     <input type="email" id="email" name="email" placeholder="Email"
                         onChange={e => setFormData({ ...formData, email: e.target.value })} required />
                     <br />
                     <input type="password" id="password" name="password" placeholder="Contraseña"
                         onChange={e => setFormData({ ...formData, password: e.target.value })} required />
                     <br />
-                    
+
 
                     <button type="submit">Iniciar Sesion</button>
 

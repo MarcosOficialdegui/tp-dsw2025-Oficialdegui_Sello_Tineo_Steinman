@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SearchBar from "../components/SearchBar";
 import Footer from "../components/Footer";
 
@@ -30,6 +30,12 @@ const Home: React.FC = () => {
 
   const [complejos, setComplejos] = useState<Complejo[]>([]);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+
+    buscarComplejos(filters); // Buscar complejos al iniciar la pagina 
+
+  }, []);  
 
   // recibe (name, value)
   const handleFilterChange = (name: keyof Filtros, value: string) => {

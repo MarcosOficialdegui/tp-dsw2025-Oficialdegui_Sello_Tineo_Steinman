@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+
 export interface IUsuario extends mongoose.Document {
     nombre: string;
     apellido: string;
