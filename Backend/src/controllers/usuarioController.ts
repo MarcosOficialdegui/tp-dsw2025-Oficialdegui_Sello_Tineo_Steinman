@@ -28,7 +28,7 @@ export const createUsuario = async (req: Request, res: Response): Promise<void> 
 
 }
 
-export const findUsuario = async (req: Request, res: Response): Promise<void> => {
+export const generarToken = async (req: Request, res: Response): Promise<void> => {
 
     try {
         const { email, password } = req.body;
@@ -60,4 +60,21 @@ export const findUsuario = async (req: Request, res: Response): Promise<void> =>
     }
 
 
+}
+
+export const buscarUsuarioToken = async (req: Request, res: Response): Promise<void> => {
+    try{
+        const userId = (req as any).user.id;
+        const usuario = await Usuario.findById(userId).select('-password');
+
+        if(!usuario){
+            res.status(404).json({ error: 'Usuario no encontrado' });
+            return;
+        }
+
+        res.json(usuario); //Devolver el usuario encontrado con el token
+
+    }catch(error){
+        res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
+    }
 }

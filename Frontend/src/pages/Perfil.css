@@ -1,0 +1,50 @@
+.perfil-container{
+    background-color: rgba(1, 168, 1, 0.591);
+    width: 50%;
+    height: 50rem;
+    margin: 2rem;
+    justify-self: center;
+    border-radius: 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.avatar-container{
+    background-color: rgb(178, 255, 178);
+    width: 80%;
+    height: 20%;
+    margin: 2rem;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 5%;
+    box-shadow: 20px 20px 50px #0000002f;
+    
+}
+
+img{
+    width: 100px;
+    height: 100px;
+}
+
+.nombre-usuario{
+    margin-left: 2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.info-container{
+    
+    width: 80%;
+    height: 50%;
+    
+    
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    padding: 5%;
+    
+}
