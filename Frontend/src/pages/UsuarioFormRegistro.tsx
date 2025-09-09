@@ -17,11 +17,21 @@ export default function UsuarioFormRegistro() {
         rol: "usuario"
     });
 
+    const [validarPassword, setValidarPassword] = useState(false);
+    const [validarMail, setValidarMail] = useState(false);
 
+    
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Formulario enviado:", formData);
+
+
+        if(formData.password.length < 8){
+            setValidarPassword(true);
+            return;
+        }
+
+        
 
         const enviarDatos = async () => {
             try {
@@ -31,9 +41,12 @@ export default function UsuarioFormRegistro() {
                     body: JSON.stringify(formData)
                 });
                 if (res.ok) {
+                    setValidarMail(false);
+                    setValidarPassword(false);
                     alert("Usuario registrado con éxito");
+                    window.location.href = "/login";
                 } else {
-                    alert("Error al registrar usuario");
+                    alert(res.status === 400 ? "El email ya se encuentra registrado" : "Error al registrar el usuario");
                 }
             } catch (err) {
                 alert("Error de conexión");
@@ -84,6 +97,15 @@ export default function UsuarioFormRegistro() {
                     <button type="submit">Registrarse</button>
 
                     <p>Al registrarse acepta los <a className="texto-resaltado" onClick={handleContactoClick}>Terminos y Condiciones.</a></p>
+                    <p>¿Ya tienes una cuenta? <a className="texto-resaltado" href="/login">Iniciar sesión</a></p>
+
+                    <div>
+
+                        {validarPassword && <p className="error">La contraseña debe tener mas de 7 caracteres</p>}
+                        {validarMail && <p className="error">El email ya se encuentra registrado</p>}
+                        
+                    </div>
+
                 </form>
             </div>
         </>

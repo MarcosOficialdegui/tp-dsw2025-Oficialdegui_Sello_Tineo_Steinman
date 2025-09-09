@@ -29,6 +29,8 @@ const Perfil = () => {
 
             if (!token) {
                 console.error("No se encontró el token de autenticación.");
+                localStorage.removeItem("token");
+                window.location.href = "/"; 
                 return;
             }
 
@@ -42,6 +44,9 @@ const Perfil = () => {
 
             if (!data.ok) {
                 console.error("Error en la respuesta del servidor:", data.statusText);
+                
+                localStorage.removeItem("token");
+                window.location.href = "/"; 
                 return;
             }
 

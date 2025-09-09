@@ -54,3 +54,8 @@ label {
   padding-bottom: 80px;
   margin-top: 40px;
 }
+
+.error{
+    color: red;
+    
+}

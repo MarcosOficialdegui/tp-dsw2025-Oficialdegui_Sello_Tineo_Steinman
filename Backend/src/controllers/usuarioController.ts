@@ -19,6 +19,10 @@ export const createUsuario = async (req: Request, res: Response): Promise<void> 
 
         const nuevoUsuario = new Usuario({ nombre, apellido, email, password, rol });
 
+        if(await Usuario.findOne({email})){
+            res.status(400).json({ error: 'El email ya se encuentra registrado' });
+            return;
+        }
         const usuarioGuardado = await nuevoUsuario.save();
 
         res.status(201).json(usuarioGuardado);
