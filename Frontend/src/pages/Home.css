@@ -1,0 +1,80 @@
+/* Estilos para la página Home */
+
+.complejo-hero {
+  position: relative;
+  height: 500px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: background-image 1s ease-in-out;
+}
+
+.complejo-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+  z-index: 1;
+}
+
+.complejo-hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 800px;
+  padding: 0 1rem;
+}
+
+.complejo-title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.complejo-description {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  line-height: 1.6;
+}
+
+.complejo-reservar-btn {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+.complejo-reservar-btn:hover {
+  background-color: var(--secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px -1px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 768px) {
+  .complejo-hero {
+    height: 400px;
+  }
+  
+  .complejo-title {
+    font-size: 2rem;
+  }
+  
+  .complejo-description {
+    font-size: 1rem;
+  }
+}
