@@ -65,6 +65,116 @@
   box-shadow: 0 6px 8px -1px rgba(0, 0, 0, 0.4);
 }
 
+/* Contenedor principal */
+.home-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* Sección de complejos */
+.complejos-section {
+  margin-top: 24px;
+}
+
+.complejos-section h2 {
+  margin-bottom: 16px;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+/* Lista de complejos */
+.complejos-list {
+  list-style: none;
+  padding: 0;
+}
+
+/* Tarjeta de complejo */
+.complejo-card {
+  border: 1px solid #e0e0e0;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.complejo-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Layout de la tarjeta */
+.complejo-card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.complejo-info {
+  flex: 1;
+}
+
+.complejo-actions {
+  margin-left: 16px;
+}
+
+/* Título del complejo */
+.complejo-name {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+/* Información del complejo */
+.complejo-detail {
+  margin: 4px 0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.complejo-detail.available {
+  color: #28a745;
+  font-weight: 500;
+}
+
+/* Botón Ver Complejo */
+.ver-complejo-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.ver-complejo-btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+.ver-complejo-btn:active {
+  transform: translateY(0);
+}
+
+/* Estados de carga y sin resultados */
+.loading-message,
+.no-results-message {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.loading-message {
+  color: #007bff;
+}
+
 @media (max-width: 768px) {
   .complejo-hero {
     height: 400px;
@@ -76,5 +186,24 @@
   
   .complejo-description {
     font-size: 1rem;
+  }
+
+  .home-container {
+    padding: 12px;
+  }
+
+  .complejo-card-content {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .complejo-actions {
+    margin-left: 0;
+    align-self: stretch;
+  }
+
+  .ver-complejo-btn {
+    width: 100%;
+    padding: 12px;
   }
 }

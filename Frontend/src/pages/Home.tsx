@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
 import "./Home.css";
 
@@ -22,6 +23,8 @@ type Filtros = {
 };
 
 const Home: React.FC = () => {
+  const navigate = useNavigate();
+  
   const [filters, setFilters] = useState<Filtros>({
     ciudad: "",
     tipoCancha: "",
@@ -98,43 +101,73 @@ const Home: React.FC = () => {
     }
   };
 
+  // Función para navegar a la página del complejo
+  const handleVerComplejo = (complejoId: string) => {
+    navigate(`/complejo/${complejoId}`);
+  };
+
   return (
-
-    
     <>
-    <section 
-      className="complejo-hero"
-      style={{
-        backgroundImage: `url(${heroImages[currentImageIndex]})`
-      }}
-    >
-      <div className="complejo-hero-content">
-        <h1 className="complejo-title">
-          Reserva tu Cancha Favorita
-        </h1>
-        <p className="complejo-description">
-          Disfruta del mejor fútbol y pádel en instalaciones de primera calidad. Reserva fácil y rápido online.
-        </p>
-        <button className="complejo-reservar-btn">
-          Reservar Ahora
-        </button>
-      </div>
-    </section><div style={{ maxWidth: 1100, margin: "0 auto", padding: 16 }}>
-        <SearchBar filters={filters} onChange={handleFilterChange} onSearch={() => buscarComplejos(filters)} />
+      <section 
+        className="complejo-hero"
+        style={{
+          backgroundImage: `url(${heroImages[currentImageIndex]})`
+        }}
+      >
+        <div className="complejo-hero-content">
+          <h1 className="complejo-title">
+            Reserva tu Cancha Favorita
+          </h1>
+          <p className="complejo-description">
+            Disfruta del mejor fútbol y pádel en instalaciones de primera calidad. Reserva fácil y rápido online.
+          </p>
+          <button className="complejo-reservar-btn">
+            Reservar Ahora
+          </button>
+        </div>
+      </section>
 
-        <section style={{ marginTop: 24 }}>
+      <div className="home-container">
+        <SearchBar 
+          filters={filters} 
+          onChange={handleFilterChange} 
+          onSearch={() => buscarComplejos(filters)} 
+        />
+
+        <section className="complejos-section">
           <h2>Complejos disponibles</h2>
           {loading ? (
-            <p>Cargando...</p>
+            <p className="loading-message">Cargando...</p>
           ) : complejos.length === 0 ? (
-            <p>No hay complejos cargados.</p>
+            <p className="no-results-message">No hay complejos cargados.</p>
           ) : (
-            <ul style={{ listStyle: "none", padding: 0 }}>
+            <ul className="complejos-list">
               {complejos.map((c) => (
-                <li key={c._id} style={{ border: "1px solid #e0e0e0", padding: 12, borderRadius: 8, marginBottom: 12 }}>
-                  <h3 style={{ margin: 0 }}>{c.nombre}</h3>
-                  <p style={{ margin: "6px 0" }}>{c.localidad} — {c.direccion}</p>
-                  <p style={{ margin: "6px 0" }}>Canchas: {c.canchas?.map(cc => cc.tipoCancha).join(", ") || "—"}</p>
+                <li key={c._id} className="complejo-card">
+                  <div className="complejo-card-content">
+                    <div className="complejo-info">
+                      <h3 className="complejo-name">{c.nombre}</h3>
+                      <p className="complejo-detail">
+                        📍 {c.localidad} — {c.direccion}
+                      </p>
+                      <p className="complejo-detail">
+                        🏟️ Canchas: {c.canchas?.map(cc => cc.tipoCancha).join(", ") || "No especificado"}
+                      </p>
+                      {c.canchas && c.canchas.length > 0 && (
+                        <p className="complejo-detail available">
+                          ✅ {c.canchas.length} cancha{c.canchas.length !== 1 ? 's' : ''} disponible{c.canchas.length !== 1 ? 's' : ''}
+                        </p>
+                      )}
+                    </div>
+                    <div className="complejo-actions">
+                      <button 
+                        onClick={() => handleVerComplejo(c._id)}
+                        className="ver-complejo-btn"
+                      >
+                        Ver Complejo
+                      </button>
+                    </div>
+                  </div>
                 </li>
               ))}
             </ul>

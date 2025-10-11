@@ -6,9 +6,16 @@ interface TimeSlot {
   available: boolean
 }
 
-export default function Calendar() {
+interface CalendarProps {
+  complejoId: string;
+}
+
+export default function Calendar({ complejoId }: CalendarProps) {
   const [selectedDate, setSelectedDate] = useState<string>("")
   const [selectedTime, setSelectedTime] = useState<string>("")
+  
+  // Usar complejoId para futuras funcionalidades (por ahora solo lo guardamos)
+  console.log('Calendar para complejo:', complejoId);
 
   // Generate dates for the next 30 days
   const generateDates = () => {

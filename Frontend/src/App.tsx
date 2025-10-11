@@ -13,23 +13,17 @@ import Footer from './components/Footer';
 
 function App() {
   return (
-    <>
-      
-      <BrowserRouter>
+    <BrowserRouter>
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/registrarse" element={<UsuarioFormRegistro />} />
         <Route path="/login" element={<UsuarioFormLogin />} /> 
-
         <Route path="/perfil" element={<Perfil />} />
-
         <Route path="/complejo/:id" element={<Complejo />} />
-
       </Routes>
-      </BrowserRouter>
       <Footer />
-    </>
+    </BrowserRouter>
   );
 }
 
