@@ -140,7 +140,10 @@ const Home: React.FC = () => {
           ) : complejos.length === 0 ? (
             <p className="no-results-message">No hay complejos cargados.</p>
           ) : (
-            <ComplejoList complejos={complejos} /> // 👈 usamos cards
+            <ComplejoList
+              complejos={complejos}
+              onComplejoClick={handleVerComplejo}
+            />
           )}
         </section>
       </div>

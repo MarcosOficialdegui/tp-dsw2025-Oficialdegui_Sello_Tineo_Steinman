@@ -2,7 +2,7 @@ import Header from './components/Header';
 import Home from './pages/Home';
 import UsuarioFormRegistro from './pages/UsuarioFormRegistro';
 import UsuarioFormLogin from './pages/UsuarioFormLogin';
-
+import ScrollToTop from './components/ScrollToTop';
 import Perfil from './pages/Perfil';
 
 import Complejo from './pages/Complejo';
@@ -14,6 +14,7 @@ import Footer from './components/Footer';
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
