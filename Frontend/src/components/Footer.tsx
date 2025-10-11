@@ -9,7 +9,7 @@ export default function Footer() {
           <div>
             <div className={styles["footer-company"]}>
               <div className={styles["footer-logo"]}>⚽</div>
-              <h3 className={styles["footer-title"]}>SportCourt</h3>
+              <h3 className={styles["footer-title"]}>AlquilaTuCancha</h3>
             </div>
             <p className={styles["footer-description"]}>
               Los mejores complejos para disfrutar de tus deportes favoritos con instalaciones de primera calidad.
@@ -21,10 +21,10 @@ export default function Footer() {
             <h4 className={styles["footer-section-title"]}>Contacto</h4>
             <div className={styles["footer-contact"]}>
               <a href="tel:+541112345678" className={styles["footer-link"]}>
-                📞 +54 11 1234-5678
+                📞 +54 341 305 5793
               </a>
               <a href="mailto:info@sportcourt.com" className={styles["footer-link"]}>
-                ✉️ info@sportcourt.com
+                ✉️ tomastineo04@gmail.com
               </a>
               <span className={styles["footer-address"]}>
                 📍 Av. Principal 123, Ciudad
@@ -57,7 +57,7 @@ export default function Footer() {
         {/* Copyright */}
         <div className={styles["footer-copyright"]}>
           <p className={styles["footer-copyright-text"]}>
-            © 2024 SportCourt. Todos los derechos reservados.
+            © 2025 AlquilaTuCancha. Todos los derechos reservados.
           </p>
         </div>
       </div>
