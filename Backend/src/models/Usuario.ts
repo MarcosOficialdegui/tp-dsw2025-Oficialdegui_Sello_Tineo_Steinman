@@ -15,7 +15,12 @@ const usuarioSchema = new mongoose.Schema<IUsuario>({
     apellido: { type: String, required: true },
     email: { type: String, required: true},
     password: { type: String, required: true },
-    rol: { type: String, enum: ['propietario', 'usuario'], default: 'usuario' },
+    rol: { 
+        type: String, 
+        required: true, 
+        enum: ['propietario', 'usuario'], 
+        default: 'usuario' 
+    },
 });
 
 export default mongoose.model<IUsuario>("Usuario", usuarioSchema);

@@ -8,15 +8,15 @@ export default function Footer() {
           {/* Company Info */}
           <div>
             <div className={styles["footer-company"]}>
-              <div className={styles["footer-logo"]}>⚽</div>
-              <h3 className={styles["footer-title"]}>AlquilaTuCancha</h3>
+              <img 
+                src="/images/Logo-ATC-Circular.png"
+                alt="Logo AlquilaTuCancha" 
+                className={styles["footer-logo"]} 
+              />
             </div>
-            <p className={styles["footer-description"]}>
-              Los mejores complejos para disfrutar de tus deportes favoritos con instalaciones de primera calidad.
-            </p>
           </div>
 
-          {/* Contact */}
+          {/* Contacto */}
           <div>
             <h4 className={styles["footer-section-title"]}>Contacto</h4>
             <div className={styles["footer-contact"]}>
@@ -32,7 +32,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Services */}
+          {/* Servicios */}
           <div>
             <h4 className={styles["footer-section-title"]}>Servicios</h4>
             <div className={styles["footer-services"]}>
@@ -43,7 +43,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Social Media */}
+          {/* Redes Sociales */}
           <div>
             <h4 className={styles["footer-section-title"]}>Síguenos</h4>
             <div className={styles["footer-social"]}>
