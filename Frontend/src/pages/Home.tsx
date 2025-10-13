@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
 import ComplejoList from "../components/ComplejoList.tsx";
 import "./Home.css";
+import ComplejoForm from "../components/ComplejoForm.tsx";
 
 type Cancha = {
   tipoCancha: string;
@@ -146,6 +147,7 @@ const Home: React.FC = () => {
             />
           )}
         </section>
+        <ComplejoForm/>
       </div>
     </>
   );

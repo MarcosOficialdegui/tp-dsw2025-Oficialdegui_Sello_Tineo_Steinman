@@ -50,3 +50,29 @@ export const getServiciosDisponibles = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
+
+export const crearComplejo = async (req: Request, res: Response) => {
+  try {
+    const { nombre, direccion, ciudad, servicios, canchas } = req.body;
+
+    if (!nombre || !direccion || !ciudad) {
+      return res.status(400).json({ error: "Faltan datos obligatorios" });
+    }
+
+    const nuevoComplejo = new Complejo({
+      nombre,
+      direccion,
+      ciudad,
+      servicios: servicios || [],
+      canchas: canchas || []
+    });
+
+    const guardado = await nuevoComplejo.save();
+    res.status(201).json({ mensaje: "Complejo creado con éxito", complejo: guardado });
+
+  } catch (error) {
+    console.error("Error al crear complejo:", error);
+    res.status(500).json({ error: "Error al crear el complejo" });
+  }
+};
+

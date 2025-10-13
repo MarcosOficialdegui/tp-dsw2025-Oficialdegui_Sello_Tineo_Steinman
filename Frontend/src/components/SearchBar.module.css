@@ -1,56 +1,96 @@
 .container {
   display: flex;
-  gap: 12px;
+  flex-wrap: wrap;
   align-items: center;
-  padding: 12px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+  justify-content: center;
+  gap: 18px;
+  padding: 22px 28px;
+  background: linear-gradient(135deg, #f8fff9 0%, #eef6ef 100%);
+
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  margin: 30px auto;
+  width: 100%;
+  max-width: 900px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+}
+
+/* SELECTS */
 .select {
-  padding: 8px 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  background-color: white;
-  transition: border 0.2s ease-in-out;
+  flex: 1;
+  min-width: 180px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #d0d7de;
+  background-color: #fafafa;
+  font-size: 1rem;
+  transition: all 0.2s ease;
 }
 
 .select:focus {
-  border: 1px solid #2e7d32;
+  border-color: #57b46f;
+  background-color: #fff;
+  box-shadow: 0 0 6px rgba(87, 180, 111, 0.25);
   outline: none;
 }
 
+/* INPUT (fecha) */
 .input {
-  padding: 8px 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  transition: border 0.2s ease-in-out;
+  flex: 1;
+  min-width: 180px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #d0d7de;
+  background-color: #fafafa;
+  font-size: 1rem;
+  transition: all 0.2s ease;
 }
 
 .input:focus {
-  border: 1px solid #2e7d32;
+  border-color: #57b46f;
+  background-color: #fff;
+  box-shadow: 0 0 6px rgba(87, 180, 111, 0.25);
   outline: none;
 }
 
+/* BOTÓN */
 .button {
-  padding: 8px 16px;
-  border-radius: 6px;
+  padding: 12px 30px;
+  border-radius: 10px;
   border: none;
-  background-color: #2e7d32;
+  background-color: #57b46f;
   color: #fff;
+  font-weight: 600;
+  font-size: 1.05rem;
   cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+  transition: background-color 0.2s ease, transform 0.15s ease;
 }
 
 .button:hover {
-  background-color: #1b5e20;
+  background-color: #4aa763;
+  transform: translateY(-2px);
 }
 
 .button:active {
-  transform: scale(0.97);
+  transform: scale(0.98);
+}
+
+/* RESPONSIVE */
+@media (max-width: 700px) {
+  .container {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 18px 20px;
+  }
+
+  .select,
+  .input,
+  .button {
+    width: 100%;
+  }
 }
