@@ -129,9 +129,9 @@ export default function ComplejoForm() {
                 value={cancha.tipoCancha}
                 onChange={e => actualizarCancha(index, "tipoCancha", e.target.value)}
               >
-                <option value="Fútbol 5">Fútbol 5</option>
-                <option value="Fútbol 7">Fútbol 7</option>
-                <option value="Pádel">Pádel</option>
+                <option value="futbol5">Fútbol 5</option>
+                <option value="futbol7">Fútbol 7</option>
+                <option value="padel">Pádel</option>
               </select>
 
               <input
