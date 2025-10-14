@@ -4,7 +4,9 @@
   "main": "src/index.ts",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "seed:complejos": "ts-node src/scripts/seedComplejos.ts"
+    "seed:complejos": "ts-node src/scripts/seedComplejos.ts",
+    "seed:ciudades": "ts-node src/scripts/seedCiudades.ts",
+    "seed:all": "npm run seed:ciudades && npm run seed:complejos"
   },
   "dependencies": {
     "cors": "^2.8.5",

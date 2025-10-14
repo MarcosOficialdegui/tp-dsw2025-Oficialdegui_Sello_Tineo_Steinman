@@ -1,96 +1,238 @@
 .container {
   display: flex;
+  gap: 16px;
+  padding: 20px;
+  background: linear-gradient(135deg, #2452b6 0%, #69c0e9 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  padding: 22px 28px;
-  background: linear-gradient(135deg, #f8fff9 0%, #eef6ef 100%);
-
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  margin: 30px auto;
-  width: 100%;
-  max-width: 900px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  align-items: flex-start;
 }
 
-.container:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
-}
-
-/* SELECTS */
-.select {
+/* CONTENEDOR DE CADA CAMPO */
+.fieldContainer {
+  position: relative; 
   flex: 1;
-  min-width: 180px;
-  padding: 12px 14px;
-  border-radius: 10px;
-  border: 1px solid #d0d7de;
-  background-color: #fafafa;
-  font-size: 1rem;
-  transition: all 0.2s ease;
+  min-width: 200px;
 }
 
-.select:focus {
-  border-color: #57b46f;
-  background-color: #fff;
-  box-shadow: 0 0 6px rgba(87, 180, 111, 0.25);
-  outline: none;
-}
-
-/* INPUT (fecha) */
+/* INPUT UNIFICADO */
 .input {
-  flex: 1;
-  min-width: 180px;
-  padding: 12px 14px;
-  border-radius: 10px;
-  border: 1px solid #d0d7de;
-  background-color: #fafafa;
-  font-size: 1rem;
-  transition: all 0.2s ease;
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  font-size: 16px;
+  background: white;
+  color: #333;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
 }
 
 .input:focus {
-  border-color: #57b46f;
-  background-color: #fff;
-  box-shadow: 0 0 6px rgba(87, 180, 111, 0.25);
   outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+  transform: translateY(-1px);
 }
 
-/* BOTÓN */
-.button {
-  padding: 12px 30px;
-  border-radius: 10px;
-  border: none;
-  background-color: #57b46f;
-  color: #fff;
-  font-weight: 600;
-  font-size: 1.05rem;
+.input::placeholder {
+  color: #999;
+}
+
+/* ESTILO PARA EL SELECT PERSONALIZADO */
+.selectInput {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.15s ease;
+  user-select: none;
+  background: white;
+  padding: 12px 16px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #333;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.selectInput:hover {
+  border-color: #e0e0e0;
+}
+
+.selectInput:focus-within {
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+  transform: translateY(-1px);
+}
+
+.selectText {
+  flex: 1;
+  color: #333;
+}
+
+.selectArrow {
+  margin-left: 8px;
+  color: #666;
+  transition: transform 0.3s ease;
+  font-size: 12px;
+}
+
+.selectArrow.open {
+  transform: rotate(180deg);
+}
+
+/* DROPDOWN - POSICIONAMIENTO RELATIVO AL FIELDCONTAINER */
+.dropdown {
+  position: absolute; /* 👈 Relativo al fieldContainer más cercano */
+  top: calc(100% + 4px); /* 👈 Justo debajo del input */
+  left: 0;
+  right: 0; /* 👈 Mismo ancho que el fieldContainer */
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 1000;
+  animation: fadeInDown 0.2s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f5f5f5;
+  transition: background-color 0.2s ease;
+  cursor: default;
+}
+
+.dropdownItem:last-child {
+  border-bottom: none;
+}
+
+.dropdownItem.clickable {
+  cursor: pointer;
+}
+
+.dropdownItem.clickable:hover {
+  background-color: #f8f9fa;
+}
+
+.dropdownItem.selected {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+}
+
+.dropdownItem.loading {
+  color: #666;
+  font-style: italic;
+}
+
+.dropdownItem.noResults {
+  color: #999;
+  font-style: italic;
+}
+
+/* ÍCONOS */
+.loadingIcon {
+  margin-right: 8px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.cityIcon, .sportIcon {
+  margin-right: 10px;
+  font-size: 16px;
+  min-width: 20px;
+}
+
+.searchIcon {
+  margin-right: 8px;
+  font-size: 14px;
+}
+
+.cityName, .sportName {
+  flex: 1;
+  font-weight: 500;
+}
+
+/* BOTÓN DE BÚSQUEDA */
+.button {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+  min-width: 120px;
+  align-self: flex-start;
 }
 
 .button:hover {
-  background-color: #4aa763;
   transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
 }
 
 .button:active {
-  transform: scale(0.98);
+  transform: translateY(0);
 }
 
 /* RESPONSIVE */
-@media (max-width: 700px) {
+@media (max-width: 768px) {
   .container {
     flex-direction: column;
-    align-items: stretch;
-    padding: 18px 20px;
+    gap: 12px;
   }
-
-  .select,
-  .input,
+  
+  .fieldContainer {
+    min-width: 100%;
+  }
+  
   .button {
     width: 100%;
   }
 }
+
+/* SCROLLBAR PERSONALIZADA */
+.dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dropdown::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.dropdown::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.dropdown::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+

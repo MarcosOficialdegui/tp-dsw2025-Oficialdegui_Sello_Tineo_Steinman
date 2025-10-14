@@ -8,9 +8,10 @@ const canchaSchema = new mongoose.Schema({
     trim: true
   },
   tipoCancha: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'TipoCancha',
-    required: true
+    type: String,
+    required: true,
+    enum: ['Futbol 5', 'Futbol 7', 'Padel'], 
+    trim: true
   },
   precioHora: {
     type: Number,

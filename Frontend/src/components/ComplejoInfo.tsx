@@ -1,11 +1,35 @@
 import styles from "./ComplejoInfo.module.css"
+import { 
+  MdShower,           // Vestuario
+  MdLocalParking,     // Estacionamiento  
+  MdEmojiEvents,      // Torneos
+  MdCake,             // Cumpleaños
+  MdFireplace,        // Parrilla
+  MdRestaurant,       // Bar / Restaurante
+  MdHome,             // Quincho
+  MdWifi,             // Wi-Fi
+  MdFastfood,         // Buffet
+  MdSecurity,         // Seguridad
+  MdSportsTennis,     // Pádel
+  MdSportsSoccer,     // Fútbol
+  MdStadium,          // Estadio/Complejo
+  MdLocationOn,       // Ubicación
+  MdStraighten,       // Dimensiones
+  MdLightbulb,        // Iluminación
+  MdCheckCircle,      // Disponible
+  MdCancel,           // No disponible
+  MdStar              // Calificación
+} from "react-icons/md";
 
 // Interfaz para los datos del complejo
 interface ComplejoData {
   _id: string;
   nombre: string;
   direccion: string;
-  ciudad: string;
+  ciudad: {
+    _id: string;
+    nombre: string;
+  };
   servicios: string[]; // Array de servicios disponibles
   canchas: Array<{
     _id?: string;
@@ -16,18 +40,34 @@ interface ComplejoData {
   }>;
 }
 
-// Íconos para los servicios
-const ICONOS_SERVICIOS: { [key: string]: string } = {
-  'Vestuario': '🚿',
-  'Estacionamiento': '🅿️',
-  'Torneos': '🏆',
-  'Cumpleaños': '🎂',
-  'Parrilla': '🔥',
-  'Bar / Restaurante': '🍽️',
-  'Quincho': '🏠',
-  'Wi-Fi': '📶',
-  'Buffet': '🥪',
-  'Seguridad': '🛡️'
+// Función para obtener el ícono de un servicio
+const getIconoServicio = (servicio: string) => {
+  const iconProps = { size: 20, style: { marginRight: '8px' } };
+  
+  switch (servicio) {
+    case 'Vestuario':
+      return <MdShower {...iconProps} />;
+    case 'Estacionamiento':
+      return <MdLocalParking {...iconProps} />;
+    case 'Torneos':
+      return <MdEmojiEvents {...iconProps} />;
+    case 'Cumpleaños':
+      return <MdCake {...iconProps} />;
+    case 'Parrilla':
+      return <MdFireplace {...iconProps} />;
+    case 'Bar / Restaurante':
+      return <MdRestaurant {...iconProps} />;
+    case 'Quincho':
+      return <MdHome {...iconProps} />;
+    case 'Wi-Fi':
+      return <MdWifi {...iconProps} />;
+    case 'Buffet':
+      return <MdFastfood {...iconProps} />;
+    case 'Seguridad':
+      return <MdSecurity {...iconProps} />;
+    default:
+      return <MdStadium {...iconProps} />;
+  }
 };
 
 // Props
@@ -56,16 +96,16 @@ export default function ComplejoInfo({ complejo }: ComplejoInfoProps) {
 
   // Función para obtener ícono específico según tipo de cancha
   const getIconoCancha = (tipoCancha: string) => {
-    const tipo = tipoCancha; // Normalizar texto
+    const iconProps = { size: 24, style: { marginRight: '8px' } };
     
-    switch (tipo) {
+    switch (tipoCancha) {
       case 'Padel':
-        return '🏓';
+        return <MdSportsTennis {...iconProps} />;
       case 'Futbol 5':
       case 'Futbol 7':
-        return '⚽';
+        return <MdSportsSoccer {...iconProps} />;
       default:
-        return '🏟️';
+        return <MdStadium {...iconProps} />;
     }
   };
 
@@ -87,7 +127,10 @@ export default function ComplejoInfo({ complejo }: ComplejoInfoProps) {
 
   return (
     <div className={styles.complejoInfo}>
-      <h2 className={styles.complejoInfoTitle}>Información del complejo</h2>
+              <h2 className={styles.complejoSubheading}>
+          <MdStadium size={24} color="#4CAF50" />
+          Canchas disponibles
+        </h2>
       <div className={styles.complejoInfoGrid}>
 
         <div>
@@ -100,7 +143,9 @@ export default function ComplejoInfo({ complejo }: ComplejoInfoProps) {
                 </h3>
                 <div className={styles.complejoDetailsList}>
                   <div className={styles.complejoDetailsItem}>
-                    <span className={styles.complejoDetailsIcon}>📏</span>
+                    <span className={styles.complejoDetailsIcon}>
+                      <MdStraighten size={20} />
+                    </span>
                     <span className={styles.complejoDetailsText}>
                       {getDimensionesCancha(cancha.tipoCancha)}
                     </span>
@@ -112,17 +157,24 @@ export default function ComplejoInfo({ complejo }: ComplejoInfoProps) {
                   {/* Información adicional específica para pádel */}
                   {cancha.tipoCancha.toLowerCase().includes('padel') && (
                     <div className={styles.complejoDetailsItem}>
-                      <span className={styles.complejoDetailsIcon}>🏟️</span>
+                      <span className={styles.complejoDetailsIcon}>
+                        <MdStadium size={20} />
+                      </span>
                       <span className={styles.complejoDetailsText}>Pistas con cristales reglamentarios</span>
                     </div>
                   )}
                   <div className={styles.complejoDetailsItem}>
-                    <span className={styles.complejoDetailsIcon}>💡</span>
+                    <span className={styles.complejoDetailsIcon}>
+                      <MdLightbulb size={20} />
+                    </span>
                     <span className={styles.complejoDetailsText}>Iluminación LED completa</span>
                   </div>
                   <div className={styles.complejoDetailsItem}>
                     <span className={styles.complejoDetailsIcon}>
-                      {cancha.disponible ? '✅' : '❌'}
+                      {cancha.disponible ? 
+                        <MdCheckCircle size={20} color="#4CAF50" /> : 
+                        <MdCancel size={20} color="#f44336" />
+                      }
                     </span>
                     <span className={styles.complejoDetailsText}>
                       {cancha.disponible ? 'Disponible' : 'No disponible'}
@@ -150,7 +202,7 @@ export default function ComplejoInfo({ complejo }: ComplejoInfoProps) {
                 {complejo.servicios.map((servicio) => (
                   <div key={servicio} className={styles.complejoDetailsItem}>
                     <span className={styles.complejoDetailsIcon}>
-                      {ICONOS_SERVICIOS[servicio] || '✅'}
+                      {getIconoServicio(servicio)}
                     </span>
                     <span className={styles.complejoDetailsText}>{servicio}</span>
                   </div>
@@ -163,19 +215,23 @@ export default function ComplejoInfo({ complejo }: ComplejoInfoProps) {
         <div>
           <h3 className={styles.complejoMapTitle}>Ubicación</h3>
           <div className={styles.complejoMapBox}>
-            <div className={styles.complejoMapIcon}>🗺️</div>
+            <div className={styles.complejoMapIcon}>
+              <MdLocationOn size={32} color="#4CAF50" />
+            </div>
             <div className={styles.complejoMapInfo}>
               <p className={styles.complejoMapInfoTitle}>{complejo.nombre}</p>
               <p className={styles.complejoMapInfoAddress}>
-                {complejo.direccion}, {complejo.ciudad}
+                {complejo.direccion}, {complejo.ciudad.nombre}
               </p>
             </div>
           </div>          
           <div className={styles.complejoContactList}>
             <div className={styles.complejoContactItem}>
-              <span className={styles.complejoContactIcon}>📍</span>
+              <span className={styles.complejoContactIcon}>
+                <MdLocationOn size={16} color="#4CAF50" />
+              </span>
               <span className={styles.complejoContactText}>
-                {complejo.direccion}, {complejo.ciudad}
+                {complejo.direccion}, {complejo.ciudad.nombre}
               </span>
             </div>
           </div>
@@ -185,7 +241,9 @@ export default function ComplejoInfo({ complejo }: ComplejoInfoProps) {
             <h4 className={styles.complejoDetailsTitle}>Resumen</h4>
             <div className={styles.complejoDetailsList}>
               <div className={styles.complejoDetailsItem}>
-                <span className={styles.complejoDetailsIcon}>🏟️</span>
+                <span className={styles.complejoDetailsIcon}>
+                  <MdStadium size={16} color="#4CAF50" />
+                </span>
                 <span className={styles.complejoDetailsText}>
                   {complejo.canchas.length} cancha{complejo.canchas.length !== 1 ? 's' : ''} disponible{complejo.canchas.length !== 1 ? 's' : ''}
                 </span>
@@ -194,7 +252,9 @@ export default function ComplejoInfo({ complejo }: ComplejoInfoProps) {
               
               {complejo.servicios && complejo.servicios.length > 0 && (
                 <div className={styles.complejoDetailsItem}>
-                  <span className={styles.complejoDetailsIcon}>⭐</span>
+                  <span className={styles.complejoDetailsIcon}>
+                    <MdStar size={16} color="#FFD700" />
+                  </span>
                   <span className={styles.complejoDetailsText}>
                     {complejo.servicios.length} servicio{complejo.servicios.length !== 1 ? 's' : ''} adicional{complejo.servicios.length !== 1 ? 'es' : ''}
                   </span>
