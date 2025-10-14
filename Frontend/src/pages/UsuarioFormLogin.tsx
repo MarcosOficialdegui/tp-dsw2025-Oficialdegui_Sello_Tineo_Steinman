@@ -27,7 +27,7 @@ export default function UsuarioFormLogin() {
                 });
 
                 const data = await res.json();
-                
+                console.log(data);
 
 
 
@@ -35,6 +35,7 @@ export default function UsuarioFormLogin() {
                     alert("Inicio de sesion exitoso");
                     console.log("Respuesta del servidor:", data.token);
                     localStorage.setItem("token", data.token);
+                    localStorage.setItem("rol", data.rol.toString());
                     window.location.href = "/"; // Redirigir a la página principal
                     
 

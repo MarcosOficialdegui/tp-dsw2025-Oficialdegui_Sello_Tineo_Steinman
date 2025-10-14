@@ -1,0 +1,45 @@
+.main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  
+}
+
+.desplegar button {
+  width: 100%;
+  margin-top: 12px;
+  margin-bottom: 24px; 
+  padding: 12px;
+  background-color: #57b46f;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.desplegar button:hover {
+  background-color: #4aa763;
+  transform: translateY(-2px);
+}
+
+.desplegar-form {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 1s ease;
+}
+
+.desplegar-form.abierto {
+  max-height: 1000px; /* Ajusta según el contenido */
+}
+
+.complejos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+}
+

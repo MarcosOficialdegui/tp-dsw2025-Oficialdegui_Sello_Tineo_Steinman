@@ -1,9 +1,15 @@
+import { useSearchParams } from "react-router-dom";
 import "./UsuarioForm.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 
 
 export default function UsuarioFormRegistro() {
+
+    const [searchParams] = useSearchParams();
+    const tipo = searchParams.get("tipo");
+
+
 
     const handleContactoClick = () => {
         window.alert("TERMINOS Y CONDICIONES");
@@ -20,19 +26,27 @@ export default function UsuarioFormRegistro() {
     const [validarPassword, setValidarPassword] = useState(false);
     const [validarMail, setValidarMail] = useState(false);
 
-    
+
+ useEffect(() => {
+    if(tipo == "propietario" || tipo == "usuario"){
+            setFormData({ ...formData, rol: tipo});
+        }else{ 
+            window.location.href = "/TipoUsuario";
+        }
+ }, [tipo]);
+ 
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
 
-        if(formData.password.length < 8){
+        if (formData.password.length < 8) {
             setValidarPassword(true);
             return;
         }
 
-        
 
+        
         const enviarDatos = async () => {
             try {
                 const res = await fetch("http://localhost:3000/api/usuarios", {
@@ -103,7 +117,7 @@ export default function UsuarioFormRegistro() {
 
                         {validarPassword && <p className="error">La contraseña debe tener mas de 7 caracteres</p>}
                         {validarMail && <p className="error">El email ya se encuentra registrado</p>}
-                        
+
                     </div>
 
                 </form>

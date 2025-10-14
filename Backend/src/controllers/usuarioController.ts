@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import Usuario from '../models/Usuario';
 import jwt from "jsonwebtoken";
+import { createRequire } from 'module';
 
 
-const SECRET_KEY = "tu_clave_secreta_aqui"; // Cambiar esto por una clave  segura y mantenerla en un entorno seguro
-
+const SECRET_KEY = "ClaveTokenAlquilaTuCancha";
 
 // Crear un nuevo usuario
 export const createUsuario = async (req: Request, res: Response): Promise<void> => {
@@ -19,7 +19,7 @@ export const createUsuario = async (req: Request, res: Response): Promise<void> 
 
         const nuevoUsuario = new Usuario({ nombre, apellido, email, password, rol });
 
-        if(await Usuario.findOne({email})){
+        if (await Usuario.findOne({ email })) {
             res.status(400).json({ error: 'El email ya se encuentra registrado' });
             return;
         }
@@ -43,15 +43,15 @@ export const generarToken = async (req: Request, res: Response): Promise<void> =
 
         const usuario = await Usuario.findOne({ email, password });
         if (usuario) {
-            
+
 
             // Generar token
             const token = jwt.sign(
                 { id: usuario._id, email: usuario.email, rol: usuario.rol },
                 SECRET_KEY,
                 { expiresIn: '1h' });
-                 
-            res.json({ token });
+
+            res.json({ token, rol: usuario.rol });
 
 
         } else {
@@ -67,18 +67,56 @@ export const generarToken = async (req: Request, res: Response): Promise<void> =
 }
 
 export const buscarUsuarioToken = async (req: Request, res: Response): Promise<void> => {
-    try{
+    try {
         const userId = (req as any).user.id;
         const usuario = await Usuario.findById(userId).select('-password');
 
-        if(!usuario){
+        if (!usuario) {
             res.status(404).json({ error: 'Usuario no encontrado' });
             return;
         }
 
         res.json(usuario); //Devolver el usuario encontrado con el token
 
-    }catch(error){
+    } catch (error) {
         res.status(500).json({ error: 'Error al obtener el perfil del usuario' });
+    }
+}
+
+export const guardarComplejoEnUsuario = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const userId = (req as any).user.id;
+        const complejoId = (req as any).complejoCreado._id;
+
+        const usuario = await Usuario.findById(userId);
+        if (!usuario) {
+            res.status(404).json({ error: 'Usuario no encontrado' });
+            return;
+        }
+
+          if (!usuario.complejos.includes(complejoId)) {
+            usuario.complejos.push(complejoId);
+            await usuario.save();
+          }
+        res.status(200).json({ message: 'Complejo Registrado!' });
+
+    } catch (error) {
+        res.status(500).json({ error: 'Error al guardar el complejo en el usuario' });
+    }
+}
+
+export const buscarComplejosUsuario = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const userId = (req as any).user.id;
+        const usuario = await Usuario.findById(userId).populate('complejos');
+
+        if (!usuario) {
+            res.status(404).json({ error: 'Usuario no encontrado' });
+            return;
+        }
+        res.status(200).json({ complejos: usuario.complejos });
+        
+    } catch (error) {
+        res.status(500).json({ error: 'Error al obtener los complejos del usuario' });
     }
 }

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Complejo, { SERVICIOS_DISPONIBLES } from "../models/Complejo";
+import Usuario from "../models/Usuario";
 
 export const getComplejos = async (req: Request, res: Response) => {
   try {
@@ -8,7 +9,7 @@ export const getComplejos = async (req: Request, res: Response) => {
     const query: any = {};
 
     if (ciudad) {
-      query.ciudad = ciudad; 
+      query.ciudad = ciudad;
     }
 
     if (tipoCancha) {
@@ -26,14 +27,14 @@ export const getComplejos = async (req: Request, res: Response) => {
 export const getComplejoById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    
+
     // Buscar complejo por ID sin populate ya que los datos están embebidos
     const complejo = await Complejo.findById(id);
-    
+
     if (!complejo) {
       return res.status(404).json({ error: 'Complejo no encontrado' });
     }
-    
+
     res.json(complejo);
   } catch (error) {
     console.error('Error al obtener complejo:', error);
@@ -51,7 +52,7 @@ export const getServiciosDisponibles = async (req: Request, res: Response) => {
   }
 };
 
-export const crearComplejo = async (req: Request, res: Response) => {
+export const crearComplejo = async (req: Request, res: Response, next: Function) => {
   try {
     const { nombre, direccion, ciudad, servicios, canchas } = req.body;
 
@@ -68,7 +69,9 @@ export const crearComplejo = async (req: Request, res: Response) => {
     });
 
     const guardado = await nuevoComplejo.save();
-    res.status(201).json({ mensaje: "Complejo creado con éxito", complejo: guardado });
+    (req as any).complejoCreado = guardado;
+
+    next();
 
   } catch (error) {
     console.error("Error al crear complejo:", error);
@@ -76,3 +79,28 @@ export const crearComplejo = async (req: Request, res: Response) => {
   }
 };
 
+export const eliminarComplejo = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const complejoId = req.params.id;
+    const userId = (req as any).user.id;
+    const complejo = await Complejo.findById(complejoId);
+
+    if (!complejo) {
+      res.status(404).json({ error: 'Complejo no encontrado' });
+      return;
+    }
+
+    //AGREGAR LOGICA PARA VERIFICAR QUE EL USUARIO SEA EL DUEÑO DEL COMPLEJO
+
+    await Usuario.findByIdAndUpdate(
+      userId,
+      { $pull: { complejos: complejoId } }
+    );
+    await Complejo.findByIdAndDelete(complejoId);
+
+    res.json({ message: 'Complejo eliminado correctamente' });
+  } catch (error) {
+    console.error('Error al eliminar complejo:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};

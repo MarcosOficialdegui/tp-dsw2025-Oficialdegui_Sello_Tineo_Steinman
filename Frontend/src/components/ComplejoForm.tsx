@@ -63,12 +63,16 @@ export default function ComplejoForm() {
         precioHora: Number(c.precioHora),
         disponible: c.disponible,
       })),
+
     };
 
     try {
       const res = await fetch("http://localhost:3000/api/complejos", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token") || ""}`,
+        },
         body: JSON.stringify(body),
       });
 
@@ -79,6 +83,7 @@ export default function ComplejoForm() {
         setFormData({ nombre: "", direccion: "", ciudad: "" });
         setServiciosSeleccionados([]);
         setCanchas([{ tipoCancha: "Fútbol 5", precioHora: "", disponible: true }]);
+        window.location.reload();
       } else {
         alert(data.error || "Error al crear el complejo");
       }
@@ -87,7 +92,7 @@ export default function ComplejoForm() {
     }
   };
 
-    return (
+  return (
     <div className={styles.formContainer}>
       <form className={styles.mainContent} onSubmit={handleSubmit}>
         <h1 className={styles.titulo}>Registrar Complejo</h1>

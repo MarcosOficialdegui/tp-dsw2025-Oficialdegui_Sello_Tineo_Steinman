@@ -4,6 +4,8 @@ import UsuarioFormRegistro from './pages/UsuarioFormRegistro';
 import UsuarioFormLogin from './pages/UsuarioFormLogin';
 import ScrollToTop from './components/ScrollToTop';
 import Perfil from './pages/Perfil';
+import TipoUsuario from './pages/UsuarioFormTipoUsuario';
+import MisComplejos from './pages/MisComplejos';    
 
 import Complejo from './pages/Complejo';
 
@@ -22,6 +24,8 @@ function App() {
         <Route path="/login" element={<UsuarioFormLogin />} /> 
         <Route path="/perfil" element={<Perfil />} />
         <Route path="/complejo/:id" element={<Complejo />} />
+        <Route path="/tipoUsuario" element={<TipoUsuario />} />
+        <Route path="/miscomplejos" element={<MisComplejos />} />
       </Routes>
       <Footer />
     </BrowserRouter>

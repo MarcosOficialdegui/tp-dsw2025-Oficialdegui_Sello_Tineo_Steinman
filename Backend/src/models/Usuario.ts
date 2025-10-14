@@ -7,6 +7,7 @@ export interface IUsuario extends mongoose.Document {
     email: string;
     password: string;
     rol: 'propietario' | 'usuario';
+    complejos: mongoose.Types.ObjectId[]; // Referencia a los complejos que posee
 }
 
 
@@ -21,6 +22,9 @@ const usuarioSchema = new mongoose.Schema<IUsuario>({
         enum: ['propietario', 'usuario'], 
         default: 'usuario' 
     },
+    complejos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Complejo' }] // Referencia a los complejos que posee
 });
+
+
 
 export default mongoose.model<IUsuario>("Usuario", usuarioSchema);

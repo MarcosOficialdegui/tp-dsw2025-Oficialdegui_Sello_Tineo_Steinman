@@ -16,7 +16,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     }
 
     try{
-        const decoded = jwt.verify(token, "tu_clave_secreta_aqui") as jwtpayload;
+        const decoded = jwt.verify(token, "ClaveTokenAlquilaTuCancha") as jwtpayload;
         (req as any).user = decoded;
        
         next();
@@ -24,3 +24,5 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
         return res.status(403).json({ error: 'Token inválido o expirado' });
     }
 }
+
+//DEVUELVE EL REQ.USER DEL USUARIO DESENCRIPTADO

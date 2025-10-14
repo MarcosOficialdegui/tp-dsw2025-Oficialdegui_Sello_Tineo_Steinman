@@ -18,12 +18,15 @@ type Complejo = {
 interface Props {
   complejos: Complejo[];
   onComplejoClick: (complejoId: string) => void;
+  nombreLista: string;
+  onEliminarComplejo?: (complejoId: string) => void;
 }
+  
 
-function ComplejoList({ complejos, onComplejoClick }: Props) {
+function ComplejoList({ complejos, onComplejoClick, nombreLista, onEliminarComplejo }: Props) {
   return (
     <div className="complejo-list">
-      <h2>🏟️ Complejos Disponibles</h2>
+      <h2>🏟️ {nombreLista}</h2>
       <div className="complejos-grid">
         {complejos.map((complejo) => (
           <div className="complejo-card" key={complejo._id}
@@ -42,6 +45,17 @@ function ComplejoList({ complejos, onComplejoClick }: Props) {
                 ⚽ Tipos de canchas:{" "}
                 {complejo.canchas?.map((c) => c.tipoCancha).join(", ") || "—"}
               </p>
+              {onEliminarComplejo && (
+                <button
+                  className="eliminar-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onEliminarComplejo(complejo._id);
+                  }}
+                >
+                  🗑️ Eliminar
+                </button>
+              )}
             </div>
           </div>
         ))}
