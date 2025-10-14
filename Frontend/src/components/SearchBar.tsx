@@ -21,10 +21,18 @@ type Props = {
 const SearchBar: React.FC<Props> = ({ filters, onChange, onSearch }) => {
   const [ciudades, setCiudades] = useState<Ciudad[]>([]);
   const [ciudadesFiltradas, setCiudadesFiltradas] = useState<Ciudad[]>([]);
-  const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
+  const [mostrarSugerenciasCiudad, setMostrarSugerenciasCiudad] = useState(false);
+  const [mostrarSugerenciasDeporte, setMostrarSugerenciasDeporte] = useState(false);
   const [cargandoCiudades, setCargandoCiudades] = useState(false);
 
-  // Carga todas las ciudades al inicio, cuando se monta el componente
+  // Opciones de deportes
+  const deportes = [
+    { value: "Futbol 5", label: "⚽ Fútbol 5", icon: "⚽" },
+    { value: "Futbol 7", label: "⚽ Fútbol 7", icon: "⚽" },
+    { value: "Padel", label: "🏓 Pádel", icon: "🏓" }
+  ];
+
+  // Carga todas las ciudades al inicio
   useEffect(() => {
     const cargarCiudades = async () => {
       setCargandoCiudades(true);
@@ -51,46 +59,59 @@ const SearchBar: React.FC<Props> = ({ filters, onChange, onSearch }) => {
         ciudad.nombre.toLowerCase().includes(filters.ciudad.toLowerCase())
       );
       setCiudadesFiltradas(filtradas);
-      setMostrarSugerencias(true);
+      setMostrarSugerenciasCiudad(true);
     } else {
       setCiudadesFiltradas([]);
-      setMostrarSugerencias(false);
+      setMostrarSugerenciasCiudad(false);
     }
-  }, [filters.ciudad, ciudades]); // se ejecuta cuando cambia el texto o las ciudades
+  }, [filters.ciudad, ciudades]);
 
-  // Seleccionar una ciudad de las sugerencias
+  // Seleccionar una ciudad
   const seleccionarCiudad = (ciudad: Ciudad) => {
     onChange("ciudad", ciudad.nombre);
-    setMostrarSugerencias(false);
+    setMostrarSugerenciasCiudad(false);
+  };
+
+  // Seleccionar un deporte
+  const seleccionarDeporte = (deporte: string) => {
+    onChange("tipoCancha", deporte);
+    setMostrarSugerenciasDeporte(false);
   };
 
   // Manejar cambio en el input de ciudad
   const handleCiudadChange = (value: string) => {
     onChange("ciudad", value);
     if (value.length < 2) {
-      setMostrarSugerencias(false);
+      setMostrarSugerenciasCiudad(false);
     }
+  };
+
+  // Obtener el label del deporte seleccionado
+  const getDeporteLabel = () => {
+    if (!filters.tipoCancha) return "⚽ Seleccionar deporte";
+    const deporte = deportes.find(d => d.value === filters.tipoCancha);
+    return deporte ? deporte.label : filters.tipoCancha;
   };
 
   return (
     <div className={styles.container}>
       {/* Campo de Ciudad con Autocompletado */}
-      <div className={styles.ciudadContainer}>
+      <div className={styles.fieldContainer}>
         <input
           className={styles.input}
           type="text"
           placeholder="🌆 Buscar ciudad..."
           value={filters.ciudad}
           onChange={(e) => handleCiudadChange(e.target.value)}
-          onFocus={() => filters.ciudad.length >= 2 && setMostrarSugerencias(true)}
-          onBlur={() => setTimeout(() => setMostrarSugerencias(false), 200)}
+          onFocus={() => filters.ciudad.length >= 2 && setMostrarSugerenciasCiudad(true)}
+          onBlur={() => setTimeout(() => setMostrarSugerenciasCiudad(false), 200)}
         />
         
-        {/* Menú desplegable de sugerencias */}
-        {mostrarSugerencias && (
+        {/* Dropdown de ciudades */}
+        {mostrarSugerenciasCiudad && (
           <div className={styles.dropdown}>
             {cargandoCiudades ? (
-              <div className={styles.dropdownItem + ' ' + styles.loading}>
+              <div className={`${styles.dropdownItem} ${styles.loading}`}>
                 <span className={styles.loadingIcon}>⏳</span>
                 Cargando ciudades...
               </div>
@@ -98,7 +119,7 @@ const SearchBar: React.FC<Props> = ({ filters, onChange, onSearch }) => {
               ciudadesFiltradas.map((ciudad) => (
                 <div
                   key={ciudad._id}
-                  className={styles.dropdownItem + ' ' + styles.clickable}
+                  className={`${styles.dropdownItem} ${styles.clickable}`}
                   onClick={() => seleccionarCiudad(ciudad)}
                 >
                   <span className={styles.cityIcon}>📍</span>
@@ -106,7 +127,7 @@ const SearchBar: React.FC<Props> = ({ filters, onChange, onSearch }) => {
                 </div>
               ))
             ) : (
-              <div className={styles.dropdownItem + ' ' + styles.noResults}>
+              <div className={`${styles.dropdownItem} ${styles.noResults}`}>
                 <span className={styles.searchIcon}>🔍</span>
                 No se encontraron ciudades con "{filters.ciudad}"
               </div>
@@ -115,25 +136,66 @@ const SearchBar: React.FC<Props> = ({ filters, onChange, onSearch }) => {
         )}
       </div>
 
-      <select
-        className={styles.select}
-        value={filters.tipoCancha}
-        onChange={(e) => onChange("tipoCancha", e.target.value)}
-      >
-        <option value="">⚽ Seleccionar deporte</option>
-        <option value="futbol5">Fútbol 5</option>
-        <option value="futbol7">Fútbol 7</option>
-        <option value="padel">Pádel</option>
-      </select>
+      {/* Campo de Deporte con Dropdown */}
+      <div className={styles.fieldContainer}>
+        <div
+          className={`${styles.input} ${styles.selectInput}`}
+          onClick={() => setMostrarSugerenciasDeporte(!mostrarSugerenciasDeporte)}
+          tabIndex={0} // 👈 Hace que sea focuseable
+          onKeyDown={(e) => { // 👈 Manejo de teclado
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setMostrarSugerenciasDeporte(!mostrarSugerenciasDeporte);
+            }
+          }}
+        >
+          <span className={styles.selectText}>{getDeporteLabel()}</span>
+          <span className={`${styles.selectArrow} ${mostrarSugerenciasDeporte ? styles.open : ''}`}>
+            ▼
+          </span>
+        </div>
 
-      <input
-        className={styles.input}
-        type="date"
-        value={filters.fecha}
-        onChange={(e) => onChange("fecha", e.target.value)}
-      />
+        {/* Dropdown de deportes */}
+        {mostrarSugerenciasDeporte && (
+          <div className={styles.dropdown}>
+            <div
+              className={`${styles.dropdownItem} ${styles.clickable} ${!filters.tipoCancha ? styles.selected : ''}`}
+              onMouseDown={(e) => e.preventDefault()} // 👈 Previene blur antes del click
+              onClick={() => seleccionarDeporte("")}
+            >
+              <span className={styles.sportIcon}>⚽</span>
+              <span className={styles.sportName}>Todos los deportes</span>
+            </div>
+            {deportes.map((deporte) => (
+              <div
+                key={deporte.value}
+                className={`${styles.dropdownItem} ${styles.clickable} ${filters.tipoCancha === deporte.value ? styles.selected : ''}`}
+                onMouseDown={(e) => e.preventDefault()} // 👈 Previene blur antes del click
+                onClick={() => seleccionarDeporte(deporte.value)}
+              >
+                <span className={styles.sportIcon}>{deporte.icon}</span>
+                <span className={styles.sportName}>{deporte.value}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
-      <button className={styles.button} onClick={onSearch}>🔍 Buscar</button>
+      {/* Campo de Fecha */}
+      <div className={styles.fieldContainer}>
+        <input
+          className={styles.input}
+          type="date"
+          value={filters.fecha}
+          onChange={(e) => onChange("fecha", e.target.value)}
+          placeholder="📅 Seleccionar fecha"
+        />
+      </div>
+
+      {/* Botón de Búsqueda */}
+      <button className={styles.button} onClick={onSearch}>
+        🔍 Buscar
+      </button>
     </div>
   );
 };
