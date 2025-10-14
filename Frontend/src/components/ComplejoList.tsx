@@ -1,5 +1,11 @@
 
 import "./ComplejoList.css";
+import {
+  MdStadium,        // Estadio/Complejo
+  MdLocationOn,     // Ubicación
+  MdLocationCity,   // Ciudad
+  MdSportsSoccer    // Deportes
+} from "react-icons/md";
 
 type Cancha = {
   tipoCancha: string;
@@ -26,7 +32,9 @@ interface Props {
 function ComplejoList({ complejos, onComplejoClick }: Props) {
   return (
     <div className="complejo-list">
-      <h2>🏟️ Complejos Disponibles</h2>
+      <h2>
+        Complejos Disponibles
+      </h2>
       <div className="complejos-grid">
         {complejos.map((complejo) => (
           <div className="complejo-card" key={complejo._id}
@@ -39,10 +47,17 @@ function ComplejoList({ complejos, onComplejoClick }: Props) {
             />
             <div className="complejo-info">
               <h3>{complejo.nombre}</h3>
-              <p>📍 {complejo.direccion}</p>
-              <p>🏙️ {complejo.ciudad?.nombre || 'Ciudad no especificada'}</p>
               <p>
-                ⚽ Tipos de canchas:{" "}
+                <MdLocationOn size={16} color="#4CAF50" />
+                &nbsp;{complejo.direccion}
+              </p>
+              <p>
+                <MdLocationCity size={16} color="#4CAF50" />
+                &nbsp;{complejo.ciudad?.nombre || 'Ciudad no especificada'}
+              </p>
+              <p>
+                <MdSportsSoccer size={16} color="#4CAF50" />
+                &nbsp;Tipos de canchas:{" "}
                 {complejo.canchas?.map((c) => c.tipoCancha).join(", ") || "—"}
               </p>
             </div>
