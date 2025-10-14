@@ -8,17 +8,35 @@ export const getComplejos = async (req: Request, res: Response) => {
     const query: any = {};
 
     if (ciudad) {
-      query.ciudad = ciudad; 
+      // Si ciudad es un ObjectId, buscar por ID, si no, buscar por nombre
+      if (ciudad.length === 24) { // ObjectId tiene 24 caracteres
+        query.ciudad = ciudad;
+      } else {
+        // Buscar ciudades que coincidan con el nombre
+        const Ciudad = (await import('../models/Ciudad')).default;
+        const ciudadEncontrada = await Ciudad.findOne({ 
+          nombre: new RegExp(ciudad as string, 'i') 
+        });
+        if (ciudadEncontrada) {
+          query.ciudad = ciudadEncontrada._id;
+        } else {
+          // Si no encuentra la ciudad, devolver array vacío
+          return res.json([]);
+        }
+      }
     }
 
     if (tipoCancha) {
       query["canchas.tipoCancha"] = tipoCancha;
     }
 
-    const complejos = await Complejo.find(query).populate("canchas");
+    const complejos = await Complejo.find(query)
+      .populate('ciudad', 'nombre') // Populate ciudad con solo el nombre
+      .exec();
 
     res.json(complejos);
   } catch (error) {
+    console.error('Error al obtener complejos:', error);
     res.status(500).json({ error: "Error al obtener complejos" });
   }
 };
@@ -27,8 +45,10 @@ export const getComplejoById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     
-    // Buscar complejo por ID sin populate ya que los datos están embebidos
-    const complejo = await Complejo.findById(id);
+    // Buscar complejo por ID y hacer populate de la ciudad
+    const complejo = await Complejo.findById(id)
+      .populate('ciudad', 'nombre') // Populate ciudad con solo el nombre
+      .exec();
     
     if (!complejo) {
       return res.status(404).json({ error: 'Complejo no encontrado' });

@@ -177,3 +177,137 @@
   .canchaCampos { gap: 8px; }
   .inputSmall { flex-basis: 100%; }
 }
+
+/* Contenedor de ciudad con dropdown */
+.ciudadContainer {
+  position: relative;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+/* Indicador de ciudad seleccionada */
+.ciudadSeleccionada {
+  color: #28a745;
+  font-size: 14px;
+  margin-top: 4px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Dropdown de sugerencias */
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e1e8ed;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  margin-top: 4px;
+  animation: dropdownFadeIn 0.2s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Items del dropdown */
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f7f9fa;
+  transition: background-color 0.2s ease;
+  font-size: 14px;
+}
+
+.dropdownItem:last-child {
+  border-bottom: none;
+}
+
+/* Item clickeable (ciudades) */
+.dropdownItem.clickable {
+  cursor: pointer;
+}
+
+.dropdownItem.clickable:hover {
+  background-color: #f8f9fa;
+}
+
+.dropdownItem.clickable:active {
+  background-color: #e9ecef;
+}
+
+/* Estado de carga */
+.dropdownItem.loading {
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* Opción de crear ciudad */
+.dropdownItem.createOption {
+  background-color: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+}
+
+.createButton {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: color 0.2s ease;
+}
+
+.createButton:hover {
+  color: #007bff;
+}
+
+.createButton:active {
+  color: #0056b3;
+}
+
+/* Hint para escribir más caracteres */
+.dropdownItem.hint {
+  color: #6c757d;
+  font-style: italic;
+  text-align: center;
+  background-color: #fdfdfd;
+}
+
+/* Iconos */
+.cityIcon, .loadingIcon, .createIcon, .hintIcon {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.cityName, .createText {
+  font-weight: 500;
+  color: #343a40;
+}
+
+.createText {
+  color: #007bff;
+}
+
+.loadingIcon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

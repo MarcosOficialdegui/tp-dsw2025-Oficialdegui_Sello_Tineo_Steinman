@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import Complejo, { SERVICIOS_DISPONIBLES } from '../models/Complejo';
+import Ciudad from '../models/Ciudad';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -171,20 +172,33 @@ async function seedComplejos() {
     console.log('🗑️ Limpiando complejos existentes...');
     await Complejo.deleteMany({});
 
-    console.log('🌱 Creando complejos de ejemplo...');
-    const complejosCreados = await Complejo.insertMany(complejosEjemplo);
+    console.log('🔍 Buscando ciudades para asociar...');
     
-    console.log(`✅ Se crearon ${complejosCreados.length} complejos:`);
-    complejosCreados.forEach(complejo => {
-      console.log(`  - ${complejo.nombre} (${complejo.ciudad})`);
-      console.log(`    Servicios: ${complejo.servicios.join(', ')}`);
-      console.log(`    Canchas: ${complejo.canchas.length}`);
-    });
+    // Crear complejos con ObjectIds de ciudades reales
+    const complejosConCiudadId = [];
+    
+    for (const complejoData of complejosEjemplo) {
+      // Buscar la ciudad por nombre
+      const ciudadEncontrada = await Ciudad.findOne({ 
+        nombre: new RegExp(`^${complejoData.ciudad}$`, 'i') 
+      });
+      
+      if (ciudadEncontrada) {
+        const complejoConCiudadId = {
+          ...complejoData,
+          ciudad: ciudadEncontrada._id // Usar ObjectId en lugar del nombre
+        };
+        complejosConCiudadId.push(complejoConCiudadId);
+        console.log(`  ✅ ${complejoData.nombre} → ${ciudadEncontrada.nombre} (${ciudadEncontrada._id})`);
+      } else {
+        console.log(`  ❌ No se encontró la ciudad: ${complejoData.ciudad}`);
+      }
+    }
 
-    console.log('\n📋 Servicios disponibles en el sistema:');
-    SERVICIOS_DISPONIBLES.forEach(servicio => {
-      console.log(`  - ${servicio}`);
-    });
+    console.log(`\n🌱 Creando ${complejosConCiudadId.length} complejos...`);
+    const complejosCreados = await Complejo.insertMany(complejosConCiudadId);
+    
+    console.log(`\n✅ Se crearon ${complejosCreados.length} complejos exitosamente`);
 
   } catch (error) {
     console.error('❌ Error al poblar la base de datos:', error);

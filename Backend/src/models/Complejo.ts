@@ -6,10 +6,15 @@ interface ICancha {
   disponible: boolean;
 }
 
+interface ICiudad {
+  nombre: string;
+  creadaPor: string;
+}
+
 export interface IComplejo extends Document {
   nombre: string;
   direccion: string;
-  ciudad: string; 
+  ciudad: mongoose.Schema.Types.ObjectId;
   servicios: string[]; // Array de servicios disponibles
   canchas: ICancha[];
 }
@@ -37,7 +42,11 @@ export const SERVICIOS_DISPONIBLES = [
 const ComplejoSchema = new Schema<IComplejo>({
   nombre: { type: String, required: true },
   direccion: { type: String, required: true },
-  ciudad: { type: String, required: true }, 
+  ciudad: { 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Ciudad",
+    required: true 
+  }, 
   servicios: [{ 
     type: String, 
     enum: SERVICIOS_DISPONIBLES,

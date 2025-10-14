@@ -1,15 +1,28 @@
 import { useEffect, useState } from "react";
 import styles from "./ComplejoForm.module.css";
 
+type Ciudad = {
+  _id: string;
+  nombre: string;
+};
+
 export default function ComplejoForm() {
   const [formData, setFormData] = useState({
     nombre: "",
     direccion: "",
     ciudad: "",
+    ciudadId: "",
   });
 
   const [servicios, setServicios] = useState<string[]>([]);
   const [serviciosSeleccionados, setServiciosSeleccionados] = useState<string[]>([]);
+
+  // Estados para el manejo de ciudades
+  const [ciudades, setCiudades] = useState<Ciudad[]>([]);
+  const [ciudadesFiltradas, setCiudadesFiltradas] = useState<Ciudad[]>([]);
+  const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
+  const [cargandoCiudades, setCargandoCiudades] = useState(false);
+  const [creandoCiudad, setCreandoCiudad] = useState(false);
 
   const [canchas, setCanchas] = useState([
     { tipoCancha: "Fútbol 5", precioHora: "", disponible: true },
@@ -22,6 +35,107 @@ export default function ComplejoForm() {
       .then(data => setServicios(data))
       .catch(() => alert("Error al cargar los servicios"));
   }, []);
+
+  // 🔄 Cargar ciudades al inicio
+  useEffect(() => {
+    const cargarCiudades = async () => {
+      setCargandoCiudades(true);
+      try {
+        const response = await fetch('http://localhost:3000/api/ciudades');
+        if (response.ok) {
+          const data = await response.json();
+          setCiudades(data);
+        }
+      } catch (error) {
+        console.error('Error al cargar ciudades:', error);
+      } finally {
+        setCargandoCiudades(false);
+      }
+    };
+    
+    cargarCiudades();
+  }, []);
+
+  // 🔍 Filtrar ciudades mientras el usuario escribe
+  useEffect(() => {
+    if (formData.ciudad.length >= 2) {
+      const filtradas = ciudades.filter(ciudad =>
+        ciudad.nombre.toLowerCase().includes(formData.ciudad.toLowerCase())
+      );
+      setCiudadesFiltradas(filtradas);
+      setMostrarSugerencias(true);
+    } else {
+      setCiudadesFiltradas([]);
+      setMostrarSugerencias(false);
+    }
+  }, [formData.ciudad, ciudades]);
+
+  // 🎯 Seleccionar una ciudad existente
+  const seleccionarCiudad = (ciudad: Ciudad) => {
+    setFormData({
+      ...formData,
+      ciudad: ciudad.nombre,
+      ciudadId: ciudad._id
+    });
+    setMostrarSugerencias(false);
+  };
+
+  // 📝 Manejar cambio en el input de ciudad
+  const handleCiudadChange = (value: string) => {
+    setFormData({
+      ...formData,
+      ciudad: value,
+      ciudadId: "" // Limpiar ID cuando se cambia el texto
+    });
+    if (value.length < 2) {
+      setMostrarSugerencias(false);
+    }
+  };
+
+  // ➕ Crear nueva ciudad
+  const crearNuevaCiudad = async (nombreCiudad: string) => {
+    setCreandoCiudad(true);
+    try {
+      const response = await fetch('http://localhost:3000/api/ciudades', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nombre: nombreCiudad,
+          creadaPor: 'propietario'
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        const nuevaCiudad = data.ciudad;
+        // Agregar la nueva ciudad a la lista
+        setCiudades(prev => [...prev, nuevaCiudad]);
+        
+        // Seleccionar automáticamente la nueva ciudad
+        setFormData({
+          ...formData,
+          ciudad: nuevaCiudad.nombre,
+          ciudadId: nuevaCiudad._id
+        });
+        
+        setMostrarSugerencias(false);
+        alert(`✅ Ciudad "${nuevaCiudad.nombre}" creada exitosamente`);
+        return nuevaCiudad;
+      } else {
+        alert(data.error || "Error al crear la ciudad");
+        return null;
+      }
+    } catch (error) {
+      console.error('Error al crear ciudad:', error);
+      alert("Error de conexión al crear la ciudad");
+      return null;
+    } finally {
+      setCreandoCiudad(false);
+    }
+  };
 
   // 🧠 Manejar selección de servicios
   const handleServicioChange = (servicio: string) => {
@@ -53,10 +167,33 @@ export default function ComplejoForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    let ciudadFinal = formData.ciudadId;
+
+    // Si no hay ciudad seleccionada pero hay texto, ofrecer crear nueva
+    if (!formData.ciudadId && formData.ciudad.trim()) {
+      const confirmar = confirm(`La ciudad "${formData.ciudad}" no existe. ¿Desea crearla?`);
+      if (confirmar) {
+        const nuevaCiudad = await crearNuevaCiudad(formData.ciudad.trim());
+        if (nuevaCiudad) {
+          ciudadFinal = nuevaCiudad._id;
+        } else {
+          return;
+        }
+      } else {
+        alert("Debe seleccionar una ciudad existente o crear una nueva");
+        return;
+      }
+    }
+
+    if (!ciudadFinal) {
+      alert("Debe seleccionar una ciudad");
+      return;
+    }
+
     const body = {
       nombre: formData.nombre,
       direccion: formData.direccion,
-      ciudad: formData.ciudad,
+      ciudad: ciudadFinal,
       servicios: serviciosSeleccionados,
       canchas: canchas.map(c => ({
         tipoCancha: c.tipoCancha,
@@ -76,7 +213,7 @@ export default function ComplejoForm() {
 
       if (res.ok) {
         alert("✅ Complejo creado con éxito");
-        setFormData({ nombre: "", direccion: "", ciudad: "" });
+        setFormData({ nombre: "", direccion: "", ciudad: "", ciudadId: "" });
         setServiciosSeleccionados([]);
         setCanchas([{ tipoCancha: "Fútbol 5", precioHora: "", disponible: true }]);
       } else {
@@ -110,14 +247,61 @@ export default function ComplejoForm() {
           required
         />
 
-        <input
-          className={styles.input}
-          type="text"
-          placeholder="Ciudad"
-          value={formData.ciudad}
-          onChange={e => setFormData({ ...formData, ciudad: e.target.value })}
-          required
-        />
+        <div className={styles.ciudadContainer}>
+          <input
+            className={styles.input}
+            type="text"
+            placeholder="Buscar o crear ciudad"
+            value={formData.ciudad}
+            onChange={e => handleCiudadChange(e.target.value)}
+            onFocus={() => formData.ciudad.length >= 2 && setMostrarSugerencias(true)}
+            onBlur={() => setTimeout(() => setMostrarSugerencias(false), 200)}
+            required
+          />
+
+
+
+          {/* Menú desplegable de sugerencias */}
+          {mostrarSugerencias && (
+            <div className={styles.dropdown}>
+              {cargandoCiudades ? (
+                <div className={styles.dropdownItem + ' ' + styles.loading}>
+                  <span className={styles.loadingIcon}>⏳</span>
+                  Cargando ciudades...
+                </div>
+              ) : ciudadesFiltradas.length > 0 ? (
+                ciudadesFiltradas.map((ciudad) => (
+                  <div
+                    key={ciudad._id}
+                    className={styles.dropdownItem + ' ' + styles.clickable}
+                    onClick={() => seleccionarCiudad(ciudad)}
+                  >
+                    <span className={styles.cityIcon}>📍</span>
+                    <span className={styles.cityName}>{ciudad.nombre}</span>
+                  </div>
+                ))
+              ) : formData.ciudad.trim().length >= 2 ? (
+                <div className={styles.dropdownItem + ' ' + styles.createOption}>
+                  <div
+                    className={styles.createButton}
+                    onClick={() => crearNuevaCiudad(formData.ciudad.trim())}
+                  >
+                    <span className={styles.createIcon}>➕</span>
+                    <span className={styles.createText}>
+                      Crear "{formData.ciudad}"
+                      {creandoCiudad && " (Creando...)"}
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <div className={styles.dropdownItem + ' ' + styles.hint}>
+                  <span className={styles.hintIcon}>💡</span>
+                  Escribe al menos 2 caracteres para buscar
+                </div>
+              )}
+            </div>
+          )}
+        </div>
 
         <h3 className={styles.subtitulo}>Canchas</h3>
 

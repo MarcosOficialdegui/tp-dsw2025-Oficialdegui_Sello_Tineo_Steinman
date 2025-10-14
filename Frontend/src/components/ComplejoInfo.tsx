@@ -5,7 +5,10 @@ interface ComplejoData {
   _id: string;
   nombre: string;
   direccion: string;
-  ciudad: string;
+  ciudad: {
+    _id: string;
+    nombre: string;
+  };
   servicios: string[]; // Array de servicios disponibles
   canchas: Array<{
     _id?: string;
@@ -167,7 +170,7 @@ export default function ComplejoInfo({ complejo }: ComplejoInfoProps) {
             <div className={styles.complejoMapInfo}>
               <p className={styles.complejoMapInfoTitle}>{complejo.nombre}</p>
               <p className={styles.complejoMapInfoAddress}>
-                {complejo.direccion}, {complejo.ciudad}
+                {complejo.direccion}, {complejo.ciudad.nombre}
               </p>
             </div>
           </div>          
@@ -175,7 +178,7 @@ export default function ComplejoInfo({ complejo }: ComplejoInfoProps) {
             <div className={styles.complejoContactItem}>
               <span className={styles.complejoContactIcon}>📍</span>
               <span className={styles.complejoContactText}>
-                {complejo.direccion}, {complejo.ciudad}
+                {complejo.direccion}, {complejo.ciudad.nombre}
               </span>
             </div>
           </div>

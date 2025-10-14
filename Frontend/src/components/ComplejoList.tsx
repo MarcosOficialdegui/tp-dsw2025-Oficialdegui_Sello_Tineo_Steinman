@@ -10,7 +10,10 @@ type Complejo = {
   _id: string;
   nombre: string;
   direccion?: string;
-  ciudad?: string;
+  ciudad?: {
+    _id: string;
+    nombre: string;
+  };
   imagen?: string;
   canchas?: Cancha[];
 };
@@ -37,7 +40,7 @@ function ComplejoList({ complejos, onComplejoClick }: Props) {
             <div className="complejo-info">
               <h3>{complejo.nombre}</h3>
               <p>📍 {complejo.direccion}</p>
-              <p>🏙️ {complejo.ciudad}</p>
+              <p>🏙️ {complejo.ciudad?.nombre || 'Ciudad no especificada'}</p>
               <p>
                 ⚽ Tipos de canchas:{" "}
                 {complejo.canchas?.map((c) => c.tipoCancha).join(", ") || "—"}
