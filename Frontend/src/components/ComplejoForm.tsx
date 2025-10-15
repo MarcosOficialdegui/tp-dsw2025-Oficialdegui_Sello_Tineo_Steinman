@@ -93,6 +93,7 @@ export default function ComplejoForm() {
   };
 
   // ➕ Crear nueva ciudad
+  
   const crearNuevaCiudad = async (nombreCiudad: string) => {
     setCreandoCiudad(true);
     try {
@@ -100,6 +101,7 @@ export default function ComplejoForm() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem("token") || ""}`,
         },
         body: JSON.stringify({
           nombre: nombreCiudad,

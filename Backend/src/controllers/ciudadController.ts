@@ -55,7 +55,7 @@ export const createCiudad = async (req: Request, res: Response) => {
 
         res.status(201).json({
             message: 'Ciudad creada exitosamente',
-            nombre: ciudadGuardada.nombre,
+            ciudad: ciudadGuardada,
         });
     } catch (error: any) {
         console.error('Error al crear ciudad:', error);

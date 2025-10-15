@@ -108,14 +108,18 @@ export const guardarComplejoEnUsuario = async (req: Request, res: Response): Pro
 export const buscarComplejosUsuario = async (req: Request, res: Response): Promise<void> => {
     try {
         const userId = (req as any).user.id;
-        const usuario = await Usuario.findById(userId).populate('complejos');
+        // Busca el usuario y popula los complejos
+        const usuario = await Usuario.findById(userId)
+            .populate({
+                path: 'complejos',
+                populate: { path: 'ciudad', select: 'nombre' } // <-- esto popula la ciudad en cada complejo
+            });
 
         if (!usuario) {
             res.status(404).json({ error: 'Usuario no encontrado' });
             return;
         }
         res.status(200).json({ complejos: usuario.complejos });
-        
     } catch (error) {
         res.status(500).json({ error: 'Error al obtener los complejos del usuario' });
     }

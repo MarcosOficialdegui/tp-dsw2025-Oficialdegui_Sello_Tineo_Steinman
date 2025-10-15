@@ -9,9 +9,6 @@ export const getComplejos = async (req: Request, res: Response) => {
     const query: any = {};
 
     if (ciudad) {
-<<<<<<< HEAD
-      query.ciudad = ciudad;
-=======
       // Si ciudad es un ObjectId, buscar por ID, si no, buscar por nombre
       if (ciudad.length === 24) { // ObjectId tiene 24 caracteres
         query.ciudad = ciudad;
@@ -28,7 +25,6 @@ export const getComplejos = async (req: Request, res: Response) => {
           return res.json([]);
         }
       }
->>>>>>> 2427a43eb759ff59cf0f858ff584aec18afb547a
     }
 
     if (tipoCancha) {
@@ -49,19 +45,12 @@ export const getComplejos = async (req: Request, res: Response) => {
 export const getComplejoById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-<<<<<<< HEAD
-
-    // Buscar complejo por ID sin populate ya que los datos están embebidos
-    const complejo = await Complejo.findById(id);
-
-=======
     
     // Buscar complejo por ID y hacer populate de la ciudad
     const complejo = await Complejo.findById(id)
       .populate('ciudad', 'nombre') // Populate ciudad con solo el nombre
       .exec();
     
->>>>>>> 2427a43eb759ff59cf0f858ff584aec18afb547a
     if (!complejo) {
       return res.status(404).json({ error: 'Complejo no encontrado' });
     }
