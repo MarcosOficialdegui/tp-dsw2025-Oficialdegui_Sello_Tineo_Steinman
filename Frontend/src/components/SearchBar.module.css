@@ -209,10 +209,13 @@
 }
 
 /* RESPONSIVE */
-@media (max-width: 768px) {
+
+/* SM - Móviles (hasta 767px) */
+@media (max-width: 767px) {
   .container {
     flex-direction: column;
     gap: 12px;
+    padding: 16px;
   }
   
   .fieldContainer {
@@ -221,6 +224,48 @@
   
   .button {
     width: 100%;
+    padding: 14px;
+    font-size: 16px;
+  }
+
+  .input {
+    font-size: 16px; /* Evita zoom en iOS */
+  }
+}
+
+/* MD - Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .container {
+    gap: 12px;
+    padding: 18px;
+  }
+
+  .fieldContainer {
+    min-width: 180px;
+    flex: 1 1 calc(50% - 12px); /* 2 columnas */
+  }
+
+  .button {
+    width: 100%;
+    margin-top: 8px;
+  }
+}
+
+/* LG - Desktop (1024px+) */
+@media (min-width: 1024px) {
+  .container {
+    gap: 16px;
+    padding: 20px;
+  }
+
+  .fieldContainer {
+    min-width: 200px;
+    flex: 1;
+  }
+
+  .button {
+    min-width: 150px;
+    flex: 0 0 auto;
   }
 }
 

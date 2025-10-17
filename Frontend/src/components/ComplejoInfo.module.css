@@ -143,3 +143,238 @@
   border: 2px solid #4CAF50;
   background: #f6fff6;
 }
+/* Responsive */
+/* SM - Móviles (hasta 767px) */
+@media (max-width: 767px) {
+  .complejoInfo {
+    padding: 1rem;
+  }
+
+  .complejoInfoTitle {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .complejoInfoGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .complejoDetailsTitle,
+  .complejoMapTitle {
+    font-size: 1.125rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .complejoDetailsList {
+    gap: 0.5rem;
+  }
+
+  .complejoDetailsIcon,
+  .complejoContactIcon {
+    font-size: 1.125rem;
+  }
+
+  .complejoDetailsText,
+  .complejoContactText {
+    font-size: 0.875rem;
+  }
+
+  .complejoPriceBox {
+    margin-top: 1rem;
+    padding: 0.75rem;
+  }
+
+  .complejoPriceTitle {
+    font-size: 1rem;
+  }
+
+  .complejoPrice {
+    font-size: 1.25rem;
+  }
+
+  .complejoMapBox {
+    height: 250px;
+  }
+
+  .complejoMapIcon {
+    font-size: 2.5rem;
+  }
+
+  .complejoMapInfoTitle {
+    font-size: 0.938rem;
+  }
+
+  .complejoMapInfoAddress {
+    font-size: 0.813rem;
+  }
+
+  .canchaHoverBox {
+    padding: 8px;
+  }
+}
+
+/* MD - Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .complejoInfo {
+    padding: 1.5rem;
+  }
+
+  .complejoInfoTitle {
+    font-size: 1.375rem;
+  }
+
+  .complejoInfoGrid {
+    gap: 1.75rem;
+  }
+
+  .complejoDetailsTitle,
+  .complejoMapTitle {
+    font-size: 1.188rem;
+  }
+
+  .complejoMapBox {
+    height: 275px;
+  }
+
+  .complejoMapIcon {
+    font-size: 2.75rem;
+  }
+
+  .canchaHoverBox {
+    padding: 10px;
+  }
+}
+
+/* LG - Desktop (1024px+) */
+@media (min-width: 1024px) {
+  .complejoInfo {
+    padding: 2rem;
+  }
+
+  .complejoInfoGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .complejoMapBox {
+    height: 300px;
+  }
+}
+
+/* Responsive */
+/* SM - MÃ³viles (hasta 767px) */
+@media (max-width: 767px) {
+  .complejoInfo {
+    padding: 1rem;
+  }
+
+  .complejoInfoTitle {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .complejoInfoGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .complejoDetailsTitle,
+  .complejoMapTitle {
+    font-size: 1.125rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .complejoDetailsList {
+    gap: 0.5rem;
+  }
+
+  .complejoDetailsIcon,
+  .complejoContactIcon {
+    font-size: 1.125rem;
+  }
+
+  .complejoDetailsText,
+  .complejoContactText {
+    font-size: 0.875rem;
+  }
+
+  .complejoPriceBox {
+    margin-top: 1rem;
+    padding: 0.75rem;
+  }
+
+  .complejoPriceTitle {
+    font-size: 1rem;
+  }
+
+  .complejoPrice {
+    font-size: 1.25rem;
+  }
+
+  .complejoMapBox {
+    height: 250px;
+  }
+
+  .complejoMapIcon {
+    font-size: 2.5rem;
+  }
+
+  .complejoMapInfoTitle {
+    font-size: 0.938rem;
+  }
+
+  .complejoMapInfoAddress {
+    font-size: 0.813rem;
+  }
+
+  .canchaHoverBox {
+    padding: 8px;
+  }
+}
+
+/* MD - Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .complejoInfo {
+    padding: 1.5rem;
+  }
+
+  .complejoInfoTitle {
+    font-size: 1.375rem;
+  }
+
+  .complejoInfoGrid {
+    gap: 1.75rem;
+  }
+
+  .complejoDetailsTitle,
+  .complejoMapTitle {
+    font-size: 1.188rem;
+  }
+
+  .complejoMapBox {
+    height: 275px;
+  }
+
+  .complejoMapIcon {
+    font-size: 2.75rem;
+  }
+
+  .canchaHoverBox {
+    padding: 10px;
+  }
+}
+
+/* LG - Desktop (1024px+) */
+@media (min-width: 1024px) {
+  .complejoInfo {
+    padding: 2rem;
+  }
+
+  .complejoInfoGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .complejoMapBox {
+    height: 300px;
+  }
+}

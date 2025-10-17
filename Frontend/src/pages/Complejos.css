@@ -1,7 +1,7 @@
 .complejos-page {
   min-height: 100vh;
   padding: 20px;
-  background: #f5f5f5;
+
 }
 
 .search-section {
@@ -114,18 +114,21 @@
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+/* SM - Móviles (hasta 767px) */
+@media (max-width: 767px) {
   .complejos-page {
     padding: 10px;
   }
 
   .search-section {
-    padding: 15px;
+    margin-bottom: 16px;
   }
 
   .controls-bar {
     flex-direction: column;
     align-items: flex-start;
+    padding: 12px 16px;
+    gap: 12px;
   }
 
   .controls-left,
@@ -144,5 +147,47 @@
   .sort-controls {
     width: 100%;
     justify-content: space-between;
+  }
+
+  .filter-toggle {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* MD - Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .complejos-page {
+    padding: 16px;
+  }
+
+  .controls-bar {
+    padding: 14px 18px;
+    gap: 14px;
+  }
+
+  .results-count {
+    font-size: 15px;
+  }
+
+  .sort-controls {
+    min-width: 280px;
+  }
+}
+
+/* LG - Desktop (1024px+) */
+@media (min-width: 1024px) {
+  .complejos-page {
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .controls-bar {
+    padding: 15px 20px;
+  }
+
+  .results-count {
+    font-size: 15px;
   }
 }

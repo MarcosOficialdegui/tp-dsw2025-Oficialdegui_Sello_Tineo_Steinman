@@ -34,7 +34,7 @@
 }
 
 .desplegar-form.abierto {
-  max-height: 2000px;
+  max-height: 3000px;
   opacity: 1;
 }
 
@@ -43,5 +43,55 @@
   flex-wrap: wrap;
   gap: 24px;
   justify-content: center;
+}
+
+/* Responsive */
+/* SM - Móviles (hasta 767px) */
+@media (max-width: 767px) {
+  .main-container {
+    padding: 10px;
+  }
+
+  .desplegar button {
+    margin-top: 10px;
+    margin-bottom: 18px;
+    padding: 10px;
+    font-size: 0.938rem;
+  }
+
+  .complejos-grid {
+    gap: 16px;
+  }
+}
+
+/* MD - Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .main-container {
+    padding: 16px;
+  }
+
+  .desplegar button {
+    margin-top: 11px;
+    margin-bottom: 20px;
+    padding: 11px;
+    font-size: 0.969rem;
+  }
+
+  .complejos-grid {
+    gap: 20px;
+  }
+}
+
+/* LG - Desktop (1024px+) */
+@media (min-width: 1024px) {
+  .main-container {
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .complejos-grid {
+    gap: 24px;
+  }
 }
 

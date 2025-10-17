@@ -194,9 +194,13 @@
   color: #007bff;
 }
 
-@media (max-width: 768px) {
+/* RESPONSIVE BREAKPOINTS */
+
+/* SM - Móviles (hasta 767px) */
+@media (max-width: 767px) {
   .hero {
     background-attachment: scroll; /* Desactivar parallax en móvil para mejor performance */
+    min-height: 100vh;
   }
 
   .hero-content {
@@ -204,28 +208,19 @@
   }
 
   .hero-title {
-    font-size: 2.2rem;
+    font-size: 2rem;
+    margin-bottom: 1rem;
   }
 
   .hero-description {
-    font-size: 1.1rem;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
   }
 
   .hero-reservar-btn {
     padding: 0.9rem 2rem;
     font-size: 1rem;
-  }
-
-  .complejo-hero {
-    height: 400px;
-  }
-  
-  .complejo-title {
-    font-size: 2rem;
-  }
-  
-  .complejo-description {
-    font-size: 1rem;
+    width: 100%;
   }
 
   .home-container {
@@ -245,5 +240,67 @@
   .ver-complejo-btn {
     width: 100%;
     padding: 12px;
+  }
+}
+
+/* MD - Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero {
+    background-attachment: scroll;
+    min-height: 80vh;
+  }
+
+  .hero-content {
+    padding: 2rem;
+    max-width: 700px;
+  }
+
+  .hero-title {
+    font-size: 2.8rem;
+  }
+
+  .hero-description {
+    font-size: 1.2rem;
+  }
+
+  .hero-reservar-btn {
+    padding: 1rem 2.5rem;
+  }
+
+  .home-container {
+    padding: 16px;
+  }
+
+  .complejo-card {
+    margin-bottom: 14px;
+  }
+}
+
+/* LG - Desktop (1024px+) */
+@media (min-width: 1024px) {
+  .hero {
+    background-attachment: fixed; /* Parallax solo en desktop */
+    min-height: calc(100vh - 110.719px);
+  }
+
+  .hero-content {
+    padding: 2rem;
+    max-width: 800px;
+  }
+
+  .hero-title {
+    font-size: 3.5rem;
+  }
+
+  .hero-description {
+    font-size: 1.3rem;
+  }
+
+  .hero-reservar-btn {
+    padding: 1rem 2.5rem;
+  }
+
+  .home-container {
+    padding: 16px;
   }
 }

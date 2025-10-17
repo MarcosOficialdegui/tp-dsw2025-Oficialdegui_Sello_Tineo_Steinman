@@ -65,11 +65,101 @@
   align-items: start;
 }
 
-@media (max-width: 1024px) {
-  .complejo-title {
-    font-size: 2rem;
+/* Responsive */
+/* SM - Móviles (hasta 767px) */
+@media (max-width: 767px) {
+  .complejo-hero {
+    padding: 2rem 0;
   }
+
+  .complejo-hero-content {
+    padding: 0 0.75rem;
+  }
+
+  .complejo-title {
+    font-size: 1.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .complejo-description {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .complejo-reservar-btn {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  .complejo-main {
+    padding: 1.5rem 0.75rem;
+  }
+
   .complejo-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+/* MD - Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .complejo-hero {
+    padding: 3rem 0;
+  }
+
+  .complejo-hero-content {
+    padding: 0 1.5rem;
+  }
+
+  .complejo-title {
+    font-size: 2.25rem;
+    margin-bottom: 0.875rem;
+  }
+
+  .complejo-description {
+    font-size: 1.125rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .complejo-reservar-btn {
+    padding: 0.938rem 1.75rem;
+    font-size: 1.063rem;
+  }
+
+  .complejo-main {
+    padding: 2rem 1.5rem;
+  }
+
+  .complejo-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+/* LG - Desktop (1024px+) */
+@media (min-width: 1024px) {
+  .complejo-hero {
+    padding: 4rem 0;
+  }
+
+  .complejo-hero-content {
+    padding: 0 2rem;
+  }
+
+  .complejo-title {
+    font-size: 3rem;
+  }
+
+  .complejo-description {
+    font-size: 1.25rem;
+  }
+
+  .complejo-main {
+    padding: 3rem 2rem;
+  }
+
+  .complejo-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
   }
 }

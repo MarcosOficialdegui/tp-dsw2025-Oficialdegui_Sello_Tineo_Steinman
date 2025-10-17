@@ -49,24 +49,34 @@
   border: none;
   color: #2e7d32;
   cursor: pointer;
+  font-size: 1.5rem;
 }
 
+/* Responsive */
+/* SM - Móviles (hasta 767px) */
+@media (max-width: 767px) {
+  .container {
+    padding: 0 1rem;
+  }
 
-@media (max-width: 768px) {
+  .logo {
+    font-size: 1.3rem;
+  }
+
   .menuButton {
     display: block;
   }
 
   .nav {
     position: absolute;
-    top: 72px;
+    top: 60px;
     left: 0;
     width: 100%;
     background-color: #ffffff;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
-    padding: 1.2rem 0;
+    gap: 0.5rem;
+    padding: 1rem 0;
     border-top: 1px solid #e0e0e0;
     transform: translateY(-200%);
     opacity: 0;
@@ -82,7 +92,49 @@
   }
 
   .nav a {
-    font-size: 1.1rem;
+    font-size: 1rem;
     padding: 0.5rem 0;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* MD - Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .container {
+    padding: 0 1.25rem;
+    max-width: 100%;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+  }
+
+  .nav {
+    gap: 1.25rem;
+  }
+
+  .nav a {
+    font-size: 0.938rem;
+  }
+}
+
+/* LG - Desktop (1024px+) */
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1400px;
+    padding: 0 2rem;
+  }
+
+  .logo {
+    font-size: 1.6rem;
+  }
+
+  .nav {
+    gap: 1.5rem;
+  }
+
+  .nav a {
+    font-size: 1rem;
   }
 }
