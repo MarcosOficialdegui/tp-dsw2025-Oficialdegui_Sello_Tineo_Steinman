@@ -123,7 +123,7 @@ const Home: React.FC = () => {
           </p>
           <button
             className="hero-reservar-btn"
-            onClick={() => window.scrollTo({ top: 961.985, behavior: "smooth" })}
+            onClick={() => window.scrollTo({ top: 851.266, behavior: "smooth" })}
           >
             Reservar Ahora
           </button>

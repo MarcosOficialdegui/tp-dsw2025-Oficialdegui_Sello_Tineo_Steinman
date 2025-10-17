@@ -1,3 +1,14 @@
+/* Layout principal para mantener footer abajo */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-main {
+  flex: 1;
+}
+
 button{
     background-color: #4CAF50; /* Green */
     border: none;

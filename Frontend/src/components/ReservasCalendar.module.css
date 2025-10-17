@@ -1,0 +1,217 @@
+.container {
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* SELECTOR DE DÍAS */
+.selectorDias {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.diaBtn {
+  flex: 1;
+  min-width: 100px;
+  padding: 12px 16px;
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.diaBtn:hover {
+  border-color: #57b46f;
+  background: #f8fff8;
+}
+
+.diaSeleccionado {
+  background: linear-gradient(135deg, #57b46f 0%, #4aa763 100%);
+  border-color: #4aa763;
+  color: white;
+  font-weight: 600;
+}
+
+.diaNombre {
+  display: block;
+  font-size: 14px;
+  text-transform: capitalize;
+}
+
+/* CONTENEDOR DE RESERVAS */
+.reservasContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* CARD DE RESERVA */
+.reservaCard {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #57b46f;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.reservaCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ESTADOS */
+.confirmada {
+  border-left-color: #4CAF50;
+}
+
+.pendiente {
+  border-left-color: #FFA726;
+}
+
+.cancelada {
+  border-left-color: #EF5350;
+  opacity: 0.7;
+}
+
+/* HEADER DE RESERVA */
+.reservaHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.horario {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.estadoBadge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.confirmada .estadoBadge {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
+.pendiente .estadoBadge {
+  background: #FFF3E0;
+  color: #E65100;
+}
+
+.cancelada .estadoBadge {
+  background: #FFEBEE;
+  color: #C62828;
+}
+
+/* BODY DE RESERVA */
+.reservaBody {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.canchaInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #57b46f;
+  font-weight: 500;
+}
+
+.usuarioInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  font-size: 14px;
+}
+
+.infoItem svg {
+  color: #999;
+}
+
+/* ESTADOS VACÍOS */
+.cargando,
+.sinReservas {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+}
+
+.sinReservas svg {
+  color: #ddd;
+  margin-bottom: 16px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 767px) {
+  .selectorDias {
+    gap: 6px;
+  }
+
+  .diaBtn {
+    min-width: 80px;
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .reservaCard {
+    padding: 14px;
+  }
+
+  .reservaHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .usuarioInfo {
+    padding: 10px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .selectorDias {
+    gap: 10px;
+  }
+
+  .diaBtn {
+    min-width: 90px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .selectorDias {
+    gap: 12px;
+  }
+
+  .diaBtn {
+    min-width: 100px;
+  }
+}
