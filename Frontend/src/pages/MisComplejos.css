@@ -3,7 +3,8 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  
+  min-height: calc(100vh - 200px); /* Ajustar según la altura del header */
+  padding: 20px;
 }
 
 .desplegar button {
@@ -45,6 +46,144 @@
   justify-content: center;
 }
 
+/* LISTA DE COMPLEJOS */
+.complejos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.loading-message,
+.no-results-message {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+  font-size: 1.1rem;
+}
+
+/* CARD DE COMPLEJO */
+.complejo-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.complejo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* HEADER DEL COMPLEJO */
+.complejo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 24px;
+  gap: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.complejo-info h2 {
+  margin: 0 0 12px 0;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.complejo-detalles {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detalle-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #666;
+  font-size: 14px;
+}
+
+.detalle-item svg {
+  color: #57b46f;
+}
+
+/* ACCIONES */
+.complejo-acciones {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-ver,
+.btn-ver-reservas,
+.btn-eliminar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-ver {
+  background: #e8f4ff;
+  color: #1976d2;
+  border: 2px solid #1976d2;
+}
+
+.btn-ver:hover {
+  background: #1976d2;
+  color: white;
+}
+
+.btn-ver-reservas {
+  background: #f0f7f4;
+  color: #57b46f;
+  border: 2px solid #57b46f;
+}
+
+.btn-ver-reservas:hover {
+  background: #57b46f;
+  color: white;
+}
+
+.btn-eliminar {
+  background: #fff5f5;
+  color: #e53935;
+  border: 2px solid #e53935;
+}
+
+.btn-eliminar:hover {
+  background: #e53935;
+  color: white;
+}
+
+/* SECCIÓN DE RESERVAS */
+.reservas-section {
+  padding: 24px;
+  background: #fafafa;
+  animation: expandDown 0.4s ease-out;
+}
+
+@keyframes expandDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 2000px;
+  }
+}
+
 /* Responsive */
 /* SM - Móviles (hasta 767px) */
 @media (max-width: 767px) {
@@ -61,6 +200,31 @@
 
   .complejos-grid {
     gap: 16px;
+  }
+
+  .complejo-header {
+    flex-direction: column;
+    padding: 16px;
+  }
+
+  .complejo-info h2 {
+    font-size: 1.2rem;
+  }
+
+  .complejo-acciones {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .btn-ver,
+  .btn-ver-reservas,
+  .btn-eliminar {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .reservas-section {
+    padding: 16px;
   }
 }
 
@@ -80,6 +244,10 @@
   .complejos-grid {
     gap: 20px;
   }
+
+  .complejo-header {
+    padding: 20px;
+  }
 }
 
 /* LG - Desktop (1024px+) */
@@ -92,6 +260,10 @@
 
   .complejos-grid {
     gap: 24px;
+  }
+
+  .complejo-header {
+    padding: 24px;
   }
 }
 

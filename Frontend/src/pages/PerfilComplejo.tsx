@@ -4,14 +4,11 @@ import Calendar from "../components/Calendar";
 import ComplejoInfo from "../components/ComplejoInfo";
 import "./PerfilComplejo.css";
 
-export interface ComplejoData {
+interface ComplejoData {
   _id: string;
   nombre: string;
   direccion: string;
-  ciudad: {
-    _id: string;
-    nombre: string;
-  };
+  ciudad: { _id: string; nombre: string; };
   servicios: string[];
   canchas: Array<{
     _id?: string;
@@ -27,7 +24,8 @@ export default function Complejo() {
   const [complejo, setComplejo] = useState<ComplejoData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  const [seleccionCancha, setSeleccionCancha] = useState<string | null>(null);
+ 
   useEffect(() => {
     const fetchComplejo = async () => {
       try {
@@ -76,19 +74,27 @@ export default function Complejo() {
     );
   }
 
+
+  // Obtener los datos de los componentes hijos
+  const handleSeleccionCancha = (canchaId: string) => {
+    setSeleccionCancha(canchaId);
+  }
+
+
   return (
     <div className="complejo-container">
       <main className="complejo-main">
         <div className="complejo-grid">
+          {seleccionCancha && seleccionCancha !== "" ? (
+            <div>
+              <Calendar complejoId={complejo._id} canchaId = {seleccionCancha} />
+            </div>
+          ) : null}
 
           <div>
-            <ComplejoInfo complejo={complejo} />
+            <ComplejoInfo complejo={complejo}
+              onSeleccionCancha={handleSeleccionCancha} />
           </div>
-    
-          <div>
-            <Calendar complejoId={complejo._id} />
-          </div>
-
         </div>
       </main>
     </div>
