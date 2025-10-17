@@ -25,7 +25,7 @@ export default function Complejo() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [seleccionCancha, setSeleccionCancha] = useState<string | null>(null);
- 
+
   useEffect(() => {
     const fetchComplejo = async () => {
       try {
@@ -85,16 +85,20 @@ export default function Complejo() {
     <div className="complejo-container">
       <main className="complejo-main">
         <div className="complejo-grid">
-          {seleccionCancha && seleccionCancha !== "" ? (
-            <div>
-              <Calendar complejoId={complejo._id} canchaId = {seleccionCancha} />
-            </div>
-          ) : null}
+
 
           <div>
             <ComplejoInfo complejo={complejo}
               onSeleccionCancha={handleSeleccionCancha} />
           </div>
+
+          {seleccionCancha && seleccionCancha !== "" ? (
+            <div className="calendar-container animated">
+              <Calendar complejoId={complejo._id} canchaId={seleccionCancha} />
+            </div>
+          ) : null}
+
+
         </div>
       </main>
     </div>

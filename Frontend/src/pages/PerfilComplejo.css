@@ -163,3 +163,19 @@
     gap: 3rem;
   }
 }
+
+
+.calendar-container.animated {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
