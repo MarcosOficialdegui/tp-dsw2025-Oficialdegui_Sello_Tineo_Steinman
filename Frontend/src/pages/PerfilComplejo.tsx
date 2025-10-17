@@ -33,11 +33,11 @@ export default function Complejo() {
       try {
         setLoading(true);
         const response = await fetch(`http://localhost:3000/api/complejos/${id}`);
-        
+
         if (!response.ok) {
           throw new Error('Complejo no encontrado');
         }
-        
+
         const data = await response.json();
         setComplejo(data);
       } catch (error) {
@@ -80,12 +80,15 @@ export default function Complejo() {
     <div className="complejo-container">
       <main className="complejo-main">
         <div className="complejo-grid">
-          <div>
-            <Calendar complejoId={complejo._id} />
-          </div>
+
           <div>
             <ComplejoInfo complejo={complejo} />
           </div>
+    
+          <div>
+            <Calendar complejoId={complejo._id} />
+          </div>
+
         </div>
       </main>
     </div>

@@ -58,6 +58,13 @@ export default function Calendar({ complejoId, canchaId }: CalendarProps) {
 
   const reservarTurno = async() => {
 
+    console.log('Reservando turno para:', {
+      complejo: complejoId,
+      cancha: canchaId,
+      fecha: selectedDate,
+      horaInicio: selectedTime,
+    });
+
     await fetch(`http://localhost:3000/api/reservas`, {
       method: 'POST',
       headers: {
