@@ -1,6 +1,8 @@
 import { useSearchParams } from "react-router-dom";
 import "./UsuarioForm.css";
 import { useState, useEffect } from "react";
+import { mostrarExito, mostrarError } from "../utils/notificaciones";
+
 
 
 
@@ -57,19 +59,19 @@ export default function UsuarioFormRegistro() {
                 if (res.ok) {
                     setValidarMail(false);
                     setValidarPassword(false);
-                    alert("Usuario registrado con éxito");
+                    mostrarExito("Usuario registrado con éxito");
                     window.location.href = "/login";
                 } else {
-                    alert(res.status === 400 ? "El email ya se encuentra registrado" : "Error al registrar el usuario");
+                    mostrarError(res.status === 400 ? "El email ya se encuentra registrado" : "Error al registrar el usuario");
                 }
             } catch (err) {
-                alert("Error de conexión");
+                mostrarError("Error de conexión");
             }
         };
 
         const verificarPassword = () => {
             if (formData.password !== (document.getElementById("passwordCheck") as HTMLInputElement).value) {
-                alert("Las contraseñas no coinciden");
+                mostrarError("Las contraseñas no coinciden");
                 return false;
             } else { return true }
         }
