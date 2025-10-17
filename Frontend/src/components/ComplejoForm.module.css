@@ -4,7 +4,6 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f3f4f6 0%, #e9ecef 100%);
   padding: 20px;
 }
 
@@ -29,7 +28,7 @@
 
 /* Inputs generales */
 .input {
-  width: 100%;
+  width: 94%;
   padding: 12px 14px;
   margin: 8px 0;
   border: 1px solid #d0d7de;
@@ -50,7 +49,12 @@
 .inputSmall {
   flex: 0 0 160px;
   padding: 10px;
+  border: 1px solid #d0d7de;
+  border-radius: 10px;
+  font-size: 1rem;
 }
+
+
 
 /* Select */
 .select {
@@ -292,6 +296,9 @@
 .cityIcon, .loadingIcon, .createIcon, .hintIcon {
   margin-right: 8px;
   font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
 }
 
 .cityName, .createText {
@@ -304,6 +311,10 @@
 }
 
 .loadingIcon {
+  animation: spin 1s linear infinite;
+}
+
+.loadingIcon svg {
   animation: spin 1s linear infinite;
 }
 

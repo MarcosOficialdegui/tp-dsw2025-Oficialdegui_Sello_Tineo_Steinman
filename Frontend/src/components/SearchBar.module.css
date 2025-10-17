@@ -5,7 +5,6 @@
   background: linear-gradient(135deg, #2452b6 0%, #69c0e9 100%);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  margin-bottom: 24px;
   flex-wrap: wrap;
   align-items: flex-start;
 }
@@ -151,6 +150,11 @@
 /* ÍCONOS */
 .loadingIcon {
   margin-right: 8px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.loadingIcon svg {
   animation: spin 1s linear infinite;
 }
 
@@ -163,11 +167,15 @@
   margin-right: 10px;
   font-size: 16px;
   min-width: 20px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .searchIcon {
   margin-right: 8px;
   font-size: 14px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .cityName, .sportName {

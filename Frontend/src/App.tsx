@@ -6,8 +6,8 @@ import ScrollToTop from './components/ScrollToTop';
 import Perfil from './pages/Perfil';
 import TipoUsuario from './pages/UsuarioFormTipoUsuario';
 import MisComplejos from './pages/MisComplejos';    
-
-import Complejo from './pages/Complejo';
+import Complejos from './pages/Complejos';
+import Complejo from './pages/PerfilComplejo';
 
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -20,6 +20,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="complejos" element={<Complejos />} />
         <Route path="/registrarse" element={<UsuarioFormRegistro />} />
         <Route path="/login" element={<UsuarioFormLogin />} /> 
         <Route path="/perfil" element={<Perfil />} />

@@ -29,11 +29,13 @@
 .desplegar-form {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 1s ease;
+  opacity: 0;
+  transition: max-height 0.4s ease-out, opacity 0.3s ease-out;
 }
 
 .desplegar-form.abierto {
-  max-height: 1000px; /* Ajusta según el contenido */
+  max-height: 2000px;
+  opacity: 1;
 }
 
 .complejos-grid {

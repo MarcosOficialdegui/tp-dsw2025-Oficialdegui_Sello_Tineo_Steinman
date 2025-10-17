@@ -6,6 +6,7 @@ import {
   MdLocationOn,       // Ubicación
   MdSearch            // Búsqueda
 } from "react-icons/md";
+import { Loader2 } from 'lucide-react';
 
 type Ciudad = {
   _id: string;
@@ -131,7 +132,7 @@ const SearchBar: React.FC<Props> = ({ filters, onChange, onSearch }) => {
           <div className={styles.dropdown}>
             {cargandoCiudades ? (
               <div className={`${styles.dropdownItem} ${styles.loading}`}>
-                <span className={styles.loadingIcon}>⏳</span>
+                <span className={styles.loadingIcon}><Loader2 size={16} /></span>
                 Cargando ciudades...
               </div>
             ) : ciudadesFiltradas.length > 0 ? (

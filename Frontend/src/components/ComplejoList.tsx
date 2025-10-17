@@ -1,11 +1,13 @@
 
 import "./ComplejoList.css";
 import {
-  MdStadium,        // Estadio/Complejo
+  //MdStadium,        // Estadio/Complejo
   MdLocationOn,     // Ubicación
   MdLocationCity,   // Ciudad
-  MdSportsSoccer    // Deportes
+  MdSportsSoccer,   // Deportes
+  MdDelete          // Eliminar
 } from "react-icons/md";
+
 
 type Cancha = {
   tipoCancha: string;
@@ -35,7 +37,7 @@ interface Props {
 function ComplejoList({ complejos, onComplejoClick, nombreLista, onEliminarComplejo }: Props) {
   return (
     <div className="complejo-list">
-      <h2>🏟️ {nombreLista}</h2>
+      <h2>{nombreLista}</h2>
       <div className="complejos-grid">
         {complejos.map((complejo) => (
           <div className="complejo-card" key={complejo._id}
@@ -69,7 +71,8 @@ function ComplejoList({ complejos, onComplejoClick, nombreLista, onEliminarCompl
                     onEliminarComplejo(complejo._id);
                   }}
                 >
-                  🗑️ Eliminar
+                  <MdDelete size={18} style={{ verticalAlign: 'middle', marginRight: '4px' }} />
+                  Eliminar
                 </button>
               )}
             </div>

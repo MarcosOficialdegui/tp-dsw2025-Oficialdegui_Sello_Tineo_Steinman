@@ -107,20 +107,23 @@ const Home: React.FC = () => {
     <>
       {/* Hero con carousel */}
       <section
-        className="complejo-hero"
+        className="hero"
         style={{
           backgroundImage: `url(${heroImages[currentImageIndex]})`,
         }}
       >
-        <div className="complejo-hero-content">
-          <h1 className="complejo-title">Reserva tu Cancha Favorita</h1>
-          <p className="complejo-description">
+        <div className="hero-content">
+          <h1 className="hero-title">Busca tu cancha favorita.</h1>
+          <p className="hero-description">
             Disfruta del mejor fútbol y pádel en instalaciones de primera
-            calidad. Reserva fácil y rápido online.
+            calidad. 
+          </p>
+           <p className="hero-description">
+            Reserva fácil y rápido online.
           </p>
           <button
-            className="complejo-reservar-btn"
-            onClick={() => window.scrollTo({ top: 600, behavior: "smooth" })}
+            className="hero-reservar-btn"
+            onClick={() => window.scrollTo({ top: 961.985, behavior: "smooth" })}
           >
             Reservar Ahora
           </button>

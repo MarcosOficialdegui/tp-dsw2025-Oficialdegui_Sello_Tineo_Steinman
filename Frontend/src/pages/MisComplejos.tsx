@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ComplejoList from '../components/ComplejoList';
 import './MisComplejos.css';
 import { useNavigate } from 'react-router-dom';
 import ComplejoForm from '../components/ComplejoForm';
+import { ChevronDown } from 'lucide-react';
 
 
 export default function MisComplejos() {
@@ -117,7 +118,9 @@ export default function MisComplejos() {
 
                 <div className='desplegar'>
 
-                    <button onClick={() => setRegistrar(prev => (!prev))}>⬇️ Registrar Complejo ⬇️ </button>
+                    <button onClick={() => setRegistrar(prev => (!prev))}>
+                        <ChevronDown size={20} /> Registrar Complejo <ChevronDown size={20} />
+                    </button>
 
                 </div>
 

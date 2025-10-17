@@ -1,0 +1,148 @@
+.complejos-page {
+  min-height: 100vh;
+  padding: 20px;
+  background: #f5f5f5;
+}
+
+.search-section {
+  background: white;
+  padding: 20px;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 0;
+}
+
+/* Barra de controles - integrada visualmente con search-section */
+.controls-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: white;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 20px;
+  border-top: 1px solid #e8e8e8;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.controls-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.controls-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.filter-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.2s;
+}
+
+.filter-toggle:hover {
+  background: #e8f5e9;
+  border-color: #4CAF50;
+  color: #2e7d32;
+}
+
+.results-count {
+  font-size: 15px;
+  color: #666;
+}
+
+.results-count strong {
+  color: #333;
+  font-weight: 600;
+}
+
+.sort-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8f9fa;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.2s;
+}
+
+.sort-controls:hover {
+  border-color: #4CAF50;
+}
+
+.sort-label {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.sort-select {
+  padding: 6px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  background: white;
+  color: #333;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.sort-select:hover,
+.sort-select:focus {
+  border-color: #4CAF50;
+}
+
+/* Línea divisoria - ahora eliminada ya que está integrado */
+.divider {
+  display: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .complejos-page {
+    padding: 10px;
+  }
+
+  .search-section {
+    padding: 15px;
+  }
+
+  .controls-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .controls-left,
+  .controls-right {
+    width: 100%;
+  }
+
+  .controls-right {
+    justify-content: flex-end;
+  }
+
+  .results-count {
+    font-size: 14px;
+  }
+
+  .sort-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

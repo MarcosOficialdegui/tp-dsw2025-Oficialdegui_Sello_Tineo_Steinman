@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./ComplejoForm.module.css";
+import { MapPin, Plus, Lightbulb, Loader2 } from 'lucide-react';
 
 type Ciudad = {
   _id: string;
@@ -124,7 +125,7 @@ export default function ComplejoForm() {
         });
         
         setMostrarSugerencias(false);
-        alert(`✅ Ciudad "${nuevaCiudad.nombre}" creada exitosamente`);
+        alert(`Ciudad "${nuevaCiudad.nombre}" creada exitosamente`);
         return nuevaCiudad;
       } else {
         alert(data.error || "Error al crear la ciudad");
@@ -218,7 +219,7 @@ export default function ComplejoForm() {
       const data = await res.json();
 
       if (res.ok) {
-        alert("✅ Complejo creado con éxito");
+        alert("Complejo creado con éxito");
         setFormData({ nombre: "", direccion: "", ciudad: "", ciudadId: "" });
         setServiciosSeleccionados([]);
         setCanchas([{ tipoCancha: "Fútbol 5", precioHora: "", disponible: true }]);
@@ -273,7 +274,7 @@ export default function ComplejoForm() {
             <div className={styles.dropdown}>
               {cargandoCiudades ? (
                 <div className={styles.dropdownItem + ' ' + styles.loading}>
-                  <span className={styles.loadingIcon}>⏳</span>
+                  <span className={styles.loadingIcon}><Loader2 size={16} /></span>
                   Cargando ciudades...
                 </div>
               ) : ciudadesFiltradas.length > 0 ? (
@@ -283,7 +284,7 @@ export default function ComplejoForm() {
                     className={styles.dropdownItem + ' ' + styles.clickable}
                     onClick={() => seleccionarCiudad(ciudad)}
                   >
-                    <span className={styles.cityIcon}>📍</span>
+                    <span className={styles.cityIcon}><MapPin size={16} /></span>
                     <span className={styles.cityName}>{ciudad.nombre}</span>
                   </div>
                 ))
@@ -293,7 +294,7 @@ export default function ComplejoForm() {
                     className={styles.createButton}
                     onClick={() => crearNuevaCiudad(formData.ciudad.trim())}
                   >
-                    <span className={styles.createIcon}>➕</span>
+                    <span className={styles.createIcon}><Plus size={16} /></span>
                     <span className={styles.createText}>
                       Crear "{formData.ciudad}"
                       {creandoCiudad && " (Creando...)"}
@@ -302,7 +303,7 @@ export default function ComplejoForm() {
                 </div>
               ) : (
                 <div className={styles.dropdownItem + ' ' + styles.hint}>
-                  <span className={styles.hintIcon}>💡</span>
+                  <span className={styles.hintIcon}><Lightbulb size={16} /></span>
                   Escribe al menos 2 caracteres para buscar
                 </div>
               )}
