@@ -6,11 +6,6 @@ interface ICancha {
   disponible: boolean;
 }
 
-interface ICiudad {
-  nombre: string;
-  creadaPor: string;
-}
-
 export interface IComplejo extends Document {
   nombre: string;
   direccion: string;

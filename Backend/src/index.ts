@@ -7,6 +7,7 @@ import complejosRoutes from "./routes/complejos";
 import canchasRoutes from "./routes/canchas";
 import usuariosRoutes from "./routes/usuarios";
 import ciudadesRoutes from "./routes/ciudades";
+import reservasRoutes from "./routes/reservas";
 
 dotenv.config();
 
@@ -21,7 +22,7 @@ app.use("/api/complejos", complejosRoutes);
 app.use("/api/canchas", canchasRoutes);
 app.use("/api/usuarios", usuariosRoutes);
 app.use("/api/ciudades", ciudadesRoutes);
-
+app.use("/api/reservas", reservasRoutes);
 
 const PORT = process.env.PORT || 5000;
 

@@ -8,12 +8,14 @@ interface TimeSlot {
 
 interface CalendarProps {
   complejoId: string;
+  canchaId?: string;
 }
 
-export default function Calendar({ complejoId }: CalendarProps) {
+export default function Calendar({ complejoId, canchaId }: CalendarProps) {
   const [selectedDate, setSelectedDate] = useState<string>("")
   const [selectedTime, setSelectedTime] = useState<string>("")
-  
+
+
   // Usar complejoId para futuras funcionalidades (por ahora solo lo guardamos)
   console.log('Calendar para complejo:', complejoId);
 
@@ -37,14 +39,14 @@ export default function Calendar({ complejoId }: CalendarProps) {
   const timeSlots: TimeSlot[] = [
     { time: "08:00", available: true },
     { time: "09:00", available: true },
-    { time: "10:00", available: false },
+    { time: "10:00", available: true },
     { time: "11:00", available: true },
     { time: "12:00", available: true },
-    { time: "13:00", available: false },
+    { time: "13:00", available: true },
     { time: "14:00", available: true },
     { time: "15:00", available: true },
     { time: "16:00", available: true },
-    { time: "17:00", available: false },
+    { time: "17:00", available: true },
     { time: "18:00", available: true },
     { time: "19:00", available: true },
     { time: "20:00", available: true },
@@ -52,6 +54,38 @@ export default function Calendar({ complejoId }: CalendarProps) {
   ]
 
   const dates = generateDates()
+
+
+  const reservarTurno = async() => {
+
+    await fetch(`http://localhost:3000/api/reservas`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify({
+
+        // JSON DE RESERVA -----------------------------------------
+    
+        complejo: complejoId,
+        cancha: canchaId,
+        fecha: new Date(selectedDate), 
+        horaInicio: selectedTime, 
+
+      }),
+    }).then(response => response.json())
+      .then(data => {
+        console.log('Reserva creada:', data);
+        alert("Reserva creada con exito")
+      })
+      .catch(error => {
+        console.error('Error al crear la reserva:', error);
+        alert("Error al crear la reserva")
+      });
+
+
+  }
 
   return (
     <div className="calendar-container">
@@ -101,6 +135,7 @@ export default function Calendar({ complejoId }: CalendarProps) {
             className="calendar-reserve-btn"
             onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "var(--secondary)")}
             onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "var(--primary)")}
+            onClick= {reservarTurno}
           >
             Reservar Turno
           </button>

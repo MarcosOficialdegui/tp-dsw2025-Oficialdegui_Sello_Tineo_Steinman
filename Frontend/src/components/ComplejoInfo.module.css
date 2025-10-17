@@ -129,3 +129,17 @@
   color: var(--card-foreground);
   font-size: 0.875rem;
 }
+
+ 
+.canchaHoverBox {
+  border: 2px solid transparent;
+  border-radius: 10px;
+  transition: border 0.2s;
+  cursor: pointer;
+  padding: 12px;
+}
+
+.canchaHoverBox:hover {
+  border: 2px solid #4CAF50;
+  background: #f6fff6;
+}

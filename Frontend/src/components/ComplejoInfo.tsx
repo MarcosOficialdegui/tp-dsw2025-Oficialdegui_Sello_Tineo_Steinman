@@ -1,5 +1,6 @@
 import styles from "./ComplejoInfo.module.css"
-import { 
+import { useState } from "react"
+import {
   MdShower,           // Vestuario
   MdLocalParking,     // Estacionamiento  
   MdEmojiEvents,      // Torneos
@@ -35,7 +36,7 @@ interface ComplejoData {
     _id?: string;
     nombre?: string;
     tipoCancha: string; // En el backend es string, no objeto
-    precioHora: number; 
+    precioHora: number;
     disponible: boolean;
   }>;
 }
@@ -43,7 +44,7 @@ interface ComplejoData {
 // Función para obtener el ícono de un servicio
 const getIconoServicio = (servicio: string) => {
   const iconProps = { size: 20, style: { marginRight: '8px' } };
-  
+
   switch (servicio) {
     case 'Vestuario':
       return <MdShower {...iconProps} />;
@@ -73,15 +74,19 @@ const getIconoServicio = (servicio: string) => {
 // Props
 interface ComplejoInfoProps {
   complejo: ComplejoData;
+  onSeleccionCancha?: (canchaId: string) => void; 
 }
 
 
 
-export default function ComplejoInfo({ complejo }: ComplejoInfoProps) {
+export default function ComplejoInfo({ complejo, onSeleccionCancha }: ComplejoInfoProps) {
+
+  
+
   // Función para obtener descripción específica según tipo de cancha
   const getDescripcionCancha = (tipoCancha: string) => {
     const tipo = tipoCancha; // Normalizar texto
-    
+
     switch (tipo) {
       case 'Padel':
         return 'Paletas disponibles para alquiler';
@@ -97,7 +102,7 @@ export default function ComplejoInfo({ complejo }: ComplejoInfoProps) {
   // Función para obtener ícono específico según tipo de cancha
   const getIconoCancha = (tipoCancha: string) => {
     const iconProps = { size: 24, style: { marginRight: '8px' } };
-    
+
     switch (tipoCancha) {
       case 'Padel':
         return <MdSportsTennis {...iconProps} />;
@@ -112,7 +117,7 @@ export default function ComplejoInfo({ complejo }: ComplejoInfoProps) {
   // Función para obtener dimensiones según tipo de cancha
   const getDimensionesCancha = (tipoCancha: string) => {
     const tipo = tipoCancha; // Normalizar texto
-    
+
     switch (tipo) {
       case 'Padel':
         return 'Dimensiones: 20m x 10m';
@@ -127,66 +132,75 @@ export default function ComplejoInfo({ complejo }: ComplejoInfoProps) {
 
   return (
     <div className={styles.complejoInfo}>
-              <h2 className={styles.complejoSubheading}>
-          <MdStadium size={24} color="#4CAF50" />
-          Canchas disponibles
-        </h2>
+      <h2 className={styles.complejoSubheading}>
+        <MdStadium size={24} color="#4CAF50" />
+        Canchas disponibles
+      </h2>
       <div className={styles.complejoInfoGrid}>
 
         <div>
           {/* Información de canchas dinámicas */}
           {complejo.canchas.length > 0 ? (
+            //<div classname = {styles.selectCanchaSection}> </div>
             complejo.canchas.map((cancha, index) => (
-              <div key={cancha._id || index} className={styles.canchaSection}>
-                <h3 className={styles.complejoDetailsTitle}>
-                  {cancha.nombre || `Cancha ${index + 1}`} - {cancha.tipoCancha}
-                </h3>
-                <div className={styles.complejoDetailsList}>
-                  <div className={styles.complejoDetailsItem}>
-                    <span className={styles.complejoDetailsIcon}>
-                      <MdStraighten size={20} />
-                    </span>
-                    <span className={styles.complejoDetailsText}>
-                      {getDimensionesCancha(cancha.tipoCancha)}
-                    </span>
-                  </div>
-                  <div className={styles.complejoDetailsItem}>
-                    <span className={styles.complejoDetailsIcon}>{getIconoCancha(cancha.tipoCancha)}</span>
-                    <span className={styles.complejoDetailsText}>{getDescripcionCancha(cancha.tipoCancha)}</span>
-                  </div>
-                  {/* Información adicional específica para pádel */}
-                  {cancha.tipoCancha.toLowerCase().includes('padel') && (
+
+              <div className ={styles.canchaHoverBox} onClick = {() => {onSeleccionCancha && onSeleccionCancha(cancha._id || "")}} key={cancha._id || index}>
+
+                <div key={cancha._id || index} className={styles.canchaSection}>
+                  <h3 className={styles.complejoDetailsTitle}>
+                    {cancha.nombre || `Cancha ${index + 1}`} - {cancha.tipoCancha}
+                  </h3>
+                  <div className={styles.complejoDetailsList}>
                     <div className={styles.complejoDetailsItem}>
                       <span className={styles.complejoDetailsIcon}>
-                        <MdStadium size={20} />
+                        <MdStraighten size={20} />
                       </span>
-                      <span className={styles.complejoDetailsText}>Pistas con cristales reglamentarios</span>
+                      <span className={styles.complejoDetailsText}>
+                        {getDimensionesCancha(cancha.tipoCancha)}
+                      </span>
                     </div>
-                  )}
-                  <div className={styles.complejoDetailsItem}>
-                    <span className={styles.complejoDetailsIcon}>
-                      <MdLightbulb size={20} />
-                    </span>
-                    <span className={styles.complejoDetailsText}>Iluminación LED completa</span>
+                    <div className={styles.complejoDetailsItem}>
+                      <span className={styles.complejoDetailsIcon}>{getIconoCancha(cancha.tipoCancha)}</span>
+                      <span className={styles.complejoDetailsText}>{getDescripcionCancha(cancha.tipoCancha)}</span>
+                    </div>
+                    {/* Información adicional específica para pádel */}
+                    {cancha.tipoCancha.toLowerCase().includes('padel') && (
+                      <div className={styles.complejoDetailsItem}>
+                        <span className={styles.complejoDetailsIcon}>
+                          <MdStadium size={20} />
+                        </span>
+                        <span className={styles.complejoDetailsText}>Pistas con cristales reglamentarios</span>
+                      </div>
+                    )}
+                    <div className={styles.complejoDetailsItem}>
+                      <span className={styles.complejoDetailsIcon}>
+                        <MdLightbulb size={20} />
+                      </span>
+                      <span className={styles.complejoDetailsText}>Iluminación LED completa</span>
+                    </div>
+                    <div className={styles.complejoDetailsItem}>
+                      <span className={styles.complejoDetailsIcon}>
+                        {cancha.disponible ?
+                          <MdCheckCircle size={20} color="#4CAF50" /> :
+                          <MdCancel size={20} color="#f44336" />
+                        }
+                      </span>
+                      <span className={styles.complejoDetailsText}>
+                        {cancha.disponible ? 'Disponible' : 'No disponible'}
+                      </span>
+                    </div>
                   </div>
-                  <div className={styles.complejoDetailsItem}>
-                    <span className={styles.complejoDetailsIcon}>
-                      {cancha.disponible ? 
-                        <MdCheckCircle size={20} color="#4CAF50" /> : 
-                        <MdCancel size={20} color="#f44336" />
-                      }
-                    </span>
-                    <span className={styles.complejoDetailsText}>
-                      {cancha.disponible ? 'Disponible' : 'No disponible'}
-                    </span>
+                  <div className={styles.complejoPriceBox}>
+                    <h4 className={styles.complejoPriceTitle}>Precio por hora</h4>
+                    <p className={styles.complejoPrice}>${cancha.precioHora.toLocaleString()}</p>
                   </div>
+                  {index < complejo.canchas.length - 1 && <hr className={styles.separator} />}
                 </div>
-                <div className={styles.complejoPriceBox}>
-                  <h4 className={styles.complejoPriceTitle}>Precio por hora</h4>
-                  <p className={styles.complejoPrice}>${cancha.precioHora.toLocaleString()}</p>
-                </div>
-                {index < complejo.canchas.length - 1 && <hr className={styles.separator} />}
+
+
               </div>
+
+
             ))
           ) : (
             <div>
@@ -224,7 +238,7 @@ export default function ComplejoInfo({ complejo }: ComplejoInfoProps) {
                 {complejo.direccion}, {complejo.ciudad.nombre}
               </p>
             </div>
-          </div>          
+          </div>
           <div className={styles.complejoContactList}>
             <div className={styles.complejoContactItem}>
               <span className={styles.complejoContactIcon}>
@@ -248,8 +262,8 @@ export default function ComplejoInfo({ complejo }: ComplejoInfoProps) {
                   {complejo.canchas.length} cancha{complejo.canchas.length !== 1 ? 's' : ''} disponible{complejo.canchas.length !== 1 ? 's' : ''}
                 </span>
               </div>
-              
-              
+
+
               {complejo.servicios && complejo.servicios.length > 0 && (
                 <div className={styles.complejoDetailsItem}>
                   <span className={styles.complejoDetailsIcon}>
