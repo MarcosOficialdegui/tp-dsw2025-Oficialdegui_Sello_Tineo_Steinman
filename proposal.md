@@ -6,7 +6,7 @@
 * 51405 - Sello - Valentino
 * 51379 - Tineo - Tomas Ivan
 * 51790 - Marcos - Oficialdegui
-* 51662 - Alejo - Steinman
+
 
 ### Repositorios
 * [fullstack app](https://github.com/TomasTineo/Complejos-futbol)
@@ -26,8 +26,8 @@ Aplicación web para realizar alquileres de canchas de fútbol 5, fútbol 7, pá
 Regularidad:
 |Req|Detalle|
 |:-|:-|
-|CRUD simple|1. CRUD Complejo.<br> 2. CRUD Cancha. <br> 3. CRUD Reserva. <br> |
-|CRUD dependiente|1. CRUD Tipo de cancha {depende de} CRUD Cancha. <br>2. CRUD Localidad {depende de} CRUD Complejo|
+|CRUD simple|1. CRUD Complejo.<br> 2. CRUD Cancha. <br> 3. CRUD Ciudad. <br> 4. CRUD Reseña. |
+|CRUD dependiente|1. CRUD Tipo de cancha {depende de} CRUD Cancha. <br>2. CRUD Reserva {depende de} CRUD Complejo & CRUD Usuario. |
 |CUU/Epic|1. Registrarse como propietario de canchas. <br>2. Publicar una cancha. <br> 3. Registrarse como Usuario <br> 4. Reservar una cancha <br> 5. Realizar el pago de una reserva <br> 6. Gestionar reservas como propietario o usuario|
 
 ### Adicional Para Aprobacion 
