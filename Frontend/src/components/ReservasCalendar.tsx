@@ -2,17 +2,17 @@ import { useState, useEffect } from 'react';
 import styles from './ReservasCalendar.module.css';
 import { MdCalendarToday, MdAccessTime, MdPerson, MdPhone, MdSportsSoccer } from 'react-icons/md';
 
+
 interface Reserva {
   _id: string;
   fecha: string;
   horaInicio: string;
-  horaFin: string;
   cancha: {
     _id: string;
     nombre: string;
     tipoCancha: string;
   };
-  usuario: {
+  user: {
     _id: string;
     nombre: string;
     apellido: string;
@@ -40,12 +40,12 @@ export default function ReservasCalendario({ complejoId }: Props) {
     try {
       setCargando(true);
       const token = localStorage.getItem('token');
-      const response = await fetch(
-        `http://localhost:3000/api/complejos/${complejoId}/reservas?fecha=${fechaSeleccionada}`,
+      const response = await fetch( `http://localhost:3000/api/complejos/${complejoId}/reservas?fecha=${fechaSeleccionada}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`
-          }
+          },
+          method: 'GET',
         }
       );
 
@@ -55,6 +55,7 @@ export default function ReservasCalendario({ complejoId }: Props) {
 
       const data = await response.json();
       setReservas(data);
+      console.log(data);
     } catch (error) {
       console.error('Error al cargar reservas:', error);
       setReservas([]);
@@ -126,6 +127,7 @@ export default function ReservasCalendario({ complejoId }: Props) {
           </div>
         ) : (
           reservas.map((reserva) => (
+            
             <div
               key={reserva._id}
               className={`${styles.reservaCard} ${obtenerColorEstado(reserva.estado)}`}
@@ -133,7 +135,7 @@ export default function ReservasCalendario({ complejoId }: Props) {
               <div className={styles.reservaHeader}>
                 <div className={styles.horario}>
                   <MdAccessTime size={20} />
-                  <span>{reserva.horaInicio} - {reserva.horaFin}</span>
+                  <span>{reserva.horaInicio}  </span>
                 </div>
                 <span className={styles.estadoBadge}>{reserva.estado}</span>
               </div>
@@ -141,20 +143,15 @@ export default function ReservasCalendario({ complejoId }: Props) {
               <div className={styles.reservaBody}>
                 <div className={styles.canchaInfo}>
                   <MdSportsSoccer size={18} />
-                  <span>{reserva.cancha.nombre} ({reserva.cancha.tipoCancha})</span>
+                  <span> NOMBRE DE CANCHA </span>
                 </div>
 
                 <div className={styles.usuarioInfo}>
                   <div className={styles.infoItem}>
                     <MdPerson size={18} />
-                    <span>{reserva.usuario.nombre} {reserva.usuario.apellido}</span>
+                    <span>{reserva.user.nombre} {reserva.user.apellido  }</span>
                   </div>
-                  {reserva.usuario.telefono && (
-                    <div className={styles.infoItem}>
-                      <MdPhone size={18} />
-                      <span>{reserva.usuario.telefono}</span>
-                    </div>
-                  )}
+                 
                 </div>
               </div>
             </div>

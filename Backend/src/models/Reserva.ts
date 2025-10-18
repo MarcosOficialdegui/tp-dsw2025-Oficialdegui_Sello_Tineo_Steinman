@@ -14,7 +14,7 @@ interface IReserva {
 const reservaSchema = new mongoose.Schema<IReserva>({
     user: { type: mongoose.Schema.Types.ObjectId, ref: "Usuario", required: true },
     complejo: { type: mongoose.Schema.Types.ObjectId, ref: "Complejo", required: true },
-    cancha: { type: mongoose.Schema.Types.ObjectId, ref: "Cancha", required: true  },
+    cancha: { type: mongoose.Schema.Types.ObjectId, ref: "Cancha", required: true },
     fecha: { type: Date, required: true },
     horaInicio: { type: String, required: true },
     creadoEn: { type: Date, default: Date.now }

@@ -11,4 +11,9 @@ router.get("/:id", getComplejoById);
 router.get("/:id/reservas", authMiddleware, getReservasPorComplejo); // Nueva ruta
 router.post("/", authMiddleware, crearComplejo, guardarComplejoEnUsuario); 
 router.delete("/:id", authMiddleware, eliminarComplejo);
+router.get("/:complejoId/reservas", authMiddleware, getReservasPorComplejo); // Nueva rutakgkbhbhjb
+
+
+
+
 export default router;

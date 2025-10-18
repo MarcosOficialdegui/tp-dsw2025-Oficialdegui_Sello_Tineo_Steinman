@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import Complejo, { SERVICIOS_DISPONIBLES } from "../models/Complejo";
 import Usuario from "../models/Usuario";
+import Reserva from "../models/Reserva";
+import Cancha from "../models/Cancha";
 
 export const getComplejos = async (req: Request, res: Response) => {
   try {
@@ -15,8 +17,8 @@ export const getComplejos = async (req: Request, res: Response) => {
       } else {
         // Buscar ciudades que coincidan con el nombre
         const Ciudad = (await import('../models/Ciudad')).default;
-        const ciudadEncontrada = await Ciudad.findOne({ 
-          nombre: new RegExp(ciudad as string, 'i') 
+        const ciudadEncontrada = await Ciudad.findOne({
+          nombre: new RegExp(ciudad as string, 'i')
         });
         if (ciudadEncontrada) {
           query.ciudad = ciudadEncontrada._id;
@@ -45,12 +47,12 @@ export const getComplejos = async (req: Request, res: Response) => {
 export const getComplejoById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    
+
     // Buscar complejo por ID y hacer populate de la ciudad
     const complejo = await Complejo.findById(id)
       .populate('ciudad', 'nombre') // Populate ciudad con solo el nombre
       .exec();
-    
+
     if (!complejo) {
       return res.status(404).json({ error: 'Complejo no encontrado' });
     }
@@ -137,25 +139,19 @@ export const getReservasPorComplejo = async (req: Request, res: Response): Promi
       return;
     }
 
-    // Construir query de búsqueda
-    const Reserva = (await import('../models/Reserva')).default;
-    const query: any = {
-      complejo: id
-    };
 
-    // Si se proporciona fecha, filtrar por esa fecha
-    if (fecha) {
-      query.fecha = fecha;
-    }
 
     // Obtener reservas y hacer populate de cancha y usuario
-    const reservas = await Reserva.find(query)
-      .populate('cancha', 'nombre tipoCancha')
-      .populate('usuario', 'nombre apellido telefono email')
-      .sort({ fecha: 1, horaInicio: 1 })
+
+
+    const reservas = await Reserva.find({ complejo: id, fecha: fecha })
+      .populate('user', 'nombre apellido')
+      
       .exec();
 
     res.json(reservas);
+    console.log(reservas);
+
   } catch (error) {
     console.error('Error al obtener reservas:', error);
     res.status(500).json({ error: 'Error al obtener reservas del complejo' });

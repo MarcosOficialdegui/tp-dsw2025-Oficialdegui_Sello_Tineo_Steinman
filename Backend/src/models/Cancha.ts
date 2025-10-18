@@ -1,6 +1,14 @@
 
 import mongoose from 'mongoose';
 
+interface ICancha extends mongoose.Document {
+  nombre: string;
+  tipoCancha: 'Futbol 5' | 'Futbol 7' | 'Padel';
+  precioHora: number;
+  complejo: mongoose.Schema.Types.ObjectId;
+  disponible: boolean;
+}
+
 const canchaSchema = new mongoose.Schema({
   nombre: {
     type: String,
@@ -31,4 +39,4 @@ const canchaSchema = new mongoose.Schema({
   timestamps: true // Agrega createdAt y updatedAt automáticamente
 });
 
-export default mongoose.model('Cancha', canchaSchema);
+export default mongoose.model<ICancha>("Cancha", canchaSchema);

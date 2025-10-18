@@ -3,11 +3,11 @@ import './MisComplejos.css';
 import { useNavigate } from 'react-router-dom';
 import ComplejoForm from '../components/ComplejoForm';
 import ReservasCalendario from '../components/ReservasCalendar.tsx';
-import { 
-  MdAdd, 
-  MdExpandMore, 
-  MdExpandLess, 
-  MdLocationOn, 
+import {
+  MdAdd,
+  MdExpandMore,
+  MdExpandLess,
+  MdLocationOn,
   MdSportsSoccer,
   MdDelete,
   MdCalendarToday,
@@ -86,11 +86,11 @@ export default function MisComplejos() {
       const res = await fetch(`http://localhost:3000/api/complejos/${complejoId}`, {
         method: "DELETE",
         headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         }
       });
-      
+
       if (res.ok) {
         setComplejos(prev => prev.filter(c => c._id !== complejoId));
         alert("Complejo eliminado correctamente");
@@ -166,8 +166,8 @@ export default function MisComplejos() {
                     >
                       <MdCalendarToday size={18} />
                       {complejoExpandido === complejo._id ? "Ocultar" : "Ver"} Reservas
-                      {complejoExpandido === complejo._id ? 
-                        <MdExpandLess size={20} /> : 
+                      {complejoExpandido === complejo._id ?
+                        <MdExpandLess size={20} /> :
                         <MdExpandMore size={20} />
                       }
                     </button>
