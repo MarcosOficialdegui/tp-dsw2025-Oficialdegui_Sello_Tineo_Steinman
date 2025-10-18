@@ -1,5 +1,7 @@
 import { useState } from "react"
 import "./Calendar.css"
+import { mostrarExito, mostrarError } from "../utils/notificaciones";
+
 
 interface TimeSlot {
   time: string
@@ -65,32 +67,35 @@ export default function Calendar({ complejoId, canchaId }: CalendarProps) {
       horaInicio: selectedTime,
     });
 
-    await fetch(`http://localhost:3000/api/reservas`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'authorization': `Bearer ${localStorage.getItem('token')}`
-      },
-      body: JSON.stringify({
+   await fetch(`http://localhost:3000/api/reservas`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    authorization: `Bearer ${localStorage.getItem("token")}`,
+  },
+  body: JSON.stringify({
+    // JSON DE RESERVA -----------------------------------------
+    complejo: complejoId,
+    cancha: canchaId,
+    fecha: new Date(selectedDate),
+    horaInicio: selectedTime,
+  }),
+})
+  .then(async (response) => {
+    const data = await response.json();
 
-        // JSON DE RESERVA -----------------------------------------
-    
-        complejo: complejoId,
-        cancha: canchaId,
-        fecha: new Date(selectedDate), 
-        horaInicio: selectedTime, 
-
-      }),
-    }).then(response => response.json())
-      .then(data => {
-        console.log('Reserva creada:', data);
-        alert("Reserva creada con exito")
-      })
-      .catch(error => {
-        console.error('Error al crear la reserva:', error);
-        alert("Error al crear la reserva")
-      });
-
+    if (response.ok) {
+      mostrarExito(data.mensaje || "Reserva creada con éxito");
+      console.log("Reserva creada:", data);
+    } else {
+      mostrarError(data.error || "Error al crear la reserva");
+      console.error("Error en la respuesta:", data);
+    }
+  })
+  .catch((error) => {
+    console.error("Error al crear la reserva:", error);
+    mostrarError("No se pudo conectar con el servidor");
+  });
 
   }
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./ComplejoForm.module.css";
 import { MapPin, Plus, Lightbulb, Loader2 } from 'lucide-react';
+import { mostrarExito, mostrarError, mostrarInfo, mostrarAdvertencia } from "../utils/notificaciones";
 
 type Ciudad = {
   _id: string;
@@ -34,7 +35,7 @@ export default function ComplejoForm() {
     fetch("http://localhost:3000/api/complejos/servicios")
       .then(res => res.json())
       .then(data => setServicios(data))
-      .catch(() => alert("Error al cargar los servicios"));
+      .catch(() => mostrarError("Error al cargar los servicios"));
   }, []);
 
   // 🔄 Cargar ciudades al inicio
@@ -125,15 +126,15 @@ export default function ComplejoForm() {
         });
         
         setMostrarSugerencias(false);
-        alert(`Ciudad "${nuevaCiudad.nombre}" creada exitosamente`);
+        mostrarExito(`Ciudad "${nuevaCiudad.nombre}" creada exitosamente`);
         return nuevaCiudad;
       } else {
-        alert(data.error || "Error al crear la ciudad");
+        mostrarError(data.error || "Error al crear la ciudad");
         return null;
       }
     } catch (error) {
       console.error('Error al crear ciudad:', error);
-      alert("Error de conexión al crear la ciudad");
+      mostrarError("Error de conexión al crear la ciudad");
       return null;
     } finally {
       setCreandoCiudad(false);
@@ -183,13 +184,13 @@ export default function ComplejoForm() {
           return;
         }
       } else {
-        alert("Debe seleccionar una ciudad existente o crear una nueva");
+        mostrarAdvertencia("Debe seleccionar una ciudad existente o crear una nueva");
         return;
       }
     }
 
     if (!ciudadFinal) {
-      alert("Debe seleccionar una ciudad");
+      mostrarAdvertencia("Debe seleccionar una ciudad");
       return;
     }
 
@@ -219,16 +220,16 @@ export default function ComplejoForm() {
       const data = await res.json();
 
       if (res.ok) {
-        alert("Complejo creado con éxito");
+        mostrarExito("Complejo creado con éxito");
         setFormData({ nombre: "", direccion: "", ciudad: "", ciudadId: "" });
         setServiciosSeleccionados([]);
         setCanchas([{ tipoCancha: "Fútbol 5", precioHora: "", disponible: true }]);
         window.location.reload();
       } else {
-        alert(data.error || "Error al crear el complejo");
+        mostrarError(data.error || "Error al crear el complejo");
       }
     } catch {
-      alert("Error de conexión con el servidor");
+      mostrarError("Error de conexión con el servidor");
     }
   };
 

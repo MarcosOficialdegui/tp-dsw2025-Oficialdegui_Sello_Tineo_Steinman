@@ -13,6 +13,9 @@ import {
   MdCalendarToday,
   MdVisibility
 } from 'react-icons/md';
+import { mostrarError, mostrarExito } from '../utils/notificaciones.ts';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css'; 
 
 interface Complejo {
   _id: string;
@@ -74,35 +77,47 @@ export default function MisComplejos() {
     navigate(`/complejo/${complejoId}`);
   };
 
-  const handleEliminarComplejo = async (complejoId: string) => {
-    if (!window.confirm("¿Estás seguro de que deseas eliminar este complejo?")) {
-      return;
-    }
+const handleEliminarComplejo = (complejoId: string) => {
+  confirmAlert({
+    title: 'Confirmación',
+    message: '¿Estás seguro de que deseas eliminar este complejo?',
+    buttons: [
+      {
+        label: 'Sí',
+        onClick: async () => {
+          const token = localStorage.getItem("token");
+          if (!token) return;
 
-    const token = localStorage.getItem("token");
-    if (!token) return;
+          try {
+            const res = await fetch(`http://localhost:3000/api/complejos/${complejoId}`, {
+              method: "DELETE",
+              headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+              }
+            });
 
-    try {
-      const res = await fetch(`http://localhost:3000/api/complejos/${complejoId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+            if (res.ok) {
+              setComplejos(prev => prev.filter(c => c._id !== complejoId));
+              mostrarExito("Complejo eliminado correctamente");
+            } else {
+              mostrarError("No se pudo eliminar el complejo.");
+            }
+          } catch (error) {
+            console.error("Error al eliminar el complejo:", error);
+            mostrarError("Error al eliminar el complejo");
+          }
         }
-      });
-
-      if (res.ok) {
-        setComplejos(prev => prev.filter(c => c._id !== complejoId));
-        alert("Complejo eliminado correctamente");
-      } else {
-        alert("No se pudo eliminar el complejo.");
+      },
+      {
+        label: 'No',
+        onClick: () => {
+         
+        }
       }
-    } catch (error) {
-      console.error("Error al eliminar el complejo:", error);
-      alert("Error al eliminar el complejo");
-    }
-  };
-
+    ]
+  });
+};
   const toggleExpansion = (complejoId: string) => {
     setComplejoExpandido(complejoExpandido === complejoId ? null : complejoId);
   };

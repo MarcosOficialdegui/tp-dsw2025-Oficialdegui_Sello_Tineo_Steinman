@@ -1,3 +1,4 @@
+import { mostrarError, mostrarExito } from "../utils/notificaciones";
 import "./UsuarioForm.css";
 import { useState } from "react";
 
@@ -32,7 +33,7 @@ export default function UsuarioFormLogin() {
 
 
                 if (res.ok) {
-                    alert("Inicio de sesion exitoso");
+                    mostrarExito("Inicio de sesion exitoso");
                     console.log("Respuesta del servidor:", data.token);
                     localStorage.setItem("token", data.token);
                     localStorage.setItem("rol", data.rol.toString());
@@ -40,11 +41,11 @@ export default function UsuarioFormLogin() {
                     
 
                 } else {    
-                    alert("El usuario no existe o las credenciales son incorrectas");
+                    mostrarError("El usuario no existe o las credenciales son incorrectas");
                 }
                 
             } catch (err) {
-                alert("Error de conexión");
+                mostrarError("Error de conexión");
             }
         };
 
