@@ -30,7 +30,7 @@ export default function ComplejoForm() {
     { tipoCancha: "Fútbol 5", precioHora: "", disponible: true },
   ]);
 
-  // 🔄 Traer servicios desde el backend
+  // Traer servicios desde el backend
   useEffect(() => {
     fetch("http://localhost:3000/api/complejos/servicios")
       .then(res => res.json())
@@ -38,7 +38,7 @@ export default function ComplejoForm() {
       .catch(() => mostrarError("Error al cargar los servicios"));
   }, []);
 
-  // 🔄 Cargar ciudades al inicio
+  // Cargar ciudades al inicio
   useEffect(() => {
     const cargarCiudades = async () => {
       setCargandoCiudades(true);
@@ -58,7 +58,7 @@ export default function ComplejoForm() {
     cargarCiudades();
   }, []);
 
-  // 🔍 Filtrar ciudades mientras el usuario escribe
+  // Filtrar ciudades mientras el usuario escribe
   useEffect(() => {
     if (formData.ciudad.length >= 2) {
       const filtradas = ciudades.filter(ciudad =>
@@ -72,7 +72,7 @@ export default function ComplejoForm() {
     }
   }, [formData.ciudad, ciudades]);
 
-  // 🎯 Seleccionar una ciudad existente
+  // Seleccionar una ciudad existente
   const seleccionarCiudad = (ciudad: Ciudad) => {
     setFormData({
       ...formData,
@@ -80,21 +80,28 @@ export default function ComplejoForm() {
       ciudadId: ciudad._id
     });
     setMostrarSugerencias(false);
+    console.log(`Ciudad seleccionada: ${ciudad.nombre} (ID: ${ciudad._id})`); // Para debugging
   };
 
-  // 📝 Manejar cambio en el input de ciudad
+  //  Manejar cambio en el input de ciudad
   const handleCiudadChange = (value: string) => {
+    // Verificar si el valor coincide exactamente con una ciudad existente
+    const ciudadExacta = ciudades.find(
+      ciudad => ciudad.nombre.toLowerCase() === value.toLowerCase()
+    );
+
     setFormData({
       ...formData,
       ciudad: value,
-      ciudadId: "" // Limpiar ID cuando se cambia el texto
+      ciudadId: ciudadExacta ? ciudadExacta._id : "" // Auto-seleccionar si coincide exactamente
     });
+    
     if (value.length < 2) {
       setMostrarSugerencias(false);
     }
   };
 
-  // ➕ Crear nueva ciudad
+  //  Crear nueva ciudad
   
   const crearNuevaCiudad = async (nombreCiudad: string) => {
     setCreandoCiudad(true);
@@ -141,7 +148,7 @@ export default function ComplejoForm() {
     }
   };
 
-  // 🧠 Manejar selección de servicios
+  // Manejar selección de servicios
   const handleServicioChange = (servicio: string) => {
     setServiciosSeleccionados(prev =>
       prev.includes(servicio)
@@ -150,42 +157,57 @@ export default function ComplejoForm() {
     );
   };
 
-  // ➕ Agregar cancha
+  //  Agregar cancha
   const agregarCancha = () => {
     setCanchas([...canchas, { tipoCancha: "Fútbol 5", precioHora: "", disponible: true }]);
   };
 
-  // ❌ Eliminar cancha
+  //  Eliminar cancha
   const eliminarCancha = (index: number) => {
     setCanchas(canchas.filter((_, i) => i !== index));
   };
 
-  // ✏️ Actualizar datos de una cancha específica
+  //  Actualizar datos de una cancha específica
   const actualizarCancha = (index: number, campo: string, valor: any) => {
     const nuevasCanchas = [...canchas];
     (nuevasCanchas[index] as any)[campo] = valor;
     setCanchas(nuevasCanchas);
   };
 
-  // 📤 Enviar al backend
+  //  Enviar al backend
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     let ciudadFinal = formData.ciudadId;
 
-    // Si no hay ciudad seleccionada pero hay texto, ofrecer crear nueva
+    // Si no hay ciudad seleccionada pero hay texto, verificar si coincide exactamente con una existente
     if (!formData.ciudadId && formData.ciudad.trim()) {
-      const confirmar = confirm(`La ciudad "${formData.ciudad}" no existe. ¿Desea crearla?`);
-      if (confirmar) {
-        const nuevaCiudad = await crearNuevaCiudad(formData.ciudad.trim());
-        if (nuevaCiudad) {
-          ciudadFinal = nuevaCiudad._id;
+      // Buscar coincidencia exacta (case-insensitive)
+      const ciudadExacta = ciudades.find(
+        ciudad => ciudad.nombre.toLowerCase() === formData.ciudad.trim().toLowerCase()
+      );
+
+      if (ciudadExacta) {
+        // Si existe, usar esa ciudad
+        ciudadFinal = ciudadExacta._id;
+        setFormData({
+          ...formData,
+          ciudadId: ciudadExacta._id
+        });
+      } else {
+        // Si no existe, preguntar si quiere crear nueva
+        const confirmar = confirm(`La ciudad "${formData.ciudad}" no existe. ¿Desea crearla?`);
+        if (confirmar) {
+          const nuevaCiudad = await crearNuevaCiudad(formData.ciudad.trim());
+          if (nuevaCiudad) {
+            ciudadFinal = nuevaCiudad._id;
+          } else {
+            return;
+          }
         } else {
+          mostrarAdvertencia("Debe seleccionar una ciudad existente o crear una nueva");
           return;
         }
-      } else {
-        mostrarAdvertencia("Debe seleccionar una ciudad existente o crear una nueva");
-        return;
       }
     }
 

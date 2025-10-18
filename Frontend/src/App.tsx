@@ -39,6 +39,7 @@ function App() {
 
         {/* Notificaciones */}
         <ToastContainer 
+          aria-label="Toast notifications"
           position="top-right"
           autoClose={3000}
           hideProgressBar={false}

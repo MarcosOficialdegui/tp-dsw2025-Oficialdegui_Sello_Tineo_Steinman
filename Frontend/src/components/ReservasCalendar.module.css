@@ -16,17 +16,20 @@
   flex: 1;
   min-width: 100px;
   padding: 12px 16px;
-  background: white;
+  background: #f5f5f5;
   border: 2px solid #e0e0e0;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
   text-align: center;
+  color: #333333;
+  font-weight: 500;
 }
 
 .diaBtn:hover {
   border-color: #57b46f;
   background: #f8fff8;
+  color: #333333;
 }
 
 .diaSeleccionado {
@@ -40,6 +43,15 @@
   display: block;
   font-size: 14px;
   text-transform: capitalize;
+  color: inherit;
+  margin-bottom: 4px;
+}
+
+.diaFecha {
+  display: block;
+  font-size: 18px;
+  font-weight: bold;
+  color: inherit;
 }
 
 /* CONTENEDOR DE RESERVAS */

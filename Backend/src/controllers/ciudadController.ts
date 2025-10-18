@@ -43,7 +43,7 @@ export const createCiudad = async (req: Request, res: Response) => {
 
         const ciudadExistente = await Ciudad.findOne({
             nombre: new RegExp(`^${nombre}$`, 'i')
-        })
+        });
 
         if (ciudadExistente) {
             return res.status(400).json({ error: 'La ciudad ya existe' });
