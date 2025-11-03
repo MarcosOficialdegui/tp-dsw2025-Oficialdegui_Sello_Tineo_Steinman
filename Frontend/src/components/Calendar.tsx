@@ -10,10 +10,11 @@ interface TimeSlot {
 
 interface CalendarProps {
   complejoId: string;
+  canchaTipo?: string;
   canchaId?: string;
 }
 
-export default function Calendar({ complejoId, canchaId }: CalendarProps) {
+export default function Calendar({ complejoId, canchaId, canchaTipo }: CalendarProps) {
   const [selectedDate, setSelectedDate] = useState<string>("")
   const [selectedTime, setSelectedTime] = useState<string>("")
 
@@ -62,7 +63,8 @@ export default function Calendar({ complejoId, canchaId }: CalendarProps) {
 
     console.log('Reservando turno para:', {
       complejo: complejoId,
-      cancha: canchaId,
+      canchaTipo: canchaTipo,
+      canchaId: canchaId,
       fecha: selectedDate,
       horaInicio: selectedTime,
     });
@@ -76,7 +78,8 @@ export default function Calendar({ complejoId, canchaId }: CalendarProps) {
   body: JSON.stringify({
     // JSON DE RESERVA -----------------------------------------
     complejo: complejoId,
-    cancha: canchaId,
+    canchaId: canchaId,
+    canchaTipo: canchaTipo,
     fecha: new Date(selectedDate),
     horaInicio: selectedTime,
   }),

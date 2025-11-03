@@ -15,5 +15,4 @@ router.get("/:complejoId/reservas", authMiddleware, getReservasPorComplejo); // 
 
 
 
-
 export default router;

@@ -24,7 +24,8 @@ export default function Complejo() {
   const [complejo, setComplejo] = useState<ComplejoData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [seleccionCancha, setSeleccionCancha] = useState<string | null>(null);
+  const [seleccionCanchaTipo, setSeleccionCanchaTipo] = useState<string | null>(null);
+  const [seleccionCanchaId, setSeleccionCanchaId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchComplejo = async () => {
@@ -76,8 +77,9 @@ export default function Complejo() {
 
 
   // Obtener los datos de los componentes hijos
-  const handleSeleccionCancha = (canchaId: string) => {
-    setSeleccionCancha(canchaId);
+  const handleSeleccionCancha = (canchaId: string ,canchaTipo: string) => {
+    setSeleccionCanchaId(canchaId);
+    setSeleccionCanchaTipo(canchaTipo);
   }
 
 
@@ -92,9 +94,9 @@ export default function Complejo() {
               onSeleccionCancha={handleSeleccionCancha} />
           </div>
 
-          {seleccionCancha && seleccionCancha !== "" ? (
+          {seleccionCanchaId && seleccionCanchaId !== "" && seleccionCanchaTipo && seleccionCanchaTipo !== "" ? (
             <div className="calendar-container animated">
-              <Calendar complejoId={complejo._id} canchaId={seleccionCancha} />
+              <Calendar complejoId={complejo._id} canchaId={seleccionCanchaId} canchaTipo={seleccionCanchaTipo} />
             </div>
           ) : null}
 

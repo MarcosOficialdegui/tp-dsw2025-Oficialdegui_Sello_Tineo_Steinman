@@ -7,11 +7,8 @@ interface Reserva {
   _id: string;
   fecha: string;
   horaInicio: string;
-  cancha: {
-    _id: string;
-    nombre: string;
-    tipoCancha: string;
-  };
+  canchaTipo: string;
+
   user: {
     _id: string;
     nombre: string;
@@ -40,7 +37,7 @@ export default function ReservasCalendario({ complejoId }: Props) {
     try {
       setCargando(true);
       const token = localStorage.getItem('token');
-      const response = await fetch( `http://localhost:3000/api/complejos/${complejoId}/reservas?fecha=${fechaSeleccionada}`,
+      const response = await fetch(`http://localhost:3000/api/complejos/${complejoId}/reservas?fecha=${fechaSeleccionada}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -99,6 +96,7 @@ export default function ReservasCalendario({ complejoId }: Props) {
     }
   };
 
+
   return (
     <div className={styles.container}>
       {/* Selector de días */}
@@ -127,7 +125,7 @@ export default function ReservasCalendario({ complejoId }: Props) {
           </div>
         ) : (
           reservas.map((reserva) => (
-            
+
             <div
               key={reserva._id}
               className={`${styles.reservaCard} ${obtenerColorEstado(reserva.estado)}`}
@@ -143,15 +141,15 @@ export default function ReservasCalendario({ complejoId }: Props) {
               <div className={styles.reservaBody}>
                 <div className={styles.canchaInfo}>
                   <MdSportsSoccer size={18} />
-                  <span> NOMBRE DE CANCHA </span>
+                  <span> {reserva.canchaTipo} </span>
                 </div>
 
                 <div className={styles.usuarioInfo}>
                   <div className={styles.infoItem}>
                     <MdPerson size={18} />
-                    <span>{reserva.user.nombre} {reserva.user.apellido  }</span>
+                    <span>{reserva.user.nombre} {reserva.user.apellido}</span>
                   </div>
-                 
+
                 </div>
               </div>
             </div>

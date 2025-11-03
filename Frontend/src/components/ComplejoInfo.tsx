@@ -1,5 +1,5 @@
 import styles from "./ComplejoInfo.module.css"
-import { useState } from "react"
+
 import {
   MdShower,           // Vestuario
   MdLocalParking,     // Estacionamiento  
@@ -74,7 +74,7 @@ const getIconoServicio = (servicio: string) => {
 // Props
 interface ComplejoInfoProps {
   complejo: ComplejoData;
-  onSeleccionCancha?: (canchaId: string) => void; 
+  onSeleccionCancha?: (canchaId: string , canchaTipo: string) => void; 
 }
 
 
@@ -144,7 +144,7 @@ export default function ComplejoInfo({ complejo, onSeleccionCancha }: ComplejoIn
             //<div classname = {styles.selectCanchaSection}> </div>
             complejo.canchas.map((cancha, index) => (
 
-              <div className ={styles.canchaHoverBox} onClick = {() => {onSeleccionCancha && onSeleccionCancha(cancha._id || "")}} key={cancha._id || index}>
+              <div className ={styles.canchaHoverBox} onClick = {() => {onSeleccionCancha && onSeleccionCancha(cancha._id || "", cancha.tipoCancha || "")}} key={cancha._id || index}>
 
                 <div key={cancha._id || index} className={styles.canchaSection}>
                   <h3 className={styles.complejoDetailsTitle}>

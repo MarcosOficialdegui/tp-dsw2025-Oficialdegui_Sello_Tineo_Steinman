@@ -79,6 +79,7 @@ export const crearComplejo = async (req: Request, res: Response, next: Function)
     const { nombre, direccion, ciudad, servicios, canchas } = req.body;
 
     if (!nombre || !direccion || !ciudad) {
+      console.log(req.body)
       return res.status(400).json({ error: "Faltan datos obligatorios" });
     }
 
@@ -146,7 +147,6 @@ export const getReservasPorComplejo = async (req: Request, res: Response): Promi
 
     const reservas = await Reserva.find({ complejo: id, fecha: fecha })
       .populate('user', 'nombre apellido')
-      
       .exec();
 
     res.json(reservas);
@@ -157,3 +157,4 @@ export const getReservasPorComplejo = async (req: Request, res: Response): Promi
     res.status(500).json({ error: 'Error al obtener reservas del complejo' });
   }
 };
+

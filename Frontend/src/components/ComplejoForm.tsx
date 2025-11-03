@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./ComplejoForm.module.css";
 import { MapPin, Plus, Lightbulb, Loader2 } from 'lucide-react';
-import { mostrarExito, mostrarError, mostrarInfo, mostrarAdvertencia } from "../utils/notificaciones";
+import { mostrarExito, mostrarError, mostrarAdvertencia } from "../utils/notificaciones";
 
 type Ciudad = {
   _id: string;

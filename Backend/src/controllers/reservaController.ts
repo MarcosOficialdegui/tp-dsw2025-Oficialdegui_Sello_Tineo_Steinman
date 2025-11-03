@@ -1,14 +1,28 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import Reserva from "../models/Reserva";
 
-
+export const buscarReserva = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { complejo, canchaId, fecha, horaInicio } = req.body;
+        const reservaEncontrada = await Reserva.findOne({complejo, canchaId, fecha, horaInicio})
+        console.log(reservaEncontrada)
+        if(reservaEncontrada){
+            return(res.status(400).json({error: "El horario esta reservado"}))
+        }
+        next();
+    } catch (error) {
+        console.error('Error al buscar reserva:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+}
 
 export const crearReserva = async (req: Request, res: Response) => {
+
     try {
-       const { complejo, cancha, fecha, horaInicio } = req.body;
+        const { complejo, canchaId, canchaTipo, fecha, horaInicio } = req.body;
 
-
-        if (!complejo || !cancha || !fecha || !horaInicio) {
+        if (!complejo || !canchaId || !canchaTipo || !fecha || !horaInicio) {
+            console.log('Datos: ', complejo, canchaId, canchaTipo, fecha, horaInicio)
             return res.status(400).json({ error: 'Faltan datos obligatorios' });
         }
 
@@ -16,25 +30,26 @@ export const crearReserva = async (req: Request, res: Response) => {
 
         const user = (req as any).user.id;
 
-        if(!user){
+        if (!user) {
             return res.status(400).json({ error: 'Usuario no autenticado' });
         }
 
 
         const nuevaReserva = new Reserva({
-               user,
-               complejo,
-               cancha,
-               fecha,
-               horaInicio,
-               creadoEn
-           });
-   
-        await nuevaReserva.save();
-   
-         
+            user,
+            complejo,
+            canchaId,
+            canchaTipo,
+            fecha,
+            horaInicio,
+            creadoEn
+        });
 
-        console.log(user, complejo, cancha, fecha, horaInicio, creadoEn);
+        await nuevaReserva.save();
+
+
+
+        console.log(user, complejo, canchaId, canchaTipo, fecha, horaInicio, creadoEn);
         res.status(201).json({ message: 'Reserva creada exitosamente' });
 
 
