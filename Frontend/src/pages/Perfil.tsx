@@ -30,7 +30,6 @@ const Perfil = () => {
   const [reservasUser, setReservasUser] = useState<Reserva[]>([]);
 
   const [reservasFinales, setReservasFinales] = useState<ReservaConNombre[]>([]);
-  const [cargandoReservas, setCargandoReservas] = useState(true);
 
   useEffect(() => {
     const llamarDatos = async () => {
@@ -109,30 +108,26 @@ const Perfil = () => {
   useEffect(() => {
     if (reservasUser.length > 0) {
       const obtenerNombresYProcesar = async () => {
-        setCargandoReservas(true);
-
-        // a) Crear un array de Promesas para cada llamada GET a la API
+        
         const promesasNombres = reservasUser.map(r => buscarNombreComplejo(r.complejo));
 
-        // b) Esperar a que TODAS las Promesas se resuelvan
         const nombresResueltos = await Promise.all(promesasNombres);
 
-        // c) Combinar los nombres resueltos con los datos originales
         const reservasProcesadas: ReservaConNombre[] = reservasUser.map((r, index) => ({
           ...r,
-          nombreComplejo: nombresResueltos[index], // Asigna el nombre en el orden correcto
+          nombreComplejo: nombresResueltos[index], 
         }));
 
-        // d) Actualizar el estado que se usará para renderizar
+        
         setReservasFinales(reservasProcesadas);
-        setCargandoReservas(false);
+
       };
 
       obtenerNombresYProcesar();
     } else if (reservasUser.length === 0 && userData) {
       // Si el usuario no tiene reservas
       setReservasFinales([]);
-      setCargandoReservas(false);
+
     }
 
 
