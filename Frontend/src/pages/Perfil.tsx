@@ -3,30 +3,34 @@ import { useState, useEffect } from "react";
 
 interface Reserva {
   _id: string;
-  fecha: string;
-  cancha: string;
-  usuario?: string;
-  complejo?: string;
+  user: string;
+  complejo: string;
+  canchaId: string;
+  canchaTipo: string;
+  fecha: Date;
+  horaInicio: string;
+  creadoEn: Date;
 }
 
-interface Complejo {
-  _id: string;
-  nombre: string;
-  direccion: string;
-  reservas?: Reserva[];
+interface ReservaConNombre extends Reserva {
+  nombreComplejo?: string;
 }
+
 
 interface User {
   nombre: string;
   apellido: string;
   email: string;
   rol: string;
-  complejos?: Complejo[];
   reservas?: Reserva[];
 }
 
 const Perfil = () => {
   const [userData, setUserData] = useState<User | null>(null);
+  const [reservasUser, setReservasUser] = useState<Reserva[]>([]);
+
+  const [reservasFinales, setReservasFinales] = useState<ReservaConNombre[]>([]);
+  const [cargandoReservas, setCargandoReservas] = useState(true);
 
   useEffect(() => {
     const llamarDatos = async () => {
@@ -54,6 +58,27 @@ const Perfil = () => {
 
         const data = await res.json();
         setUserData(data);
+
+
+        // Obtener reservas del usuario
+        try {
+
+          const reservasRes = await fetch("http://localhost:3000/api/reservas/mis-reservas", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          setReservasUser(await reservasRes.json());
+
+        } catch (error) {
+          console.error("No se pudieron obtener las reservas del usuario", error);
+        }
+
+
+
       } catch (error) {
         console.error("Error al obtener perfil:", error);
       }
@@ -61,6 +86,58 @@ const Perfil = () => {
 
     llamarDatos();
   }, []);
+
+
+  const buscarNombreComplejo = async (complejoId: string) => {
+    try {
+      const res = await fetch(`http://localhost:3000/api/complejos/${complejoId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        console.log("Nombre del complejo:", data.nombre);
+        return data.nombre || "Nombre no disponible";
+      }
+    } catch (error) {
+      console.error("Error al obtener el nombre del complejo:", error);
+    }
+  }
+
+  useEffect(() => {
+    if (reservasUser.length > 0) {
+      const obtenerNombresYProcesar = async () => {
+        setCargandoReservas(true);
+
+        // a) Crear un array de Promesas para cada llamada GET a la API
+        const promesasNombres = reservasUser.map(r => buscarNombreComplejo(r.complejo));
+
+        // b) Esperar a que TODAS las Promesas se resuelvan
+        const nombresResueltos = await Promise.all(promesasNombres);
+
+        // c) Combinar los nombres resueltos con los datos originales
+        const reservasProcesadas: ReservaConNombre[] = reservasUser.map((r, index) => ({
+          ...r,
+          nombreComplejo: nombresResueltos[index], // Asigna el nombre en el orden correcto
+        }));
+
+        // d) Actualizar el estado que se usará para renderizar
+        setReservasFinales(reservasProcesadas);
+        setCargandoReservas(false);
+      };
+
+      obtenerNombresYProcesar();
+    } else if (reservasUser.length === 0 && userData) {
+      // Si el usuario no tiene reservas
+      setReservasFinales([]);
+      setCargandoReservas(false);
+    }
+
+
+  }, [reservasUser, userData]);
+
 
   if (!userData) return <p className="loading">Cargando perfil...</p>;
 
@@ -93,51 +170,27 @@ const Perfil = () => {
         </div>
 
         {/* Sección dinámica */}
-        {userData.rol === "propietario" ? (
-          <>
-            <h2 className="section-title">🏟️ Mis complejos</h2>
-            {userData.complejos && userData.complejos.length > 0 ? (
-              userData.complejos.map((complejo) => (
-                <div key={complejo._id} className="complejo-card">
-                  <h3>{complejo.nombre}</h3>
-                  <p className="direccion">{complejo.direccion}</p>
 
-                  <h4>Reservas en este complejo:</h4>
-                  {complejo.reservas && complejo.reservas.length > 0 ? (
-                    <ul className="reserva-list">
-                      {complejo.reservas.map((r) => (
-                        <li key={r._id}>
-                          <strong>{r.usuario}</strong> — {r.cancha} —{" "}
-                          {new Date(r.fecha).toLocaleString()}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="no-data">Sin reservas registradas</p>
-                  )}
-                </div>
-              ))
-            ) : (
-              <p className="no-data">No tenés complejos publicados aún.</p>
-            )}
-          </>
-        ) : (
-          <>
-            <h2 className="section-title">📅 Mis reservas</h2>
-            {userData.reservas && userData.reservas.length > 0 ? (
-              <ul className="reserva-list">
-                {userData.reservas.map((r) => (
-                  <li key={r._id}>
-                    <strong>{r.complejo}</strong> — {r.cancha} —{" "}
-                    {new Date(r.fecha).toLocaleString()}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="no-data">Aún no realizaste reservas.</p>
-            )}
-          </>
-        )}
+        <>
+          <h2 className="section-title">📅 Mis reservas</h2>
+          {reservasFinales.length > 0 ? (
+            <ul className="reserva-list">
+              {reservasFinales.map((r) => (
+                <li key={r._id}>
+                  <strong>
+                    {
+                      r.nombreComplejo ? r.nombreComplejo : "Cargando nombre..."
+                    }
+                  </strong> — {r.canchaTipo} —{" "}
+                  {new Date(r.fecha).toLocaleString()}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="no-data">Aún no realizaste reservas.</p>
+          )}
+        </>
+
       </div>
     </div>
   );
