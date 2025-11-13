@@ -17,6 +17,11 @@ export const createUsuario = async (req: Request, res: Response): Promise<void> 
             return;
         }
 
+
+        if (password.length < 8) {res.status(400).json({ error: 'La contraseña debe tener al menos 8 caracteres' });
+            return;
+        }
+
         const nuevoUsuario = new Usuario({ nombre, apellido, email, password, rol });
 
         if (await Usuario.findOne({ email })) {
