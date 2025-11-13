@@ -131,7 +131,7 @@ const Perfil = () => {
     }
 
 
-  }, [reservasUser, userData]);
+  }, [ userData]);
 
 
   if (!userData) return <p className="loading">Cargando perfil...</p>;

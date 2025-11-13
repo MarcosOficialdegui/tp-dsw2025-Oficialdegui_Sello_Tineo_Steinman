@@ -50,7 +50,9 @@ export default function Header() {
         </button>
 
         <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
-          {rol === 'propietario' && <a href="/miscomplejos">Mis Complejos</a>}
+          {
+          rol === 'propietario' && 
+          <a href="/miscomplejos">Mis Complejos</a>}
           <a href="/">Inicio</a>
           <a href="/complejos">Complejos</a>
           <a href="/contacto">Contacto</a>
