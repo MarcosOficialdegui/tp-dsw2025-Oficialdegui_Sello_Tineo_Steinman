@@ -4,14 +4,14 @@ import UsuarioFormRegistro from './pages/UsuarioFormRegistro';
 import UsuarioFormLogin from './pages/UsuarioFormLogin';
 import ScrollToTop from './components/ScrollToTop';
 import Perfil from './pages/Perfil';
-import TipoUsuario from './pages/UsuarioFormTipoUsuario';
-import MisComplejos from './pages/MisComplejos';    
+import TipoUsuario from './pages/UsuarioFormTipoUsuario';  
 import Complejos from './pages/Complejos';
 import Complejo from './pages/PerfilComplejo';
 import Footer from './components/Footer';
 import './App.css';
+import Dashboard from "./pages/Dashboard";
 
-// 🟢 Importá React Toastify
+
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -29,10 +29,11 @@ function App() {
             <Route path="complejos" element={<Complejos />} />
             <Route path="/registrarse" element={<UsuarioFormRegistro />} />
             <Route path="/login" element={<UsuarioFormLogin />} /> 
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/perfil" element={<Perfil />} />
             <Route path="/complejo/:id" element={<Complejo />} />
             <Route path="/tipoUsuario" element={<TipoUsuario />} />
-            <Route path="/miscomplejos" element={<MisComplejos />} />
+            <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         </main>
         <Footer />

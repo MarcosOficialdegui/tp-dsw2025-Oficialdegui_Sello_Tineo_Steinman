@@ -52,10 +52,12 @@ export default function Header() {
         <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
           {
           rol === 'propietario' && 
-          <a href="/miscomplejos">Mis Complejos</a>}
+          <a href="/dashboard">Dashboard</a>
+          }
           <a href="/">Inicio</a>
           <a href="/complejos">Complejos</a>
           <a href="/contacto">Contacto</a>
+            
 
           {isLoggedIn ? (
             <>
