@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react"
-import "./Calendar.css"
+import { useState, useEffect, useRef } from "react"
+import styles from "./Calendar.module.css"
 import { mostrarExito, mostrarError } from "../utils/notificaciones";
 
 
@@ -24,10 +24,10 @@ export default function Calendar({ complejoId, canchaId, canchaTipo }: CalendarP
   const [selectedTime, setSelectedTime] = useState<string>("")
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([])
   const [cargandoHorarios, setCargandoHorarios] = useState(false)
+  const horariosRef = useRef<HTMLDivElement>(null)
 
   console.log('Calendar para complejo:', complejoId);
 
-  // Cuando cambia la fecha o la cancha, consultar horarios ocupados
   useEffect(() => {
     if (!selectedDate || !canchaId) return;
 
@@ -46,28 +46,30 @@ export default function Calendar({ complejoId, canchaId, canchaTipo }: CalendarP
         const data = await response.json();
         const ocupados: string[] = data.horariosOcupados;
 
-        const slots = HORARIOS_BASE.map(time => ({
+        setTimeSlots(HORARIOS_BASE.map(time => ({
           time,
           available: !ocupados.includes(time)
-        }));
-
-        setTimeSlots(slots);
+        })));
       } catch (error) {
         console.error("Error al cargar horarios:", error);
         setTimeSlots(HORARIOS_BASE.map(time => ({ time, available: true })));
       } finally {
         setCargandoHorarios(false);
+        if (window.innerWidth <= 768) {
+          setTimeout(() => {
+            horariosRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }, 100);
+        }
       }
     };
 
     cargarHorariosOcupados();
   }, [selectedDate, canchaId]);
 
-
   const generateDates = () => {
     const dates = []
     const today = new Date()
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 7; i++) {
       const date = new Date(today)
       date.setDate(today.getDate() + i)
       dates.push({
@@ -75,6 +77,7 @@ export default function Calendar({ complejoId, canchaId, canchaTipo }: CalendarP
         day: date.getDate(),
         month: date.toLocaleDateString("es-ES", { month: "short" }),
         weekday: date.toLocaleDateString("es-ES", { weekday: "short" }),
+        isToday: i === 0,
       })
     }
     return dates
@@ -83,13 +86,7 @@ export default function Calendar({ complejoId, canchaId, canchaTipo }: CalendarP
   const dates = generateDates()
 
   const reservarTurno = async () => {
-    console.log('Reservando turno para:', {
-      complejo: complejoId,
-      canchaTipo: canchaTipo,
-      canchaId: canchaId,
-      fecha: selectedDate,
-      horaInicio: selectedTime,
-    });
+    console.log('Reservando turno para:', { complejo: complejoId, canchaTipo, canchaId, fecha: selectedDate, horaInicio: selectedTime });
 
     await fetch(`http://localhost:3000/api/reservas`, {
       method: "POST",
@@ -99,19 +96,16 @@ export default function Calendar({ complejoId, canchaId, canchaTipo }: CalendarP
       },
       body: JSON.stringify({
         complejo: complejoId,
-        canchaId: canchaId,
-        canchaTipo: canchaTipo,
+        canchaId,
+        canchaTipo,
         fecha: new Date(selectedDate),
         horaInicio: selectedTime,
       }),
     })
       .then(async (response) => {
         const data = await response.json();
-
         if (response.ok) {
           mostrarExito(data.mensaje || "Reserva creada con éxito");
-          console.log("Reserva creada:", data);
-          // Marcar el horario como ocupado localmente sin refetch
           setTimeSlots(prev =>
             prev.map(slot =>
               slot.time === selectedTime ? { ...slot, available: false } : slot
@@ -120,7 +114,6 @@ export default function Calendar({ complejoId, canchaId, canchaTipo }: CalendarP
           setSelectedTime("");
         } else {
           mostrarError(data.error || "Error al crear la reserva");
-          console.error("Error en la respuesta:", data);
         }
       })
       .catch((error) => {
@@ -129,44 +122,73 @@ export default function Calendar({ complejoId, canchaId, canchaTipo }: CalendarP
       });
   }
 
-  return (
-    <div className="calendar-container">
-      <h2 className="calendar-title">Selecciona tu turno</h2>
+  const selectedDateObj = dates.find(d => d.date === selectedDate);
 
-      {/* Date Selection */}
-      <div style={{ marginBottom: "2rem" }}>
-        <h3 className="calendar-section-title">Fecha</h3>
-        <div className="calendar-date-grid">
+  return (
+    <div className={styles.wrapper}>
+
+      {/* Header */}
+      <div className={styles.header}>
+        <div className={styles.headerLeft}>
+          <span className={styles.headerDot} />
+          <h2 className={styles.headerTitle}>Seleccioná tu turno</h2>
+        </div>
+        {canchaTipo && (
+          <span className={styles.canchaBadge}>{canchaTipo}</span>
+        )}
+      </div>
+
+      {/* Fecha */}
+      <div className={styles.section}>
+        <p className={styles.sectionLabel}>Fecha</p>
+        <div className={styles.datesScroll}>
           {dates.map((date) => (
             <button
               key={date.date}
               onClick={() => setSelectedDate(date.date)}
-              className={`calendar-date-btn${selectedDate === date.date ? " selected" : ""}`}
+              className={`${styles.dateBtn} ${selectedDate === date.date ? styles.dateBtnSelected : ""}`}
             >
-              <div className="day">{date.day}</div>
-              <div className="month">{date.month}</div>
-              <div className="weekday">{date.weekday}</div>
+              {date.isToday && <span className={styles.todayDot} />}
+              <span className={styles.dateWeekday}>{date.weekday}</span>
+              <span className={styles.dateDay}>{date.day}</span>
+              <span className={styles.dateMonth}>{date.month}</span>
             </button>
           ))}
         </div>
       </div>
 
-      {/* Time Selection */}
+      {/* Horarios */}
       {selectedDate && (
-        <div>
-          <h3 className="calendar-section-title">Horario</h3>
+        <div ref={horariosRef} className={styles.section}>
+          <div className={styles.sectionLabelRow}>
+            <p className={styles.sectionLabel}>Horarios disponibles</p>
+            {selectedDateObj && (
+              <span className={styles.fechaChip}>
+                {selectedDateObj.weekday} {selectedDateObj.day} {selectedDateObj.month}
+              </span>
+            )}
+          </div>
+
           {cargandoHorarios ? (
-            <p>Cargando horarios disponibles...</p>
+            <div className={styles.loadingRow}>
+              <span className={styles.loadingDot} />
+              <span className={styles.loadingDot} style={{ animationDelay: "0.15s" }} />
+              <span className={styles.loadingDot} style={{ animationDelay: "0.3s" }} />
+              <span className={styles.loadingText}>Cargando horarios...</span>
+            </div>
           ) : (
-            <div className="calendar-time-grid">
+            <div className={styles.timesGrid}>
               {timeSlots.map((slot) => (
                 <button
                   key={slot.time}
                   onClick={() => slot.available && setSelectedTime(slot.time)}
                   disabled={!slot.available}
-                  className={`calendar-time-btn${selectedTime === slot.time ? " selected" : ""}${!slot.available ? " unavailable" : ""}`}
+                  className={`${styles.timeBtn} ${
+                    selectedTime === slot.time ? styles.timeBtnSelected : ""
+                  } ${!slot.available ? styles.timeBtnUnavailable : ""}`}
                 >
-                  {slot.time}
+                  <span className={styles.timeText}>{slot.time}</span>
+                  {!slot.available && <span className={styles.unavailableLine} />}
                 </button>
               ))}
             </div>
@@ -174,20 +196,40 @@ export default function Calendar({ complejoId, canchaId, canchaTipo }: CalendarP
         </div>
       )}
 
-      {/* Reservation Button */}
+      {/* Resumen + Botón */}
       {selectedDate && selectedTime && (
-        <div className="calendar-reserve-section">
-          <button
-            className="calendar-reserve-btn"
-            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "var(--secondary)")}
-            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "var(--primary)")}
-            onClick={reservarTurno}
-          >
-            Reservar Turno
+        <div className={styles.reservaFooter}>
+          <div className={styles.reservaSummary}>
+            <div className={styles.summaryItem}>
+              <span className={styles.summaryLabel}>Fecha</span>
+              <span className={styles.summaryValue}>
+                {new Date(selectedDate + "T12:00:00").toLocaleDateString("es-ES", {
+                  weekday: "short", day: "numeric", month: "long"
+                })}
+              </span>
+            </div>
+            <div className={styles.summaryDivider} />
+            <div className={styles.summaryItem}>
+              <span className={styles.summaryLabel}>Hora</span>
+              <span className={styles.summaryValue}>{selectedTime}</span>
+            </div>
+            {canchaTipo && (
+              <>
+                <div className={styles.summaryDivider} />
+                <div className={styles.summaryItem}>
+                  <span className={styles.summaryLabel}>Cancha</span>
+                  <span className={styles.summaryValue}>{canchaTipo}</span>
+                </div>
+              </>
+            )}
+          </div>
+
+          <button className={styles.reservarBtn} onClick={reservarTurno}>
+            Confirmar reserva
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
           </button>
-          <p className="calendar-reserve-info">
-            Fecha: {new Date(selectedDate).toLocaleDateString("es-ES")} - Hora: {selectedTime}
-          </p>
         </div>
       )}
     </div>

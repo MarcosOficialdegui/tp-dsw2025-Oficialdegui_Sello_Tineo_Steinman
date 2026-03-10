@@ -1,380 +1,417 @@
-/* Estilos para complejoInfo.module.css */
+/* ════════════════════════════════════════════
+   ComplejoInfo.module.css  —  Minimalista / Verde
+   ════════════════════════════════════════════ */
 
-.complejoInfo {
-  background-color: var(--card);
-  border-radius: var(--radius);
-  padding: 2rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+/* ── Wrapper ── */
+.wrapper {
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  padding: 0.25rem 0;
 }
 
-.complejoInfoTitle {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: var(--card-foreground);
-  margin-bottom: 1.5rem;
+/* ── Section ── */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
-.complejoInfoGrid {
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.sectionDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #6fcf7f;
+  flex-shrink: 0;
+}
+
+.sectionTitle {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-foreground, #888);
+  margin: 0;
+}
+
+.sectionCount {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  color: #6fcf7f;
+  background: rgba(111, 207, 127, 0.12);
+  border: 1px solid rgba(111, 207, 127, 0.3);
+  border-radius: 20px;
+  padding: 1px 9px;
+  margin-left: auto;
+}
+
+/* ── Canchas Grid ── */
+.canchasGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+/* ── Cancha Card ── */
+.canchaCard {
+  position: relative;
+  background: var(--card, #fff);
+  border: 1px solid var(--border, #e8e8e8);
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.canchaCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(111, 207, 127, 0.15);
+  border-color: rgba(111, 207, 127, 0.5);
+}
+
+.canchaNoDisponible {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.canchaNoDisponible:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--border, #e8e8e8);
+}
+
+/* Top color stripe */
+.canchaStripe {
+  height: 3px;
+  background: linear-gradient(90deg, #6fcf7f, #a8e6b0);
+}
+
+.canchaNoDisponible .canchaStripe {
+  background: #ccc;
+}
+
+.canchaCardInner {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Card header */
+.canchaCardHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.canchaIconWrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(111, 207, 127, 0.12);
+  color: #4caf50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.canchaNameGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.canchaTag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: #6fcf7f;
+  font-weight: 500;
+}
+
+.canchaNombre {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--card-foreground, #111);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Disponible badge */
+.disponibleBadge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  font-weight: 500;
+  border-radius: 20px;
+  padding: 3px 9px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.disponibleOn {
+  background: rgba(111, 207, 127, 0.12);
+  color: #4caf50;
+  border: 1px solid rgba(111, 207, 127, 0.35);
+}
+
+.disponibleOff {
+  background: rgba(244, 67, 54, 0.08);
+  color: #e57373;
+  border: 1px solid rgba(244, 67, 54, 0.2);
+}
+
+/* Specs */
+.canchaSpecs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.85rem;
+  background: var(--muted, #f9f9f9);
+  border-radius: 9px;
+}
+
+.specItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--muted-foreground, #666);
+}
+
+.specItem svg {
+  color: #6fcf7f;
+  flex-shrink: 0;
+}
+
+/* Card footer */
+.canchaCardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.25rem;
+  border-top: 1px solid var(--border, #eee);
+}
+
+.precioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.precioLabel {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted-foreground, #999);
+}
+
+.precioValor {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--card-foreground, #111);
+}
+
+.reservarBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #6fcf7f;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.45rem 1rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.reservarBtn:hover {
+  background: #4caf50;
+  transform: translateX(2px);
+}
+
+/* ── Bottom grid ── */
+.bottomGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
 }
 
-.complejoDetailsTitle {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--card-foreground);
-  margin-bottom: 1rem;
-}
-
-.complejoDetailsList {
+/* ── Servicios ── */
+.serviciosGrid {
   display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.complejoDetailsItem {
-  display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   gap: 0.5rem;
 }
 
-.complejoDetailsIcon {
-  font-size: 1.25rem;
+.servicioChip {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid var(--border, #e8e8e8);
+  border-radius: 20px;
+  font-size: 0.8rem;
+  color: var(--card-foreground, #333);
+  background: var(--card, #fff);
+  transition: border-color 0.15s, background 0.15s;
 }
 
-.complejoDetailsText {
-  color: var(--card-foreground);
+.servicioChip:hover {
+  border-color: #6fcf7f;
+  background: rgba(111, 207, 127, 0.06);
 }
 
-.complejoPriceBox {
-  margin-top: 1.5rem;
-  padding: 1rem;
-  background-color: var(--muted);
-  border-radius: var(--radius);
+.servicioIcon {
+  color: #6fcf7f;
+  display: flex;
+  align-items: center;
 }
 
-.complejoPriceTitle {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--card-foreground);
-  margin-bottom: 0.5rem;
+/* ── Ubicación ── */
+.ubicacionCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--border, #e8e8e8);
+  border-radius: 12px;
+  background: var(--card, #fff);
 }
 
-.complejoPrice {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: var(--primary);
-  margin: 0;
-}
-
-.complejoMapTitle {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--card-foreground);
-  margin-bottom: 1rem;
-}
-
-.complejoMapBox {
-  width: 100%;
-  height: 300px;
-  background-color: var(--muted);
-  border-radius: var(--radius);
+.ubicacionIconWrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(111, 207, 127, 0.12);
+  color: #4caf50;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+.ubicacionInfo {
+  display: flex;
   flex-direction: column;
-  gap: 1rem;
-  border: 1px solid var(--border);
+  gap: 0.2rem;
+  min-width: 0;
 }
 
-.complejoMapIcon {
-  font-size: 3rem;
-}
-
-.complejoMapInfo {
-  text-align: center;
-}
-
-.complejoMapInfoTitle {
-  color: var(--card-foreground);
+.ubicacionNombre {
+  font-size: 0.9rem;
   font-weight: 600;
-  margin: 0 0 0.5rem 0;
-}
-
-.complejoMapInfoAddress {
-  color: var(--muted-foreground);
-  font-size: 0.875rem;
+  color: var(--card-foreground, #111);
   margin: 0;
 }
 
-.complejoContactList {
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+.ubicacionDireccion {
+  font-size: 0.8rem;
+  color: var(--muted-foreground, #777);
+  margin: 0;
 }
 
-.complejoContactItem {
+/* Resumen row */
+.resumenRow {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0.85rem 1.25rem;
+  background: var(--muted, #f9f9f9);
+  border-radius: 10px;
+}
+
+.resumenItem {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
-.complejoContactIcon {
-  font-size: 1.25rem;
+.resumenNum {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #4caf50;
 }
 
-.complejoContactText {
-  color: var(--card-foreground);
+.resumenLabel {
+  font-size: 0.78rem;
+  color: var(--muted-foreground, #888);
+}
+
+/* Empty state */
+.emptyMsg {
   font-size: 0.875rem;
-}
-
- 
-.canchaHoverBox {
-  border: 2px solid transparent;
+  color: var(--muted-foreground, #999);
+  padding: 1.5rem;
+  text-align: center;
+  border: 1px dashed var(--border, #ddd);
   border-radius: 10px;
-  transition: border 0.2s;
-  cursor: pointer;
-  padding: 12px;
 }
 
-.canchaHoverBox:hover {
-  border: 2px solid #4CAF50;
-  background: #f6fff6;
-}
-/* Responsive */
-/* SM - M�viles (hasta 767px) */
-@media (max-width: 767px) {
-  .complejoInfo {
-    padding: 1rem;
-  }
+/* ════════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════════ */
 
-  .complejoInfoTitle {
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
-  }
-
-  .complejoInfoGrid {
+/* Tablets */
+@media (max-width: 1023px) {
+  .bottomGrid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-
-  .complejoDetailsTitle,
-  .complejoMapTitle {
-    font-size: 1.125rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .complejoDetailsList {
-    gap: 0.5rem;
-  }
-
-  .complejoDetailsIcon,
-  .complejoContactIcon {
-    font-size: 1.125rem;
-  }
-
-  .complejoDetailsText,
-  .complejoContactText {
-    font-size: 0.875rem;
-  }
-
-  .complejoPriceBox {
-    margin-top: 1rem;
-    padding: 0.75rem;
-  }
-
-  .complejoPriceTitle {
-    font-size: 1rem;
-  }
-
-  .complejoPrice {
-    font-size: 1.25rem;
-  }
-
-  .complejoMapBox {
-    height: 250px;
-  }
-
-  .complejoMapIcon {
-    font-size: 2.5rem;
-  }
-
-  .complejoMapInfoTitle {
-    font-size: 0.938rem;
-  }
-
-  .complejoMapInfoAddress {
-    font-size: 0.813rem;
-  }
-
-  .canchaHoverBox {
-    padding: 8px;
-  }
 }
 
-/* MD - Tablets (768px - 1023px) */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .complejoInfo {
-    padding: 1.5rem;
-  }
-
-  .complejoInfoTitle {
-    font-size: 1.375rem;
-  }
-
-  .complejoInfoGrid {
-    gap: 1.75rem;
-  }
-
-  .complejoDetailsTitle,
-  .complejoMapTitle {
-    font-size: 1.188rem;
-  }
-
-  .complejoMapBox {
-    height: 275px;
-  }
-
-  .complejoMapIcon {
-    font-size: 2.75rem;
-  }
-
-  .canchaHoverBox {
-    padding: 10px;
-  }
-}
-
-/* LG - Desktop (1024px+) */
-@media (min-width: 1024px) {
-  .complejoInfo {
-    padding: 2rem;
-  }
-
-  .complejoInfoGrid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .complejoMapBox {
-    height: 300px;
-  }
-}
-
-/* Responsive */
-/* SM - Móviles (hasta 767px) */
+/* Mobile */
 @media (max-width: 767px) {
-  .complejoInfo {
+  .wrapper {
+    gap: 2rem;
+  }
+
+  .canchasGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .canchaCardInner {
     padding: 1rem;
   }
 
-  .complejoInfoTitle {
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
+  .canchaCardHeader {
+    flex-wrap: wrap;
   }
 
-  .complejoInfoGrid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+  .disponibleBadge {
+    order: 3;
+    margin-left: auto;
   }
 
-  .complejoDetailsTitle,
-  .complejoMapTitle {
-    font-size: 1.125rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .complejoDetailsList {
-    gap: 0.5rem;
-  }
-
-  .complejoDetailsIcon,
-  .complejoContactIcon {
-    font-size: 1.125rem;
-  }
-
-  .complejoDetailsText,
-  .complejoContactText {
-    font-size: 0.875rem;
-  }
-
-  .complejoPriceBox {
-    margin-top: 1rem;
-    padding: 0.75rem;
-  }
-
-  .complejoPriceTitle {
+  .precioValor {
     font-size: 1rem;
   }
 
-  .complejoPrice {
-    font-size: 1.25rem;
+  .bottomGrid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
 
-  .complejoMapBox {
-    height: 250px;
-  }
-
-  .complejoMapIcon {
-    font-size: 2.5rem;
-  }
-
-  .complejoMapInfoTitle {
-    font-size: 0.938rem;
-  }
-
-  .complejoMapInfoAddress {
-    font-size: 0.813rem;
-  }
-
-  .canchaHoverBox {
-    padding: 8px;
-  }
-}
-
-/* MD - Tablets (768px - 1023px) */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .complejoInfo {
-    padding: 1.5rem;
-  }
-
-  .complejoInfoTitle {
-    font-size: 1.375rem;
-  }
-
-  .complejoInfoGrid {
-    gap: 1.75rem;
-  }
-
-  .complejoDetailsTitle,
-  .complejoMapTitle {
-    font-size: 1.188rem;
-  }
-
-  .complejoMapBox {
-    height: 275px;
-  }
-
-  .complejoMapIcon {
-    font-size: 2.75rem;
-  }
-
-  .canchaHoverBox {
-    padding: 10px;
-  }
-}
-
-/* LG - Desktop (1024px+) */
-@media (min-width: 1024px) {
-  .complejoInfo {
-    padding: 2rem;
-  }
-
-  .complejoInfoGrid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .complejoMapBox {
-    height: 300px;
+  .resumenRow {
+    gap: 1rem;
   }
 }

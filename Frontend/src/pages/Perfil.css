@@ -76,7 +76,6 @@
   border-radius: 8px;
 }
 
-/* Stats */
 .perfil-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -109,7 +108,6 @@
   color: #388e3c;
 }
 
-/* Acciones */
 .perfil-actions {
   display: flex;
   justify-content: center;
@@ -145,167 +143,6 @@
   background-color: #d4ebd6;
 }
 
-/* Responsive */
-/* SM - Móviles (hasta 767px) */
-@media (max-width: 767px) {
-  .perfil-wrapper {
-    padding: 1.5rem 0.75rem;
-  }
-
-  .perfil-card {
-    padding: 1.5rem;
-    gap: 1.5rem;
-  }
-
-  .perfil-avatar {
-    flex-direction: column;
-    text-align: center;
-    padding-bottom: 1rem;
-  }
-
-  .perfil-avatar img {
-    width: 90px;
-    height: 90px;
-  }
-
-  .perfil-nombre h1 {
-    font-size: 1.5rem;
-  }
-
-  .perfil-nombre p {
-    font-size: 0.875rem;
-  }
-
-  .perfil-info h2 {
-    font-size: 1.125rem;
-  }
-
-  .info-grid {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
-
-  .info-item span {
-    font-size: 0.875rem;
-  }
-
-  .info-item p {
-    font-size: 0.875rem;
-    padding: 0.35rem 0.5rem;
-  }
-
-  .perfil-stats {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
-
-  .stat-card {
-    padding: 0.875rem;
-  }
-
-  .stat-card h3 {
-    font-size: 0.938rem;
-  }
-
-  .stat-number {
-    font-size: 1.4rem;
-  }
-
-  .perfil-actions {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .btn-primary,
-  .btn-secondary {
-    padding: 0.7rem 1.2rem;
-    font-size: 0.938rem;
-  }
-
-  .section-title {
-    font-size: 1.063rem;
-    margin-top: 1.25rem;
-  }
-
-  .complejo-card {
-    padding: 0.875rem 1rem;
-  }
-
-  .reserva-list li {
-    padding: 0.5rem 0.7rem;
-    font-size: 0.875rem;
-  }
-}
-
-/* MD - Tablets (768px - 1023px) */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .perfil-wrapper {
-    padding: 2.5rem 1.5rem;
-  }
-
-  .perfil-card {
-    padding: 2rem;
-    max-width: 650px;
-  }
-
-  .perfil-avatar img {
-    width: 100px;
-    height: 100px;
-  }
-
-  .perfil-nombre h1 {
-    font-size: 1.75rem;
-  }
-
-  .perfil-info h2 {
-    font-size: 1.2rem;
-  }
-
-  .info-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .perfil-stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .stat-card h3 {
-    font-size: 0.969rem;
-  }
-
-  .stat-number {
-    font-size: 1.5rem;
-  }
-
-  .section-title {
-    font-size: 1.125rem;
-  }
-
-  .complejo-card {
-    padding: 0.938rem 1.125rem;
-  }
-}
-
-/* LG - Desktop (1024px+) */
-@media (min-width: 1024px) {
-  .perfil-wrapper {
-    padding: 3rem 2rem;
-  }
-
-  .perfil-card {
-    max-width: 900px;
-    padding: 2.5rem;
-  }
-
-  .info-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .perfil-stats {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
 .section-title {
   margin-top: 1.5rem;
   color: #2e7d32;
@@ -338,23 +175,72 @@
   margin-bottom: 0.6rem;
 }
 
+/* ── Lista de reservas ── */
 .reserva-list {
   list-style: none;
   padding-left: 0;
   margin: 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-.reserva-list li {
+.reserva-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   background: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 0.6rem 0.8rem;
-  margin-bottom: 0.4rem;
-  color: #444;
+  border: 1px solid #e0ede0;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  transition: background 0.15s;
 }
 
-.reserva-list li strong {
+.reserva-item:hover {
+  background: #f5fbf5;
+}
+
+.reserva-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.reserva-info strong {
   color: #2e7d32;
+  font-size: 0.95rem;
+}
+
+.reserva-info span {
+  color: #777;
+  font-size: 0.82rem;
+}
+
+/* ── Botón cancelar ── */
+.btn-cancelar {
+  flex-shrink: 0;
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  border: 1.5px solid #e57373;
+  background: transparent;
+  color: #e57373;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-cancelar:hover:not(:disabled) {
+  background: #fdecea;
+  border-color: #ef5350;
+  color: #c62828;
+}
+
+.btn-cancelar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .no-data {
@@ -368,4 +254,49 @@
   padding: 3rem;
   font-size: 1.2rem;
   color: #2e7d32;
+}
+
+/* ── Responsive ── */
+@media (max-width: 767px) {
+  .perfil-wrapper { padding: 1.5rem 0.75rem; }
+  .perfil-card { padding: 1.5rem; gap: 1.5rem; }
+  .perfil-avatar { flex-direction: column; text-align: center; padding-bottom: 1rem; }
+  .perfil-avatar img { width: 90px; height: 90px; }
+  .perfil-nombre h1 { font-size: 1.5rem; }
+  .perfil-nombre p { font-size: 0.875rem; }
+  .perfil-info h2 { font-size: 1.125rem; }
+  .info-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+  .info-item span { font-size: 0.875rem; }
+  .info-item p { font-size: 0.875rem; padding: 0.35rem 0.5rem; }
+  .perfil-stats { grid-template-columns: 1fr; gap: 0.75rem; }
+  .stat-card { padding: 0.875rem; }
+  .stat-card h3 { font-size: 0.938rem; }
+  .stat-number { font-size: 1.4rem; }
+  .perfil-actions { flex-direction: column; gap: 0.75rem; }
+  .btn-primary, .btn-secondary { padding: 0.7rem 1.2rem; font-size: 0.938rem; }
+  .section-title { font-size: 1.063rem; margin-top: 1.25rem; }
+  .complejo-card { padding: 0.875rem 1rem; }
+  .reserva-item { flex-direction: column; align-items: flex-start; }
+  .btn-cancelar { align-self: flex-end; }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .perfil-wrapper { padding: 2.5rem 1.5rem; }
+  .perfil-card { padding: 2rem; max-width: 650px; }
+  .perfil-avatar img { width: 100px; height: 100px; }
+  .perfil-nombre h1 { font-size: 1.75rem; }
+  .perfil-info h2 { font-size: 1.2rem; }
+  .info-grid { grid-template-columns: repeat(2, 1fr); }
+  .perfil-stats { grid-template-columns: repeat(2, 1fr); }
+  .stat-card h3 { font-size: 0.969rem; }
+  .stat-number { font-size: 1.5rem; }
+  .section-title { font-size: 1.125rem; }
+  .complejo-card { padding: 0.938rem 1.125rem; }
+}
+
+@media (min-width: 1024px) {
+  .perfil-wrapper { padding: 3rem 2rem; }
+  .perfil-card { max-width: 900px; padding: 2.5rem; }
+  .info-grid { grid-template-columns: repeat(2, 1fr); }
+  .perfil-stats { grid-template-columns: repeat(3, 1fr); }
 }

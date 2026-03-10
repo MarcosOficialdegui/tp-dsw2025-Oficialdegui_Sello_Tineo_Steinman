@@ -16,6 +16,31 @@ export const buscarReserva = async (req: Request, res: Response, next: NextFunct
     }
 }
 
+export const cancelarReserva = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const userId = (req as any).user.id;
+
+        const reserva = await Reserva.findById(id);
+
+        if (!reserva) {
+            return res.status(404).json({ error: 'Reserva no encontrada' });
+        }
+
+        // Que solo el dueño de la reserva pueda cancelarla
+        if (reserva.user.toString() !== userId) {
+            return res.status(403).json({ error: 'No tenés permiso para cancelar esta reserva' });
+        }
+
+        await Reserva.findByIdAndDelete(id);
+        res.status(200).json({ message: 'Reserva cancelada correctamente' });
+
+    } catch (error) {
+        console.error('Error al cancelar reserva:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
+
 export const obtenerHorariosOcupados = async (req: Request, res: Response) => {
     try {
         const { canchaId, fecha } = req.query;
