@@ -16,6 +16,33 @@ export const buscarReserva = async (req: Request, res: Response, next: NextFunct
     }
 }
 
+export const obtenerHorariosOcupados = async (req: Request, res: Response) => {
+    try {
+        const { canchaId, fecha } = req.query;
+
+        if (!canchaId || !fecha) {
+            return res.status(400).json({ error: 'Faltan parámetros' });
+        }
+
+        // Busca todas las reservas para esa cancha y fecha
+        const fechaInicio = new Date(fecha as string);
+        const fechaFin = new Date(fecha as string);
+        fechaFin.setDate(fechaFin.getDate() + 1);
+
+        const reservas = await Reserva.find({
+            canchaId,
+            fecha: { $gte: fechaInicio, $lt: fechaFin }
+        });
+
+        const horariosOcupados = reservas.map(r => r.horaInicio);
+        res.status(200).json({ horariosOcupados });
+
+    } catch (error) {
+        console.error('Error al obtener horarios ocupados:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
+
 export const crearReserva = async (req: Request, res: Response) => {
 
     try {
