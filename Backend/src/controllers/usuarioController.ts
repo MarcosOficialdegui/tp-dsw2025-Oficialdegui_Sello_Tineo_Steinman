@@ -6,9 +6,9 @@ import { createRequire } from 'module';
 
 const SECRET_KEY = "ClaveTokenAlquilaTuCancha";
 
-// Crear un nuevo usuario
-export const createUsuario = async (req: Request, res: Response): Promise<void> => {
+import bcrypt from 'bcrypt';
 
+export const createUsuario = async (req: Request, res: Response): Promise<void> => {
     try {
         const { nombre, apellido, email, password, rol } = req.body;
 
@@ -17,28 +17,27 @@ export const createUsuario = async (req: Request, res: Response): Promise<void> 
             return;
         }
 
-
-        if (password.length < 8) {res.status(400).json({ error: 'La contraseña debe tener al menos 8 caracteres' });
+        if (password.length < 8) {
+            res.status(400).json({ error: 'La contraseña debe tener al menos 8 caracteres' });
             return;
         }
-
-        const nuevoUsuario = new Usuario({ nombre, apellido, email, password, rol });
 
         if (await Usuario.findOne({ email })) {
             res.status(400).json({ error: 'El email ya se encuentra registrado' });
             return;
         }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const nuevoUsuario = new Usuario({ nombre, apellido, email, password: hashedPassword, rol });
         const usuarioGuardado = await nuevoUsuario.save();
 
         res.status(201).json(usuarioGuardado);
     } catch (error) {
         res.status(500).json({ error: 'Error al crear el usuario' });
     }
-
 }
 
 export const generarToken = async (req: Request, res: Response): Promise<void> => {
-
     try {
         const { email, password } = req.body;
         if (!email || !password) {
@@ -46,31 +45,30 @@ export const generarToken = async (req: Request, res: Response): Promise<void> =
             return;
         }
 
-        const usuario = await Usuario.findOne({ email, password });
-        if (usuario) {
-
-
-            // Generar token
-            const token = jwt.sign(
-                { id: usuario._id, email: usuario.email, rol: usuario.rol },
-                SECRET_KEY,
-                { expiresIn: '1h' });
-
-            res.json({ token, rol: usuario.rol });
-
-
-        } else {
+        const usuario = await Usuario.findOne({ email });
+        if (!usuario) {
             res.status(404).json({ error: 'Usuario no encontrado o credenciales incorrectas' });
+            return;
         }
 
+        const passwordValida = await bcrypt.compare(password, usuario.password);
+        if (!passwordValida) {
+            res.status(401).json({ error: 'Usuario no encontrado o credenciales incorrectas' });
+            return;
+        }
+
+        const token = jwt.sign(
+            { id: usuario._id, email: usuario.email, rol: usuario.rol },
+            SECRET_KEY,
+            { expiresIn: '1h' }
+        );
+
+        res.json({ token, rol: usuario.rol });
 
     } catch (error) {
         res.status(500).json({ error: 'Error al buscar el usuario' });
     }
-
-
 }
-
 export const buscarUsuarioToken = async (req: Request, res: Response): Promise<void> => {
     try {
         const userId = (req as any).user.id;
