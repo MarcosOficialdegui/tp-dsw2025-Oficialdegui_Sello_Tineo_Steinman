@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Calendar from "../components/Calendar";
 import ComplejoInfo from "../components/ComplejoInfo";
 import "./PerfilComplejo.css";
@@ -26,6 +26,7 @@ export default function Complejo() {
   const [error, setError] = useState<string | null>(null);
   const [seleccionCanchaTipo, setSeleccionCanchaTipo] = useState<string | null>(null);
   const [seleccionCanchaId, setSeleccionCanchaId] = useState<string | null>(null);
+  const calendarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchComplejo = async () => {
@@ -75,31 +76,35 @@ export default function Complejo() {
     );
   }
 
-
-  // Obtener los datos de los componentes hijos
-  const handleSeleccionCancha = (canchaId: string ,canchaTipo: string) => {
+  const handleSeleccionCancha = (canchaId: string, canchaTipo: string) => {
     setSeleccionCanchaId(canchaId);
     setSeleccionCanchaTipo(canchaTipo);
-  }
-
+    setTimeout(() => {
+      calendarRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
+  };
 
   return (
     <div className="complejo-container">
       <main className="complejo-main">
         <div className="complejo-grid">
 
-
           <div>
-            <ComplejoInfo complejo={complejo}
-              onSeleccionCancha={handleSeleccionCancha} />
+            <ComplejoInfo
+              complejo={complejo}
+              onSeleccionCancha={handleSeleccionCancha}
+            />
           </div>
 
           {seleccionCanchaId && seleccionCanchaId !== "" && seleccionCanchaTipo && seleccionCanchaTipo !== "" ? (
-            <div className="calendar-container animated">
-              <Calendar complejoId={complejo._id} canchaId={seleccionCanchaId} canchaTipo={seleccionCanchaTipo} />
+            <div ref={calendarRef} className="calendar-container animated">
+              <Calendar
+                complejoId={complejo._id}
+                canchaId={seleccionCanchaId}
+                canchaTipo={seleccionCanchaTipo}
+              />
             </div>
           ) : null}
-
 
         </div>
       </main>
