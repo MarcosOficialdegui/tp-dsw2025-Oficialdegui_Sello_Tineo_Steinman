@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react"
 import styles from "./Calendar.module.css"
 import { mostrarExito, mostrarError } from "../utils/notificaciones";
 
-
 interface TimeSlot {
   time: string
   available: boolean
@@ -14,22 +13,48 @@ interface CalendarProps {
   canchaId?: string;
 }
 
-const HORARIOS_BASE = [
-  "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00",
-  "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00"
-];
+const generarHorarios = (apertura: string, cierre: string): string[] => {
+  const horarios = [];
+  let [hora] = apertura.split(":").map(Number);
+  const [horaCierre] = cierre.split(":").map(Number);
+  while (hora <= horaCierre) {
+    horarios.push(`${hora.toString().padStart(2, "0")}:00`);
+    hora++;
+  }
+  return horarios;
+};
 
 export default function Calendar({ complejoId, canchaId, canchaTipo }: CalendarProps) {
   const [selectedDate, setSelectedDate] = useState<string>("")
   const [selectedTime, setSelectedTime] = useState<string>("")
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([])
   const [cargandoHorarios, setCargandoHorarios] = useState(false)
+  const [horarioApertura, setHorarioApertura] = useState<string | null>(null)
+  const [horarioCierre, setHorarioCierre] = useState<string | null>(null)
   const horariosRef = useRef<HTMLDivElement>(null)
 
-  console.log('Calendar para complejo:', complejoId);
-
+  // Cargar horarios del complejo una sola vez
   useEffect(() => {
-    if (!selectedDate || !canchaId) return;
+    const cargarHorarioComplejo = async () => {
+      try {
+        const res = await fetch(`http://localhost:3000/api/complejos/${complejoId}`);
+        if (res.ok) {
+          const data = await res.json();
+          setHorarioApertura(data.horarioApertura || "08:00");
+          setHorarioCierre(data.horarioCierre || "22:00");
+        }
+      } catch (e) {
+        console.error("Error al cargar horario del complejo:", e);
+        setHorarioApertura("08:00");
+        setHorarioCierre("22:00");
+      }
+    };
+    cargarHorarioComplejo();
+  }, [complejoId]);
+
+  // Cargar horarios ocupados — espera a que los horarios del complejo estén listos
+  useEffect(() => {
+    if (!selectedDate || !canchaId || !horarioApertura || !horarioCierre) return;
 
     const cargarHorariosOcupados = async () => {
       setCargandoHorarios(true);
@@ -45,14 +70,16 @@ export default function Calendar({ complejoId, canchaId, canchaTipo }: CalendarP
 
         const data = await response.json();
         const ocupados: string[] = data.horariosOcupados;
+        const horariosBase = generarHorarios(horarioApertura, horarioCierre);
 
-        setTimeSlots(HORARIOS_BASE.map(time => ({
+        setTimeSlots(horariosBase.map(time => ({
           time,
           available: !ocupados.includes(time)
         })));
       } catch (error) {
         console.error("Error al cargar horarios:", error);
-        setTimeSlots(HORARIOS_BASE.map(time => ({ time, available: true })));
+        const horariosBase = generarHorarios(horarioApertura, horarioCierre);
+        setTimeSlots(horariosBase.map(time => ({ time, available: true })));
       } finally {
         setCargandoHorarios(false);
         if (window.innerWidth <= 768) {
@@ -64,7 +91,7 @@ export default function Calendar({ complejoId, canchaId, canchaTipo }: CalendarP
     };
 
     cargarHorariosOcupados();
-  }, [selectedDate, canchaId]);
+  }, [selectedDate, canchaId, horarioApertura, horarioCierre]);
 
   const generateDates = () => {
     const dates = []
@@ -86,8 +113,6 @@ export default function Calendar({ complejoId, canchaId, canchaTipo }: CalendarP
   const dates = generateDates()
 
   const reservarTurno = async () => {
-    console.log('Reservando turno para:', { complejo: complejoId, canchaTipo, canchaId, fecha: selectedDate, horaInicio: selectedTime });
-
     await fetch(`http://localhost:3000/api/reservas`, {
       method: "POST",
       headers: {

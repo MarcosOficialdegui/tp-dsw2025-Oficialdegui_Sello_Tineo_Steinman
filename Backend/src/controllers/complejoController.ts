@@ -76,7 +76,7 @@ export const getServiciosDisponibles = async (req: Request, res: Response) => {
 
 export const crearComplejo = async (req: Request, res: Response, next: Function) => {
   try {
-    const { nombre, direccion, ciudad, servicios, canchas } = req.body;
+    const { nombre, direccion, ciudad, servicios, canchas, horarioApertura, horarioCierre } = req.body;
 
     if (!nombre || !direccion || !ciudad) {
       console.log(req.body)
@@ -88,7 +88,9 @@ export const crearComplejo = async (req: Request, res: Response, next: Function)
       direccion,
       ciudad,
       servicios: servicios || [],
-      canchas: canchas || []
+      canchas: canchas || [],
+      horarioApertura: horarioApertura || "08:00",
+      horarioCierre: horarioCierre || "22:00",
     });
 
     const guardado = await nuevoComplejo.save();

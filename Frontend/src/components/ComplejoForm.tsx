@@ -14,12 +14,13 @@ export default function ComplejoForm() {
     direccion: "",
     ciudad: "",
     ciudadId: "",
+    horarioApertura: "08:00",
+    horarioCierre: "22:00",
   });
 
   const [servicios, setServicios] = useState<string[]>([]);
   const [serviciosSeleccionados, setServiciosSeleccionados] = useState<string[]>([]);
 
-  // Estados para el manejo de ciudades
   const [ciudades, setCiudades] = useState<Ciudad[]>([]);
   const [ciudadesFiltradas, setCiudadesFiltradas] = useState<Ciudad[]>([]);
   const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
@@ -30,7 +31,6 @@ export default function ComplejoForm() {
     { tipoCancha: "Fútbol 5", precioHora: "", disponible: true },
   ]);
 
-  // Traer servicios desde el backend
   useEffect(() => {
     fetch("http://localhost:3000/api/complejos/servicios")
       .then(res => res.json())
@@ -38,7 +38,6 @@ export default function ComplejoForm() {
       .catch(() => mostrarError("Error al cargar los servicios"));
   }, []);
 
-  // Cargar ciudades al inicio
   useEffect(() => {
     const cargarCiudades = async () => {
       setCargandoCiudades(true);
@@ -54,11 +53,9 @@ export default function ComplejoForm() {
         setCargandoCiudades(false);
       }
     };
-    
     cargarCiudades();
   }, []);
 
-  // Filtrar ciudades mientras el usuario escribe
   useEffect(() => {
     if (formData.ciudad.length >= 2) {
       const filtradas = ciudades.filter(ciudad =>
@@ -72,37 +69,23 @@ export default function ComplejoForm() {
     }
   }, [formData.ciudad, ciudades]);
 
-  // Seleccionar una ciudad existente
   const seleccionarCiudad = (ciudad: Ciudad) => {
-    setFormData({
-      ...formData,
-      ciudad: ciudad.nombre,
-      ciudadId: ciudad._id
-    });
+    setFormData({ ...formData, ciudad: ciudad.nombre, ciudadId: ciudad._id });
     setMostrarSugerencias(false);
-    console.log(`Ciudad seleccionada: ${ciudad.nombre} (ID: ${ciudad._id})`); // Para debugging
   };
 
-  //  Manejar cambio en el input de ciudad
   const handleCiudadChange = (value: string) => {
-    // Verificar si el valor coincide exactamente con una ciudad existente
     const ciudadExacta = ciudades.find(
       ciudad => ciudad.nombre.toLowerCase() === value.toLowerCase()
     );
-
     setFormData({
       ...formData,
       ciudad: value,
-      ciudadId: ciudadExacta ? ciudadExacta._id : "" // Auto-seleccionar si coincide exactamente
+      ciudadId: ciudadExacta ? ciudadExacta._id : ""
     });
-    
-    if (value.length < 2) {
-      setMostrarSugerencias(false);
-    }
+    if (value.length < 2) setMostrarSugerencias(false);
   };
 
-  //  Crear nueva ciudad
-  
   const crearNuevaCiudad = async (nombreCiudad: string) => {
     setCreandoCiudad(true);
     try {
@@ -112,26 +95,13 @@ export default function ComplejoForm() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem("token") || ""}`,
         },
-        body: JSON.stringify({
-          nombre: nombreCiudad,
-          creadaPor: 'propietario'
-        }),
+        body: JSON.stringify({ nombre: nombreCiudad, creadaPor: 'propietario' }),
       });
-
       const data = await response.json();
-
       if (response.ok) {
         const nuevaCiudad = data.ciudad;
-        // Agregar la nueva ciudad a la lista
         setCiudades(prev => [...prev, nuevaCiudad]);
-        
-        // Seleccionar automáticamente la nueva ciudad
-        setFormData({
-          ...formData,
-          ciudad: nuevaCiudad.nombre,
-          ciudadId: nuevaCiudad._id
-        });
-        
+        setFormData({ ...formData, ciudad: nuevaCiudad.nombre, ciudadId: nuevaCiudad._id });
         setMostrarSugerencias(false);
         mostrarExito(`Ciudad "${nuevaCiudad.nombre}" creada exitosamente`);
         return nuevaCiudad;
@@ -148,54 +118,47 @@ export default function ComplejoForm() {
     }
   };
 
-  // Manejar selección de servicios
   const handleServicioChange = (servicio: string) => {
     setServiciosSeleccionados(prev =>
-      prev.includes(servicio)
-        ? prev.filter(s => s !== servicio)
-        : [...prev, servicio]
+      prev.includes(servicio) ? prev.filter(s => s !== servicio) : [...prev, servicio]
     );
   };
 
-  //  Agregar cancha
   const agregarCancha = () => {
     setCanchas([...canchas, { tipoCancha: "Fútbol 5", precioHora: "", disponible: true }]);
   };
 
-  //  Eliminar cancha
   const eliminarCancha = (index: number) => {
     setCanchas(canchas.filter((_, i) => i !== index));
   };
 
-  //  Actualizar datos de una cancha específica
   const actualizarCancha = (index: number, campo: string, valor: any) => {
     const nuevasCanchas = [...canchas];
     (nuevasCanchas[index] as any)[campo] = valor;
     setCanchas(nuevasCanchas);
   };
 
-  //  Enviar al backend
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Validar que apertura sea antes que cierre
+    const [hApertura] = formData.horarioApertura.split(":").map(Number);
+    const [hCierre] = formData.horarioCierre.split(":").map(Number);
+    if (hApertura >= hCierre) {
+      mostrarError("El horario de apertura debe ser anterior al de cierre");
+      return;
+    }
+
     let ciudadFinal = formData.ciudadId;
 
-    // Si no hay ciudad seleccionada pero hay texto, verificar si coincide exactamente con una existente
     if (!formData.ciudadId && formData.ciudad.trim()) {
-      // Buscar coincidencia exacta (case-insensitive)
       const ciudadExacta = ciudades.find(
         ciudad => ciudad.nombre.toLowerCase() === formData.ciudad.trim().toLowerCase()
       );
-
       if (ciudadExacta) {
-        // Si existe, usar esa ciudad
         ciudadFinal = ciudadExacta._id;
-        setFormData({
-          ...formData,
-          ciudadId: ciudadExacta._id
-        });
+        setFormData({ ...formData, ciudadId: ciudadExacta._id });
       } else {
-        // Si no existe, preguntar si quiere crear nueva
         const confirmar = confirm(`La ciudad "${formData.ciudad}" no existe. ¿Desea crearla?`);
         if (confirmar) {
           const nuevaCiudad = await crearNuevaCiudad(formData.ciudad.trim());
@@ -221,12 +184,13 @@ export default function ComplejoForm() {
       direccion: formData.direccion,
       ciudad: ciudadFinal,
       servicios: serviciosSeleccionados,
+      horarioApertura: formData.horarioApertura,
+      horarioCierre: formData.horarioCierre,
       canchas: canchas.map(c => ({
         tipoCancha: c.tipoCancha,
         precioHora: Number(c.precioHora),
         disponible: c.disponible,
       })),
-
     };
 
     try {
@@ -243,7 +207,7 @@ export default function ComplejoForm() {
 
       if (res.ok) {
         mostrarExito("Complejo creado con éxito");
-        setFormData({ nombre: "", direccion: "", ciudad: "", ciudadId: "" });
+        setFormData({ nombre: "", direccion: "", ciudad: "", ciudadId: "", horarioApertura: "08:00", horarioCierre: "22:00" });
         setServiciosSeleccionados([]);
         setCanchas([{ tipoCancha: "Fútbol 5", precioHora: "", disponible: true }]);
         window.location.reload();
@@ -278,6 +242,7 @@ export default function ComplejoForm() {
           required
         />
 
+        {/* Ciudad */}
         <div className={styles.ciudadContainer}>
           <input
             className={styles.input}
@@ -289,14 +254,10 @@ export default function ComplejoForm() {
             onBlur={() => setTimeout(() => setMostrarSugerencias(false), 200)}
             required
           />
-
-
-
-          {/* Menú desplegable de sugerencias */}
           {mostrarSugerencias && (
             <div className={styles.dropdown}>
               {cargandoCiudades ? (
-                <div className={styles.dropdownItem + ' ' + styles.loading}>
+                <div className={`${styles.dropdownItem} ${styles.loading}`}>
                   <span className={styles.loadingIcon}><Loader2 size={16} /></span>
                   Cargando ciudades...
                 </div>
@@ -304,7 +265,7 @@ export default function ComplejoForm() {
                 ciudadesFiltradas.map((ciudad) => (
                   <div
                     key={ciudad._id}
-                    className={styles.dropdownItem + ' ' + styles.clickable}
+                    className={`${styles.dropdownItem} ${styles.clickable}`}
                     onClick={() => seleccionarCiudad(ciudad)}
                   >
                     <span className={styles.cityIcon}><MapPin size={16} /></span>
@@ -312,20 +273,16 @@ export default function ComplejoForm() {
                   </div>
                 ))
               ) : formData.ciudad.trim().length >= 2 ? (
-                <div className={styles.dropdownItem + ' ' + styles.createOption}>
-                  <div
-                    className={styles.createButton}
-                    onClick={() => crearNuevaCiudad(formData.ciudad.trim())}
-                  >
+                <div className={`${styles.dropdownItem} ${styles.createOption}`}>
+                  <div className={styles.createButton} onClick={() => crearNuevaCiudad(formData.ciudad.trim())}>
                     <span className={styles.createIcon}><Plus size={16} /></span>
                     <span className={styles.createText}>
-                      Crear "{formData.ciudad}"
-                      {creandoCiudad && " (Creando...)"}
+                      Crear "{formData.ciudad}"{creandoCiudad && " (Creando...)"}
                     </span>
                   </div>
                 </div>
               ) : (
-                <div className={styles.dropdownItem + ' ' + styles.hint}>
+                <div className={`${styles.dropdownItem} ${styles.hint}`}>
                   <span className={styles.hintIcon}><Lightbulb size={16} /></span>
                   Escribe al menos 2 caracteres para buscar
                 </div>
@@ -334,8 +291,37 @@ export default function ComplejoForm() {
           )}
         </div>
 
-        <h3 className={styles.subtitulo}>Canchas</h3>
+        {/* Horarios */}
+        <h3 className={styles.subtitulo}>Horario de atención</h3>
+        <div className={styles.canchaCampos}>
+          <div style={{ flex: 1 }}>
+            <label style={{ display: "block", fontSize: "0.82rem", color: "#666", marginBottom: 4 }}>
+              Apertura
+            </label>
+            <input
+              className={styles.input}
+              type="time"
+              value={formData.horarioApertura}
+              onChange={e => setFormData({ ...formData, horarioApertura: e.target.value })}
+              required
+            />
+          </div>
+          <div style={{ flex: 1 }}>
+            <label style={{ display: "block", fontSize: "0.82rem", color: "#666", marginBottom: 4 }}>
+              Cierre
+            </label>
+            <input
+              className={styles.input}
+              type="time"
+              value={formData.horarioCierre}
+              onChange={e => setFormData({ ...formData, horarioCierre: e.target.value })}
+              required
+            />
+          </div>
+        </div>
 
+        {/* Canchas */}
+        <h3 className={styles.subtitulo}>Canchas</h3>
         {canchas.map((cancha, index) => (
           <div key={index} className={styles.canchaCard}>
             <div className={styles.canchaCampos}>
@@ -348,7 +334,6 @@ export default function ComplejoForm() {
                 <option value="futbol7">Fútbol 7</option>
                 <option value="padel">Pádel</option>
               </select>
-
               <input
                 className={styles.inputSmall}
                 type="number"
@@ -357,7 +342,6 @@ export default function ComplejoForm() {
                 onChange={e => actualizarCancha(index, "precioHora", e.target.value)}
                 required
               />
-
               <label className={styles.disponibleCheck}>
                 <input
                   className={styles.checkbox}
@@ -368,13 +352,8 @@ export default function ComplejoForm() {
                 Disponible
               </label>
             </div>
-
             {canchas.length > 1 && (
-              <button
-                type="button"
-                onClick={() => eliminarCancha(index)}
-                className={styles.eliminarBtn}
-              >
+              <button type="button" onClick={() => eliminarCancha(index)} className={styles.eliminarBtn}>
                 Eliminar
               </button>
             )}
@@ -385,6 +364,7 @@ export default function ComplejoForm() {
           + Agregar otra cancha
         </button>
 
+        {/* Servicios */}
         <h3 className={styles.subtitulo}>Servicios disponibles</h3>
         <div className={styles.serviciosContainer}>
           {servicios.map((servicio) => (
