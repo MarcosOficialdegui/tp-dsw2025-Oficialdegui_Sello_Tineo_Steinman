@@ -1,0 +1,330 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap');
+
+.wrapper {
+  font-family: 'Nunito', 'Segoe UI', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem;
+}
+
+/* ── Selector de días ── */
+.diasRow {
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #c8e6c9 transparent;
+}
+
+.diasRow::-webkit-scrollbar { height: 3px; }
+.diasRow::-webkit-scrollbar-thumb { background: #c8e6c9; border-radius: 4px; }
+
+.diaBtn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 12px;
+  min-width: 58px;
+  border: 1.5px solid #e2efe3;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+
+.diaBtn:hover { border-color: #a5d6a7; background: #f5fbf5; }
+
+.diaBtnSelected {
+  border-color: #4caf50 !important;
+  background: #f0faf0 !important;
+}
+
+.hoyDot {
+  position: absolute;
+  top: 5px; right: 5px;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: #4caf50;
+}
+
+.diaSemana {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #b0c9b1;
+}
+
+.diaNro {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #222;
+  line-height: 1;
+}
+
+.diaBtnSelected .diaNro { color: #4caf50; }
+
+.diaMes {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  color: #c5d9c6;
+}
+
+/* ── Resumen del día ── */
+.resumenRow {
+  display: flex;
+  align-items: center;
+  background: #f7fbf7;
+  border: 1px solid #ddeedd;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.resumenItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0.75rem 1.25rem;
+  flex: 1;
+}
+
+.resumenDivider {
+  width: 1px;
+  background: #ddeedd;
+  align-self: stretch;
+}
+
+.resumenLabel {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9ebc9f;
+}
+
+.resumenVal {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #1b5e20;
+}
+
+/* ── Tabla ── */
+.tableScroll {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid #e2efe3;
+  box-shadow: 0 2px 8px rgba(76,175,80,0.06);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  min-width: 900px;
+}
+
+/* Header */
+.thCancha {
+  background: #f0faf0;
+  padding: 0.9rem 1.25rem;
+  text-align: left;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9ebc9f;
+  border-right: 2px solid #e2efe3;
+  border-bottom: 1.5px solid #e2efe3;
+  white-space: nowrap;
+  min-width: 160px;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+}
+
+.thHora {
+  background: #f0faf0;
+  padding: 0.9rem 0.75rem;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #6a9e6b;
+  border-bottom: 1.5px solid #e2efe3;
+  border-right: 1px solid #edf7ed;
+  white-space: nowrap;
+  min-width: 90px;
+}
+
+/* Filas zebra */
+.table tbody tr:nth-child(even) .tdCancha,
+.table tbody tr:nth-child(even) .tdSlot {
+  background-color: #fafff9;
+}
+
+.table tbody tr:hover .tdSlot,
+.table tbody tr:hover .tdCancha {
+  background-color: #f0faf0;
+}
+
+/* Celda cancha (fija a la izquierda) */
+.tdCancha {
+  height: 70px;
+  display: table-cell;
+  vertical-align: middle;
+  padding: 0.75rem 1.25rem;
+  border-right: 2px solid #e2efe3;
+  border-bottom: 1px solid #edf7ed;
+  background: #fff;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  min-width: 160px;
+}
+
+.canchaTag {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #4caf50;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.canchaNombre {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #333;
+  margin-top: 2px;
+}
+
+.canchaPrecio {
+  display: block;
+  font-size: 0.72rem;
+  color: #9ebc9f;
+  margin-top: 2px;
+}
+
+/* Celda horario */
+.tdSlot {
+  padding: 0.6rem 0.4rem;
+  text-align: center;
+  border-bottom: 1px solid #edf7ed;
+  border-right: 1px solid #edf7ed;
+  vertical-align: middle;
+  height: 70px;
+  transition: background 0.1s;
+}
+
+.tdSlotLibre { background: #fff; }
+.tdSlotOcupado { background: #e8f5e9 !important; }
+
+.libreIndicator {
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #dde8dd;
+}
+
+/* Celda con reserva */
+.reservaCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 4px;
+}
+
+.reservaUser {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #2e7d32;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 82px;
+  background: #c8e6c9;
+  border-radius: 4px;
+  padding: 3px 7px;
+}
+
+/* ── Leyenda ── */
+.leyenda {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.leyendaItem {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.leyendaOcupado {
+  display: inline-block;
+  width: 12px; height: 12px;
+  border-radius: 3px;
+  background: #c8e6c9;
+}
+
+.leyendaLibre {
+  display: inline-block;
+  width: 12px; height: 12px;
+  border-radius: 3px;
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+}
+
+/* ── Loading / Empty ── */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 2.5rem;
+  color: #9ebc9f;
+  font-size: 0.85rem;
+}
+
+.loadingDots {
+  display: flex;
+  gap: 5px;
+}
+
+.loadingDots span {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #6fcf7f;
+  animation: bounce 0.9s ease-in-out infinite;
+}
+
+.loadingDots span:nth-child(2) { animation-delay: 0.15s; }
+.loadingDots span:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50% { transform: translateY(-4px); opacity: 1; }
+}
+
+.empty {
+  text-align: center;
+  padding: 2rem;
+  color: #bbb;
+  font-size: 0.85rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 767px) {
+  .wrapper { padding: 1rem; gap: 1rem; }
+  .resumenRow { flex-direction: column; }
+  .resumenDivider { width: auto; height: 1px; align-self: auto; }
+  .resumenItem { padding: 0.6rem 1rem; }
+}

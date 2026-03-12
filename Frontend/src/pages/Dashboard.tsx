@@ -6,7 +6,7 @@ import {
 } from "recharts";
 import styles from "./Dashboard.module.css";
 import ComplejoForm from "../components/ComplejoForm";
-import ReservasCalendario from "../components/ReservasCalendar";
+import ReservasGrid from "../components/ReservasGrid";
 import { mostrarExito, mostrarError } from "../utils/notificaciones";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
@@ -384,7 +384,7 @@ export default function Dashboard() {
             {/* ── TAB: RESERVAS DEL DÍA ── */}
             {vista === "reservas" && (
               <div className={styles.reservasWrapper}>
-                <ReservasCalendario complejoId={complejoSeleccionado} />
+                <ReservasGrid complejoId={complejoSeleccionado} />
               </div>
             )}
           </>

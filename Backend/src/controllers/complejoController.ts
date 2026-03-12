@@ -132,29 +132,29 @@ export const getReservasPorComplejo = async (req: Request, res: Response): Promi
   try {
     const { id } = req.params;
     const { fecha } = req.query;
-
-    // Verificar que el complejo existe
+ 
     const complejo = await Complejo.findById(id);
     if (!complejo) {
       res.status(404).json({ error: 'Complejo no encontrado' });
       return;
     }
-
-
-
-    // Obtener reservas y hacer populate de cancha y usuario
-
-
-    const reservas = await Reserva.find({ complejo: id, fecha: fecha })
-      .populate('user', 'nombre apellido')
+ 
+    // Filtrar por rango del día completo para evitar problemas con horas
+    const fechaInicio = new Date(fecha as string);
+    fechaInicio.setHours(0, 0, 0, 0);
+    const fechaFin = new Date(fecha as string);
+    fechaFin.setHours(23, 59, 59, 999);
+ 
+    const reservas = await Reserva.find({
+      complejo: id,
+      fecha: { $gte: fechaInicio, $lte: fechaFin }
+    })
+      .populate('user', 'nombre apellido telefono')
       .exec();
-
+ 
     res.json(reservas);
-    console.log(reservas);
-
   } catch (error) {
     console.error('Error al obtener reservas:', error);
     res.status(500).json({ error: 'Error al obtener reservas del complejo' });
   }
 };
-
