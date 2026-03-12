@@ -7,6 +7,7 @@ import {
   MdSportsSoccer,   // Deportes
   MdDelete          // Eliminar
 } from "react-icons/md";
+import { construirUrlImagen, IMAGEN_PREDETERMINADA_COMPLEJO } from "../utils/constants";
 
 
 type Cancha = {
@@ -44,9 +45,13 @@ function ComplejoList({ complejos, onComplejoClick, nombreLista, onEliminarCompl
           onClick={() => onComplejoClick(complejo._id)}>
 
             <img
-              src={complejo.imagen || "/images/cancha-placeholder.jpg"}
+              src={construirUrlImagen(complejo.imagen, complejo.canchas?.[0]?.tipoCancha)}
               alt={complejo.nombre}
               className="complejo-img"
+              onError={(e) => {
+                // Si falla la carga, usar imagen placeholder
+                (e.target as HTMLImageElement).src = IMAGEN_PREDETERMINADA_COMPLEJO;
+              }}
             />
             <div className="complejo-info">
               <h3>{complejo.nombre}</h3>

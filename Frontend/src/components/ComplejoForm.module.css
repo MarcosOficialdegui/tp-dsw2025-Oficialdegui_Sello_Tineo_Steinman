@@ -435,3 +435,120 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/* Sección de carga de imagen */
+.imagenContainer {
+  width: 100%;
+  margin: 20px 0;
+  text-align: left;
+}
+
+.imagenLabel {
+  display: block;
+  margin-bottom: 10px;
+  color: #2e2e2e;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Input de archivo oculto */
+.inputFile {
+  display: none;
+}
+
+/* Contenedor de upload */
+.uploadContainer {
+  width: 100%;
+}
+
+.uploadLabel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  border: 2px dashed #d0d7de;
+  border-radius: 12px;
+  background-color: #fafafa;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.uploadLabel:hover {
+  border-color: #57b46f;
+  background-color: #f5faf7;
+}
+
+.uploadIcon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  color: #57b46f;
+  display: flex;
+  justify-content: center;
+}
+
+.uploadText {
+  font-size: 16px;
+  font-weight: 500;
+  color: #2e2e2e;
+  margin-bottom: 8px;
+}
+
+.uploadHint {
+  font-size: 13px;
+  color: #6c757d;
+}
+
+/* Previsualización de imagen */
+.previsualizacionContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.previsualizacion {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
+}
+
+.eliminarImagenBtn {
+  padding: 10px 20px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.eliminarImagenBtn:hover {
+  background-color: #5a6268;
+}
+
+/* Responsive para sección de imagen */
+@media (max-width: 767px) {
+  .uploadLabel {
+    padding: 30px 15px;
+  }
+  
+  .uploadIcon {
+    font-size: 36px;
+  }
+  
+  .uploadText {
+    font-size: 14px;
+  }
+  
+  .uploadHint {
+    font-size: 12px;
+  }
+  
+  .previsualizacion {
+    max-height: 200px;
+  }
+}

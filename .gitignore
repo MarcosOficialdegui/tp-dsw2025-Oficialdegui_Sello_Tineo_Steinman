@@ -27,3 +27,14 @@ Thumbs.db
 # Build outputs
 dist/
 build/
+
+# Archivos subidos por usuarios
+Backend/uploads/
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+
+# Pero mantener la estructura de carpetas
+!Backend/uploads/.gitkeep

@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
+import path from "path";
 
 import complejosRoutes from "./routes/complejos";
 import canchasRoutes from "./routes/canchas";
@@ -17,6 +18,9 @@ const app = express();
 // Middlewares
 app.use(cors());
 app.use(express.json());
+
+// Servir archivos estáticos desde la carpeta uploads
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Rutas
 app.use("/api/complejos", complejosRoutes);

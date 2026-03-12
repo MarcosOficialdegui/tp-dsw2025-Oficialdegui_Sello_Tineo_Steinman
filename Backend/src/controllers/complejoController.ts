@@ -83,14 +83,38 @@ export const crearComplejo = async (req: Request, res: Response, next: Function)
       return res.status(400).json({ error: "Faltan datos obligatorios" });
     }
 
+    // Parsear servicios y canchas si vienen como strings (desde FormData)
+    let serviciosParsed = servicios;
+    let canchasParsed = canchas;
+
+    if (typeof servicios === 'string') {
+      try {
+        serviciosParsed = JSON.parse(servicios);
+      } catch (e) {
+        serviciosParsed = [];
+      }
+    }
+
+    if (typeof canchas === 'string') {
+      try {
+        canchasParsed = JSON.parse(canchas);
+      } catch (e) {
+        canchasParsed = [];
+      }
+    }
+
+    // Obtener la ruta de la imagen si se subió
+    const imagen = (req as any).file ? `/uploads/${(req as any).file.filename}` : undefined;
+
     const nuevoComplejo = new Complejo({
       nombre,
       direccion,
       ciudad,
-      servicios: servicios || [],
-      canchas: canchas || [],
+      servicios: serviciosParsed || [],
+      canchas: canchasParsed || [],
       horarioApertura: horarioApertura || "08:00",
       horarioCierre: horarioCierre || "22:00",
+      imagen
     });
 
     const guardado = await nuevoComplejo.save();
@@ -158,5 +182,52 @@ export const getReservasPorComplejo = async (req: Request, res: Response): Promi
   } catch (error) {
     console.error('Error al obtener reservas:', error);
     res.status(500).json({ error: 'Error al obtener reservas del complejo' });
+  }
+};
+
+export const actualizarImagenComplejo = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const userId = (req as any).user.id;
+
+    // Verificar que se subió una imagen
+    if (!(req as any).file) {
+      res.status(400).json({ error: 'No se proporcionó ninguna imagen' });
+      return;
+    }
+
+    // Buscar el complejo
+    const complejo = await Complejo.findById(id);
+    if (!complejo) {
+      res.status(404).json({ error: 'Complejo no encontrado' });
+      return;
+    }
+
+    // Verificar que el usuario es el propietario
+    const usuario = await Usuario.findById(userId);
+    if (!usuario || !usuario.complejos.some(complejoId => complejoId.toString() === id)) {
+      res.status(403).json({ error: 'No tienes permiso para modificar este complejo' });
+      return;
+    }
+
+    // Eliminar imagen anterior si existe
+    if (complejo.imagen) {
+      const fs = require('fs');
+      const path = require('path');
+      const oldImagePath = path.join(__dirname, '../../', complejo.imagen);
+      if (fs.existsSync(oldImagePath)) {
+        fs.unlinkSync(oldImagePath);
+      }
+    }
+
+    // Actualizar con la nueva imagen
+    const nuevaImagen = `/uploads/${(req as any).file.filename}`;
+    complejo.imagen = nuevaImagen;
+    await complejo.save();
+
+    res.json({ message: 'Imagen actualizada correctamente', imagen: nuevaImagen });
+  } catch (error) {
+    console.error('Error al actualizar imagen:', error);
+    res.status(500).json({ error: 'Error al actualizar la imagen del complejo' });
   }
 };

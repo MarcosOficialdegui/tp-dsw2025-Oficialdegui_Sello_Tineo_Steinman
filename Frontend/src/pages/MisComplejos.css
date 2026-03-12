@@ -87,6 +87,51 @@
   border-bottom: 1px solid #f0f0f0;
 }
 
+/* IMAGEN DEL COMPLEJO */
+.complejo-imagen-container {
+  position: relative;
+  flex-shrink: 0;
+  width: 200px;
+  height: 150px;
+}
+
+.complejo-imagen {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-cambiar-imagen {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: rgba(87, 180, 111, 0.95);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0;
+}
+
+.complejo-imagen-container:hover .btn-cambiar-imagen {
+  opacity: 1;
+}
+
+.btn-cambiar-imagen:hover {
+  background: rgba(74, 167, 99, 0.95);
+  transform: translateX(-50%) translateY(-2px);
+}
+
 .complejo-info h2 {
   margin: 0 0 12px 0;
   color: #333;
@@ -207,6 +252,15 @@
     padding: 16px;
   }
 
+  .complejo-imagen-container {
+    width: 100%;
+    height: 180px;
+  }
+
+  .btn-cambiar-imagen {
+    opacity: 1;
+  }
+
   .complejo-info h2 {
     font-size: 1.2rem;
   }
@@ -247,6 +301,11 @@
 
   .complejo-header {
     padding: 20px;
+  }
+
+  .complejo-imagen-container {
+    width: 180px;
+    height: 135px;
   }
 }
 

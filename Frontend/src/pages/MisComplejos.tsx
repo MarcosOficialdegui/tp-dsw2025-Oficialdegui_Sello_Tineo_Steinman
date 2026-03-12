@@ -11,11 +11,13 @@ import {
   MdSportsSoccer,
   MdDelete,
   MdCalendarToday,
-  MdVisibility
+  MdVisibility,
+  MdImage
 } from 'react-icons/md';
 import { mostrarError, mostrarExito } from '../utils/notificaciones.ts';
 import { confirmAlert } from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css'; 
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import { construirUrlImagen, IMAGEN_PREDETERMINADA_COMPLEJO } from '../utils/constants.ts'; 
 
 interface Complejo {
   _id: string;
@@ -27,6 +29,7 @@ interface Complejo {
   };
   servicios: string[];
   canchas: any[];
+  imagen?: string;
 }
 
 export default function MisComplejos() {
@@ -75,6 +78,58 @@ export default function MisComplejos() {
 
   const handleVerComplejo = (complejoId: string) => {
     navigate(`/complejo/${complejoId}`);
+  };
+
+  const handleCambiarImagen = (complejoId: string) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    
+    input.onchange = async (e: Event) => {
+      const target = e.target as HTMLInputElement;
+      const file = target.files?.[0];
+      
+      if (!file) return;
+      
+      // Validar tipo de archivo
+      if (!file.type.startsWith('image/')) {
+        mostrarError('Por favor selecciona un archivo de imagen válido');
+        return;
+      }
+      
+      // Validar tamaño (máximo 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        mostrarError('La imagen no debe superar los 5MB');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('imagen', file);
+
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch(`http://localhost:3000/api/complejos/${complejoId}/imagen`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          body: formData
+        });
+
+        if (res.ok) {
+          mostrarExito('Imagen actualizada correctamente');
+          llamarDatos(); // Recargar los complejos
+        } else {
+          const data = await res.json();
+          mostrarError(data.error || 'Error al actualizar la imagen');
+        }
+      } catch (error) {
+        console.error('Error al actualizar imagen:', error);
+        mostrarError('Error de conexión al actualizar la imagen');
+      }
+    };
+    
+    input.click();
   };
 
 const handleEliminarComplejo = (complejoId: string) => {
@@ -151,8 +206,28 @@ const handleEliminarComplejo = (complejoId: string) => {
           <div className='complejos-lista'>
             {complejos.map((complejo) => (
               <div key={complejo._id} className='complejo-card'>
-                {/* Header de la card */}
+                {/* Header de la card con imagen */}
                 <div className='complejo-header'>
+                  {/* Imagen del complejo */}
+                  <div className='complejo-imagen-container'>
+                    <img 
+                      src={construirUrlImagen(complejo.imagen, complejo.canchas?.[0]?.tipoCancha)}
+                      alt={complejo.nombre}
+                      className='complejo-imagen'
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = IMAGEN_PREDETERMINADA_COMPLEJO;
+                      }}
+                    />
+                    <button 
+                      className='btn-cambiar-imagen'
+                      onClick={() => handleCambiarImagen(complejo._id)}
+                      title="Cambiar imagen"
+                    >
+                      <MdImage size={18} />
+                      Cambiar imagen
+                    </button>
+                  </div>
+
                   <div className='complejo-info'>
                     <h2>{complejo.nombre}</h2>
                     <div className='complejo-detalles'>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./ComplejoForm.module.css";
-import { MapPin, Plus, Lightbulb, Loader2 } from 'lucide-react';
+import { MapPin, Plus, Lightbulb, Loader2, Camera } from 'lucide-react';
 import { mostrarExito, mostrarError, mostrarAdvertencia } from "../utils/notificaciones";
 
 type Ciudad = {
@@ -26,6 +26,10 @@ export default function ComplejoForm() {
   const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
   const [cargandoCiudades, setCargandoCiudades] = useState(false);
   const [creandoCiudad, setCreandoCiudad] = useState(false);
+
+  // Estados para el manejo de imágenes
+  const [imagenSeleccionada, setImagenSeleccionada] = useState<File | null>(null);
+  const [previsualizacion, setPrevisualizacion] = useState<string>(""); // Data URL para previsualización
 
   const [canchas, setCanchas] = useState([
     { tipoCancha: "Fútbol 5", precioHora: "", disponible: true },
@@ -124,6 +128,38 @@ export default function ComplejoForm() {
     );
   };
 
+  // Manejar selección de imagen
+  const handleImagenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validar tipo de archivo
+      if (!file.type.startsWith('image/')) {
+        mostrarError('Por favor selecciona un archivo de imagen válido');
+        return;
+      }
+      
+      // Validar tamaño (máximo 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        mostrarError('La imagen no debe superar los 5MB');
+        return;
+      }
+
+      setImagenSeleccionada(file);
+      
+      // Crear previsualización
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPrevisualizacion(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Eliminar imagen seleccionada
+  const eliminarImagen = () => {
+    setImagenSeleccionada(null);
+    setPrevisualizacion("");
+  };
   const agregarCancha = () => {
     setCanchas([...canchas, { tipoCancha: "Fútbol 5", precioHora: "", disponible: true }]);
   };
@@ -179,28 +215,32 @@ export default function ComplejoForm() {
       return;
     }
 
-    const body = {
-      nombre: formData.nombre,
-      direccion: formData.direccion,
-      ciudad: ciudadFinal,
-      servicios: serviciosSeleccionados,
-      horarioApertura: formData.horarioApertura,
-      horarioCierre: formData.horarioCierre,
-      canchas: canchas.map(c => ({
-        tipoCancha: c.tipoCancha,
-        precioHora: Number(c.precioHora),
-        disponible: c.disponible,
-      })),
-    };
+    // Crear FormData para enviar datos con imagen
+    const formDataToSend = new FormData();
+    formDataToSend.append('nombre', formData.nombre);
+    formDataToSend.append('direccion', formData.direccion);
+    formDataToSend.append('ciudad', ciudadFinal);
+    formDataToSend.append('servicios', JSON.stringify(serviciosSeleccionados));
+    formDataToSend.append('horarioApertura', formData.horarioApertura);
+    formDataToSend.append('horarioCierre', formData.horarioCierre);
+    formDataToSend.append('canchas', JSON.stringify(canchas.map(c => ({
+      tipoCancha: c.tipoCancha,
+      precioHora: Number(c.precioHora),
+      disponible: c.disponible,
+    }))));
+
+    // Agregar imagen si se seleccionó una
+    if (imagenSeleccionada) {
+      formDataToSend.append('imagen', imagenSeleccionada);
+    }
 
     try {
       const res = await fetch("http://localhost:3000/api/complejos", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           "Authorization": `Bearer ${localStorage.getItem("token") || ""}`,
         },
-        body: JSON.stringify(body),
+        body: formDataToSend,
       });
 
       const data = await res.json();
@@ -210,6 +250,8 @@ export default function ComplejoForm() {
         setFormData({ nombre: "", direccion: "", ciudad: "", ciudadId: "", horarioApertura: "08:00", horarioCierre: "22:00" });
         setServiciosSeleccionados([]);
         setCanchas([{ tipoCancha: "Fútbol 5", precioHora: "", disponible: true }]);
+        setImagenSeleccionada(null);
+        setPrevisualizacion("");
         window.location.reload();
       } else {
         mostrarError(data.error || "Error al crear el complejo");
@@ -318,6 +360,45 @@ export default function ComplejoForm() {
               required
             />
           </div>
+        </div>
+
+        {/* Sección de carga de imagen */}
+        <div className={styles.imagenContainer}>
+          <label className={styles.imagenLabel}>Imagen del complejo (opcional)</label>
+          
+          {previsualizacion ? (
+            <div className={styles.previsualizacionContainer}>
+              <img 
+                src={previsualizacion} 
+                alt="Previsualización" 
+                className={styles.previsualizacion}
+              />
+              <button 
+                type="button" 
+                onClick={eliminarImagen}
+                className={styles.eliminarImagenBtn}
+              >
+                Cambiar imagen
+              </button>
+            </div>
+          ) : (
+            <div className={styles.uploadContainer}>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImagenChange}
+                className={styles.inputFile}
+                id="imagen-upload"
+              />
+              <label htmlFor="imagen-upload" className={styles.uploadLabel}>
+                <span className={styles.uploadIcon}>
+                  <Camera size={48} strokeWidth={1.5} />
+                </span>
+                <span className={styles.uploadText}>Seleccionar imagen</span>
+                <span className={styles.uploadHint}>JPG, PNG, GIF o WEBP (máx. 5MB)</span>
+              </label>
+            </div>
+          )}
         </div>
 
         {/* Canchas */}
