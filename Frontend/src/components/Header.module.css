@@ -1,12 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@500;600&display=swap');
+
 .header {
   position: sticky;
   top: 0;
   width: 100%;
-  background-color: #ffffff;
-  color: #2e7d32;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.08);
   z-index: 1000;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Barlow', sans-serif;
+  height: 64px;
 }
 
 .container {
@@ -14,75 +17,102 @@
   justify-content: space-between;
   align-items: center;
   max-width: 1200px;
-  margin: 0 auto; 
+  margin: 0 auto;
   padding: 0 1.5rem;
+  height: 100%;
 }
 
 .logo {
-  font-size: 1.6rem;
-  font-weight: bold;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.45rem;
+  font-weight: 800;
   color: #2e7d32;
   text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  line-height: 1;
+}
+
+.logo h2 {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
 }
 
 .nav {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 0.25rem;
 }
 
 .nav a {
+  font-family: 'Barlow', sans-serif;
   text-decoration: none;
-  color: #2e7d32;
+  color: #444;
   font-weight: 500;
-  transition: color 0.3s ease;
+  font-size: 0.88rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  transition: all 0.18s ease;
+  white-space: nowrap;
 }
 
 .nav a:hover {
-  color: #66bb6a;
+  color: #2e7d32;
+  background: #f0faf0;
 }
 
-/* Botón menú móvil */
+/* botón destacado para Iniciar Sesión */
+.nav a[href="/login"],
+.nav a:last-child:not([href="/"]) {
+  background: #4caf50;
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-weight: 600;
+}
+
+.nav a[href="/login"]:hover,
+.nav a:last-child:not([href="/"]):hover {
+  background: #43a047;
+  color: white;
+}
+
 .menuButton {
   display: none;
   background: none;
   border: none;
   color: #2e7d32;
   cursor: pointer;
-  font-size: 1.5rem;
+  padding: 0.3rem;
+  border-radius: 6px;
+  transition: background 0.15s;
 }
 
-/* Responsive */
-/* SM - Móviles (hasta 767px) */
+.menuButton:hover { background: #f0faf0; }
+
+/* ── Responsive ── */
 @media (max-width: 767px) {
-  .container {
-    padding: 0 1rem;
-  }
-
-  .logo {
-    font-size: 1.3rem;
-  }
-
-  .menuButton {
-    display: block;
-  }
+  .container { padding: 0 1rem; }
+  .logo { font-size: 1.2rem; }
+  .menuButton { display: flex; align-items: center; }
 
   .nav {
     position: absolute;
-    top: 60px;
+    top: 64px;
     left: 0;
     width: 100%;
-    background-color: #ffffff;
+    background: #fff;
     flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 1rem 0;
-    border-top: 1px solid #e0e0e0;
-    transform: translateY(-200%);
+    align-items: stretch;
+    gap: 0;
+    padding: 0.75rem 1rem 1rem;
+    border-top: 1px solid #e8f5e9;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    transform: translateY(-8px);
     opacity: 0;
     pointer-events: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.22s ease;
   }
 
   .navOpen {
@@ -92,49 +122,26 @@
   }
 
   .nav a {
-    font-size: 1rem;
-    padding: 0.5rem 0;
-    width: 100%;
+    font-size: 0.95rem;
+    padding: 0.65rem 0.75rem;
+    border-radius: 8px;
+    text-align: left;
+  }
+
+  .nav a[href="/login"],
+  .nav a:last-child:not([href="/"]) {
+    margin-top: 0.5rem;
     text-align: center;
+    padding: 0.65rem 1rem;
   }
 }
 
-/* MD - Tablets (768px - 1023px) */
 @media (min-width: 768px) and (max-width: 1023px) {
-  .container {
-    padding: 0 1.25rem;
-    max-width: 100%;
-  }
-
-  .logo {
-    font-size: 1.5rem;
-  }
-
-  .nav {
-    gap: 1.25rem;
-  }
-
-  .nav a {
-    font-size: 0.938rem;
-  }
+  .container { padding: 0 1.25rem; }
+  .nav { gap: 0.15rem; }
+  .nav a { font-size: 0.82rem; padding: 0.35rem 0.6rem; }
 }
 
-/* LG - Desktop (1024px+) */
 @media (min-width: 1024px) {
-  .container {
-    max-width: 1400px;
-    padding: 0 2rem;
-  }
-
-  .logo {
-    font-size: 1.6rem;
-  }
-
-  .nav {
-    gap: 1.5rem;
-  }
-
-  .nav a {
-    font-size: 1rem;
-  }
+  .container { max-width: 1300px; padding: 0 2rem; }
 }

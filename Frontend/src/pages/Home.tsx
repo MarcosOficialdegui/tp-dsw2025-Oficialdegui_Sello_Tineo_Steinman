@@ -1,42 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
 import ComplejoList from "../components/ComplejoList.tsx";
 import "./Home.css";
 
-
-type Cancha = {
-  tipoCancha: string;
-  cantidad?: number;
-};
-
+type Cancha = { tipoCancha: string; cantidad?: number; };
 type Complejo = {
-  _id: string;
-  nombre: string;
-  direccion?: string;
-  localidad?: string;
-  imagen?: string;
-  canchas?: Cancha[];
+  _id: string; nombre: string; direccion?: string;
+  ciudad?: { _id: string; nombre: string; };
+  imagen?: string; canchas?: Cancha[];
 };
-
-type Filtros = {
-  ciudad: string;
-  tipoCancha: string;
-  fecha: string;
-};
+type Filtros = { ciudad: string; tipoCancha: string; fecha: string; };
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  
-  const [filters, setFilters] = useState<Filtros>({
-    ciudad: "",
-    tipoCancha: "",
-    fecha: "",
-  });
+  const searchRef = useRef<HTMLDivElement>(null);
 
+  const [filters, setFilters] = useState<Filtros>({ ciudad: "", tipoCancha: "", fecha: "" });
   const [complejos, setComplejos] = useState<Complejo[]>([]);
   const [loading, setLoading] = useState(false);
-
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const heroImages = [
@@ -46,27 +28,18 @@ const Home: React.FC = () => {
     "/images/hombres-de-tiro-completo-jugando-al-futbol.jpg",
   ];
 
-  useEffect(() => {
-    buscarComplejos(filters); // buscar al inicio
-  }, []);
+  useEffect(() => { buscarComplejos(filters); }, []);
 
-  // Carousel de imágenes
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentImageIndex(
-        (prevIndex) => (prevIndex + 1) % heroImages.length
-      );
-    }, 4000);
-
+      setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
+    }, 4500);
     return () => clearInterval(interval);
-  }, [heroImages.length]);
+  }, []);
 
-  // actualizar filtros
-  const handleFilterChange = (name: keyof Filtros, value: string) => {
+  const handleFilterChange = (name: keyof Filtros, value: string) =>
     setFilters((prev) => ({ ...prev, [name]: value }));
-  };
 
-  // armar URL según filtros
   const buildUrl = (f: Filtros) => {
     const base = "http://localhost:3000/api/complejos";
     const params = new URLSearchParams();
@@ -77,77 +50,92 @@ const Home: React.FC = () => {
     return qs ? `${base}?${qs}` : base;
   };
 
-  // fetch complejos
   const buscarComplejos = async (filtros: Filtros) => {
     setLoading(true);
     try {
-      const url = buildUrl(filtros);
-      const res = await fetch(url);
-      if (!res.ok) {
-        setComplejos([]);
-        setLoading(false);
-        return;
-      }
+      const res = await fetch(buildUrl(filtros));
+      if (!res.ok) { setComplejos([]); return; }
       const data = await res.json();
       setComplejos(Array.isArray(data) ? data : []);
-    } catch (error) {
-      console.error("Error al buscar complejos", error);
+    } catch (e) {
+      console.error(e);
       setComplejos([]);
     } finally {
       setLoading(false);
     }
   };
 
-  // Función para navegar a la página del complejo
-  const handleVerComplejo = (complejoId: string) => {
-    navigate(`/complejo/${complejoId}`);
-  };
+  const scrollToSearch = () =>
+    searchRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  const pasos = [
+    { numero: "01", icono: "🔍", titulo: "Buscá tu cancha", descripcion: "Filtrá por ciudad, deporte y fecha para encontrar el complejo ideal." },
+    { numero: "02", icono: "📅", titulo: "Elegí un horario", descripcion: "Visualizá turnos disponibles en tiempo real y elegí el que mejor te quede." },
+    { numero: "03", icono: "✅", titulo: "Confirmá tu reserva", descripcion: "Con un clic quedás reservado. Sin llamadas, sin esperas." },
+  ];
 
   return (
     <>
-      {/* Hero con carousel */}
+      {/* Hero */}
       <section
         className="hero"
-        style={{
-          backgroundImage: `url(${heroImages[currentImageIndex]})`,
-        }}
+        style={{ backgroundImage: `url(${heroImages[currentImageIndex]})` }}
       >
         <div className="hero-content">
-          <h1 className="hero-title">Busca tu cancha favorita.</h1>
+          <span className="hero-eyebrow">⚽ Reservas online · Fútbol y Pádel</span>
+          <h1 className="hero-title">
+            Tu cancha,<br /><span>cuando quieras.</span>
+          </h1>
           <p className="hero-description">
-            Disfruta del mejor fútbol y pádel en instalaciones de primera
-            calidad. 
+            Encontrá y reservá canchas en los mejores complejos deportivos. Rápido, fácil y sin llamadas.
           </p>
-           <p className="hero-description">
-            Reserva fácil y rápido online.
-          </p>
-          <button
-            className="hero-reservar-btn"
-            onClick={() => window.scrollTo({ top: 851.266, behavior: "smooth" })}
-          >
-            Reservar Ahora
-          </button>
+          <div className="hero-actions">
+            <button className="hero-reservar-btn" onClick={scrollToSearch}>
+              Buscar cancha
+            </button>
+            <button className="hero-scroll-btn" onClick={scrollToSearch}>
+              ¿Cómo funciona?
+            </button>
+          </div>
         </div>
       </section>
 
-      {/* Contenido */}
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: 16 }}>
+      {/* Cómo funciona */}
+      <section className="como-funciona">
+        <div className="como-funciona-inner">
+          <p className="como-funciona-label">Simple y rápido</p>
+          <h2 className="como-funciona-titulo">¿Cómo funciona?</h2>
+          <p className="como-funciona-sub">Reservar tu cancha nunca fue tan fácil. Solo tres pasos.</p>
+          <div className="pasos-grid">
+            {pasos.map((paso, i) => (
+              <div key={i} className="paso-card">
+                <span className="paso-numero">{paso.numero}</span>
+                <div className="paso-icono-wrap">{paso.icono}</div>
+                <h3 className="paso-titulo">{paso.titulo}</h3>
+                <p className="paso-descripcion">{paso.descripcion}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Buscador + complejos */}
+      <div ref={searchRef} className="home-container">
         <SearchBar
           filters={filters}
           onChange={handleFilterChange}
           onSearch={() => buscarComplejos(filters)}
         />
-
-        <section style={{ marginTop: 24 }}>
+        <section style={{ marginTop: "2rem" }}>
           {loading ? (
-            <p className="loading-message">Cargando...</p>
+            <p className="loading-message">Cargando complejos...</p>
           ) : complejos.length === 0 ? (
-            <p className="no-results-message">No hay complejos cargados.</p>
+            <p className="no-results-message">No se encontraron complejos.</p>
           ) : (
             <ComplejoList
               complejos={complejos}
-              onComplejoClick={handleVerComplejo}
-              nombreLista="Complejos Disponibles"
+              onComplejoClick={(id) => navigate(`/complejo/${id}`)}
+              nombreLista="Complejos disponibles"
             />
           )}
         </section>
@@ -157,5 +145,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-
-

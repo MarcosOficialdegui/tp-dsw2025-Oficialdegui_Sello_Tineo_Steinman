@@ -1,27 +1,43 @@
-/* Estilos para la página Home */
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Barlow:wght@400;500;600&display=swap');
 
+/* ── Variables ── */
+:root {
+  --green-dark:   #1b5e20;
+  --green-mid:    #2e7d32;
+  --green-main:   #4caf50;
+  --green-light:  #a5d6a7;
+  --green-pale:   #e8f5e9;
+  --green-bg:     #f4faf4;
+  --text-dark:    #1a1a1a;
+  --text-mid:     #444;
+  --text-soft:    #888;
+  --white:        #ffffff;
+  --radius:       14px;
+}
+
+/* ── Hero ── */
 .hero {
   position: relative;
-  min-height: calc(100vh - 110.719px);
+  min-height: calc(100vh - 64px);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed; /* Efecto parallax */
+  background-attachment: fixed;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  transition: background-image 1s ease-in-out;
+  color: var(--white);
 }
 
 .hero::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+  inset: 0;
+  background: linear-gradient(
+    170deg,
+    rgba(0,0,0,0.62) 0%,
+    rgba(27,94,32,0.45) 100%
+  );
   z-index: 1;
 }
 
@@ -29,278 +45,308 @@
   position: relative;
   z-index: 2;
   text-align: center;
-  max-width: 800px;
+  max-width: 780px;
   padding: 2rem;
-  animation: fadeInUp 0.8s ease-out;
+  animation: heroIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes heroIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-eyebrow {
+  display: inline-block;
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #a5d6a7;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 50px;
+  padding: 0.3rem 0.9rem;
+  margin-bottom: 1.2rem;
+  backdrop-filter: blur(6px);
 }
 
 .hero-title {
-  font-size: 3.5rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
-  line-height: 1.2;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 4.8rem;
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 1.1rem;
+  text-shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+.hero-title span {
+  color: #6fcf7f;
 }
 
 .hero-description {
-  font-size: 1.3rem;
-  margin-bottom: 2rem;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
-  line-height: 1.6;
-  opacity: 0.95;
+  font-family: 'Barlow', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  line-height: 1.65;
+  opacity: 0.88;
+  max-width: 500px;
+  margin: 0 auto 2rem;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+}
+
+.hero-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .hero-reservar-btn {
-  background: #57b46f;
+  font-family: 'Barlow Condensed', sans-serif;
+  background: var(--green-main);
   color: white;
   border: none;
-  padding: 1rem 2.5rem;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  font-weight: 600;
+  padding: 0.85rem 2.4rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.25s ease;
+  box-shadow: 0 6px 20px rgba(76,175,80,0.4);
 }
 
 .hero-reservar-btn:hover {
-  background: #4aa763;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  background: #43a047;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(76,175,80,0.5);
 }
 
-.hero-reservar-btn:active {
-  transform: translateY(0);
+.hero-scroll-btn {
+  font-family: 'Barlow', sans-serif;
+  background: rgba(255,255,255,0.12);
+  color: white;
+  border: 1.5px solid rgba(255,255,255,0.35);
+  padding: 0.85rem 2rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(6px);
 }
 
-/* Contenedor principal */
+.hero-scroll-btn:hover {
+  background: rgba(255,255,255,0.2);
+  border-color: rgba(255,255,255,0.6);
+}
+
+/* ── Cómo funciona ── */
+.como-funciona {
+  background: var(--white);
+  border-bottom: 1px solid #e8f0e8;
+  padding: 5rem 1.5rem;
+}
+
+.como-funciona-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.como-funciona-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--green-main);
+  margin-bottom: 0.5rem;
+}
+
+.como-funciona-titulo {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: var(--green-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.6rem;
+  line-height: 1.1;
+}
+
+.como-funciona-sub {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.95rem;
+  color: var(--text-soft);
+  margin-bottom: 3rem;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pasos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  position: relative;
+}
+
+/* línea conectora entre pasos */
+.pasos-grid::before {
+  content: '';
+  position: absolute;
+  top: 42px;
+  left: calc(16.66% + 1rem);
+  right: calc(16.66% + 1rem);
+  height: 1px;
+  background: linear-gradient(90deg, var(--green-light), var(--green-pale), var(--green-light));
+  z-index: 0;
+}
+
+.paso-card {
+  background: var(--white);
+  border: 1px solid #e4f0e4;
+  border-radius: var(--radius);
+  padding: 2.2rem 1.5rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.paso-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 32px rgba(76,175,80,0.12);
+  border-color: var(--green-light);
+}
+
+.paso-icono-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--green-pale);
+  border: 1.5px solid #c8e6c9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 0.3rem;
+  transition: background 0.2s;
+}
+
+.paso-card:hover .paso-icono-wrap {
+  background: #d4edda;
+}
+
+.paso-numero {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--green-light);
+  text-transform: uppercase;
+}
+
+.paso-titulo {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--green-mid);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.paso-descripcion {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.88rem;
+  color: var(--text-soft);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Sección de complejos ── */
 .home-container {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 16px;
+  padding: 3rem 1.5rem 4rem;
+  scroll-margin-top: 80px;
 }
 
-/* Sección de complejos */
-.complejos-section {
-  margin-top: 24px;
-}
-
-.complejos-section h2 {
-  margin-bottom: 16px;
-  color: #333;
-  font-size: 1.5rem;
-}
-
-/* Lista de complejos */
-.complejos-list {
-  list-style: none;
-  padding: 0;
-}
-
-/* Tarjeta de complejo */
-.complejo-card {
-  border: 1px solid #e0e0e0;
-  padding: 16px;
-  border-radius: 8px;
-  margin-bottom: 16px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.complejo-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-/* Layout de la tarjeta */
-.complejo-card-content {
+.section-header {
   display: flex;
+  align-items: baseline;
   justify-content: space-between;
-  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eaf3ea;
 }
 
-.complejo-info {
-  flex: 1;
+.section-titulo {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--green-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
-.complejo-actions {
-  margin-left: 16px;
+.section-count {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.82rem;
+  color: var(--text-soft);
 }
 
-/* Título del complejo */
-.complejo-name {
-  margin: 0 0 8px 0;
-  color: #333;
-  font-size: 1.2em;
-  font-weight: 600;
-}
-
-/* Información del complejo */
-.complejo-detail {
-  margin: 4px 0;
-  color: #666;
-  font-size: 0.95rem;
-}
-
-.complejo-detail.available {
-  color: #28a745;
-  font-weight: 500;
-}
-
-/* Botón Ver Complejo */
-.ver-complejo-btn {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: background-color 0.2s, transform 0.1s;
-}
-
-.ver-complejo-btn:hover {
-  background-color: #0056b3;
-  transform: translateY(-1px);
-}
-
-.ver-complejo-btn:active {
-  transform: translateY(0);
-}
-
-/* Estados de carga y sin resultados */
+/* ── Estados ── */
 .loading-message,
 .no-results-message {
   text-align: center;
-  padding: 40px 20px;
-  color: #666;
-  font-size: 1.1rem;
+  padding: 4rem 1rem;
+  font-family: 'Barlow', sans-serif;
+  font-size: 1rem;
+  color: var(--text-soft);
 }
 
-.loading-message {
-  color: #007bff;
-}
+.loading-message { color: var(--green-main); }
 
-/* RESPONSIVE BREAKPOINTS */
-
-/* SM - Móviles (hasta 767px) */
+/* ── RESPONSIVE ── */
 @media (max-width: 767px) {
   .hero {
-    background-attachment: scroll; /* Desactivar parallax en móvil para mejor performance */
-    min-height: 100vh;
-  }
-
-  .hero-content {
-    padding: 1.5rem;
-  }
-
-  .hero-title {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-
-  .hero-description {
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .hero-reservar-btn {
-    padding: 0.9rem 2rem;
-    font-size: 1rem;
-    width: 100%;
-  }
-
-  .home-container {
-    padding: 12px;
-  }
-
-  .complejo-card-content {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .complejo-actions {
-    margin-left: 0;
-    align-self: stretch;
-  }
-
-  .ver-complejo-btn {
-    width: 100%;
-    padding: 12px;
-  }
-}
-
-/* MD - Tablets (768px - 1023px) */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .hero {
     background-attachment: scroll;
-    min-height: 80vh;
+    min-height: 100svh;
   }
+  .hero-title { font-size: 3rem; }
+  .hero-description { font-size: 1rem; }
+  .hero-reservar-btn { width: 100%; }
+  .hero-scroll-btn { width: 100%; }
 
-  .hero-content {
-    padding: 2rem;
-    max-width: 700px;
+  .como-funciona { padding: 3rem 1rem; }
+  .como-funciona-titulo { font-size: 1.9rem; }
+  .pasos-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
+  .pasos-grid::before { display: none; }
 
-  .hero-title {
-    font-size: 2.8rem;
-  }
-
-  .hero-description {
-    font-size: 1.2rem;
-  }
-
-  .hero-reservar-btn {
-    padding: 1rem 2.5rem;
-  }
-
-  .home-container {
-    padding: 16px;
-  }
-
-  .complejo-card {
-    margin-bottom: 14px;
-  }
+  .home-container { padding: 2rem 1rem 3rem; }
 }
 
-/* LG - Desktop (1024px+) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero { background-attachment: scroll; min-height: 85vh; }
+  .hero-title { font-size: 3.8rem; }
+  .pasos-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .pasos-grid::before { display: none; }
+  .como-funciona { padding: 3.5rem 1.5rem; }
+}
+
 @media (min-width: 1024px) {
-  .hero {
-    background-attachment: fixed; /* Parallax solo en desktop */
-    min-height: calc(100vh - 110.719px);
-  }
-
-  .hero-content {
-    padding: 2rem;
-    max-width: 800px;
-  }
-
-  .hero-title {
-    font-size: 3.5rem;
-  }
-
-  .hero-description {
-    font-size: 1.3rem;
-  }
-
-  .hero-reservar-btn {
-    padding: 1rem 2.5rem;
-  }
-
-  .home-container {
-    padding: 16px;
-  }
+  .hero { background-attachment: fixed; }
 }

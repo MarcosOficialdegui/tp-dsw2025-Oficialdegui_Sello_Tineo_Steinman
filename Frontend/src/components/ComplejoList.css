@@ -1,143 +1,120 @@
-.complejo-list {
-  padding: 20px;
-  max-width: 1200px;
-  margin: auto;
-}
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap');
 
 .complejo-list h2 {
-  text-align: center;
-  margin-bottom: 30px;
-  font-size: 2rem;
-  color: #333;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #1b5e20;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #eaf3ea;
 }
 
 .complejos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
 }
 
 .complejo-card {
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  border: 1px solid #e4f0e4;
+  border-radius: 14px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  height: 320px;
+  display: flex;
+  flex-direction: column;
 }
 
 .complejo-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
-}
-
-.complejo-card:active {
-  transform: translateY(0);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(76,175,80,0.13);
+  border-color: #a5d6a7;
 }
 
 .complejo-img {
   width: 100%;
-  height: 180px;
+  height: 150px;
   object-fit: cover;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.complejo-card:hover .complejo-img {
+  transform: scale(1.03);
 }
 
 .complejo-info {
-  padding: 15px;
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  flex: 1;
+  overflow: hidden;
 }
 
 .complejo-info h3 {
-  margin: 0 0 10px;
-  font-size: 1.4rem;
-  color: #222;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1b5e20;
+  margin: 0 0 0.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .complejo-info p {
-  margin: 5px 0;
-  font-size: 0.95rem;
-  color: #555;
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.8rem;
+  color: #666;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .eliminar-button {
-
-  margin-top: 10px;
-  padding: 8px 12px;
-  background-color: #e74c3c;
-  color: white;
-  border: none;
-  border-radius: 6px;
+  margin-top: auto;
+  background: transparent;
+  color: #e53935;
+  border: 1px solid #ef9a9a;
+  border-radius: 8px;
+  padding: 0.35rem 0.75rem;
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.18s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: fit-content;
 }
 
 .eliminar-button:hover {
-  background-color: #c0392b;
+  background: #ffebee;
+  border-color: #e53935;
 }
 
-/* RESPONSIVE BREAKPOINTS */
-
-/* SM - Móviles (hasta 767px) */
+/* Responsive */
 @media (max-width: 767px) {
-  .complejo-list {
-    padding: 12px;
-  }
-
-  .complejo-list h2 {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-  }
-
-  .complejos-grid {
-    grid-template-columns: 1fr; /* 1 columna */
-    gap: 16px;
-  }
-
-  .complejo-img {
-    height: 200px;
-  }
-
-  .complejo-info h3 {
-    font-size: 1.2rem;
-  }
-
-  .complejo-info p {
-    font-size: 0.9rem;
-  }
+  .complejos-grid { grid-template-columns: 1fr; }
+  .complejo-card { height: auto; }
+  .complejo-img { height: 160px; }
 }
 
-/* MD - Tablets (768px - 1023px) */
 @media (min-width: 768px) and (max-width: 1023px) {
-  .complejo-list {
-    padding: 16px;
-  }
-
-  .complejo-list h2 {
-    font-size: 1.8rem;
-    margin-bottom: 25px;
-  }
-
-  .complejos-grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 columnas */
-    gap: 18px;
-  }
-
-  .complejo-img {
-    height: 180px;
-  }
-}
-
-/* LG - Desktop (1024px+) */
-@media (min-width: 1024px) {
-  .complejo-list {
-    padding: 20px;
-  }
-
-  .complejos-grid {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 3-4 columnas */
-    gap: 20px;
-  }
-
-  .complejo-img {
-    height: 180px;
-  }
+  .complejos-grid { grid-template-columns: repeat(2, 1fr); }
+  .complejo-card { height: 300px; }
+  .complejo-img { height: 140px; }
 }

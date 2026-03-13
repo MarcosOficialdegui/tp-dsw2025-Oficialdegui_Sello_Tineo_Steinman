@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import styles from './Header.module.css';
 import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react'; 
+import { Menu, X } from 'lucide-react';
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -21,9 +21,7 @@ export default function Header() {
         }
       })
         .then(res => res.json())
-        .then(data => {
-          if (data.rol) setRol(data.rol);
-        })
+        .then(data => { if (data.rol) setRol(data.rol); })
         .catch(() => setRol(''));
     }
   }, []);
@@ -34,11 +32,13 @@ export default function Header() {
     window.location.href = '/';
   };
 
+  const closeMenu = () => setMenuOpen(false);
+
   return (
     <header className={styles.header}>
       <div className={styles.container}>
-        <Link to="/" className={styles.logo}>
-          <h2>Alquila tu cancha</h2>
+        <Link to="/" className={styles.logo} onClick={closeMenu}>
+          <h2>Alquila Tu Cancha</h2>
         </Link>
 
         <button
@@ -50,24 +50,21 @@ export default function Header() {
         </button>
 
         <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
-          {
-          rol === 'propietario' && 
-          <a href="/dashboard">Dashboard</a>
-          }
-          <a href="/">Inicio</a>
-          <a href="/complejos">Complejos</a>
-          <a href="/contacto">Contacto</a>
-            
+          {rol === 'propietario' && (
+            <Link to="/dashboard" onClick={closeMenu}>Dashboard</Link>
+          )}
+          <Link to="/" onClick={closeMenu}>Inicio</Link>
+          <Link to="/complejos" onClick={closeMenu}>Complejos</Link>
 
           {isLoggedIn ? (
             <>
-              <a href="/perfil">Perfil</a>
+              <Link to="/perfil" onClick={closeMenu}>Perfil</Link>
               <a href="/" onClick={handleLogout}>Cerrar Sesión</a>
             </>
           ) : (
             <>
-              <a href="/tipoUsuario">Registrarse</a>
-              <a href="/login">Iniciar Sesión</a>
+              <Link to="/tipoUsuario" onClick={closeMenu}>Registrarse</Link>
+              <Link to="/login" onClick={closeMenu}>Iniciar Sesión</Link>
             </>
           )}
         </nav>
