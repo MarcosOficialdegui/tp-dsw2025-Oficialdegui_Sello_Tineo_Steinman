@@ -233,10 +233,6 @@ export default function ComplejoForm() {
     if (imagenSeleccionada) {
       formDataToSend.append('imagen', imagenSeleccionada);
     }
-    // Agregar imagen si se seleccionó una
-    if (imagenSeleccionada) {
-      formDataToSend.append('imagen', imagenSeleccionada);
-    }
 
     try {
       const res = await fetch("http://localhost:3000/api/complejos", {
@@ -254,8 +250,6 @@ export default function ComplejoForm() {
         setFormData({ nombre: "", direccion: "", ciudad: "", ciudadId: "", horarioApertura: "08:00", horarioCierre: "22:00" });
         setServiciosSeleccionados([]);
         setCanchas([{ tipoCancha: "Fútbol 5", precioHora: "", disponible: true }]);
-        setImagenSeleccionada(null);
-        setPrevisualizacion("");
         setImagenSeleccionada(null);
         setPrevisualizacion("");
         window.location.reload();
@@ -339,44 +333,6 @@ export default function ComplejoForm() {
           )}
         </div>
 
-        {/* Sección de carga de imagen */}
-        <div className={styles.imagenContainer}>
-          <label className={styles.imagenLabel}>Imagen del complejo (opcional)</label>
-          
-          {previsualizacion ? (
-            <div className={styles.previsualizacionContainer}>
-              <img 
-                src={previsualizacion} 
-                alt="Previsualización" 
-                className={styles.previsualizacion}
-              />
-              <button 
-                type="button" 
-                onClick={eliminarImagen}
-                className={styles.eliminarImagenBtn}
-              >
-                Cambiar imagen
-              </button>
-            </div>
-          ) : (
-            <div className={styles.uploadContainer}>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImagenChange}
-                className={styles.inputFile}
-                id="imagen-upload"
-              />
-              <label htmlFor="imagen-upload" className={styles.uploadLabel}>
-                <span className={styles.uploadIcon}>
-                  <Camera size={48} strokeWidth={1.5} />
-                </span>
-                <span className={styles.uploadText}>Seleccionar imagen</span>
-                <span className={styles.uploadHint}>JPG, PNG, GIF o WEBP (máx. 5MB)</span>
-              </label>
-            </div>
-          )}
-        </div>
 
         {/* Horarios */}
         <h3 className={styles.subtitulo}>Horario de atención</h3>
