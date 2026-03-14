@@ -15,6 +15,7 @@ type Filtros = { ciudad: string; tipoCancha: string; fecha: string; };
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const searchRef = useRef<HTMLDivElement>(null);
+  const comoFuncionaRef = useRef<HTMLDivElement>(null);
 
   const [filters, setFilters] = useState<Filtros>({ ciudad: "", tipoCancha: "", fecha: "" });
   const [complejos, setComplejos] = useState<Complejo[]>([]);
@@ -68,6 +69,9 @@ const Home: React.FC = () => {
   const scrollToSearch = () =>
     searchRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
 
+  const scrollToComoFunciona = () =>
+    comoFuncionaRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+
   const pasos = [
     { numero: "01", icono: "🔍", titulo: "Buscá tu cancha", descripcion: "Filtrá por ciudad, deporte y fecha para encontrar el complejo ideal." },
     { numero: "02", icono: "📅", titulo: "Elegí un horario", descripcion: "Visualizá turnos disponibles en tiempo real y elegí el que mejor te quede." },
@@ -77,10 +81,18 @@ const Home: React.FC = () => {
   return (
     <>
       {/* Hero */}
-      <section
-        className="hero"
-        style={{ backgroundImage: `url(${heroImages[currentImageIndex]})` }}
-      >
+      <section className="hero">
+        {heroImages.map((img, i) => (
+          <div
+            key={img}
+            className={`hero-bg ${i === currentImageIndex ? "active" : ""}`}
+            style={{ backgroundImage: `url(${img})` }}
+          />
+        ))}
+
+        {/* El overlay oscuro */}
+        <div className="hero-overlay" />
+
         <div className="hero-content">
           <span className="hero-eyebrow">⚽ Reservas online · Fútbol y Pádel</span>
           <h1 className="hero-title">
@@ -93,7 +105,7 @@ const Home: React.FC = () => {
             <button className="hero-reservar-btn" onClick={scrollToSearch}>
               Buscar cancha
             </button>
-            <button className="hero-scroll-btn" onClick={scrollToSearch}>
+            <button className="hero-scroll-btn" onClick={scrollToComoFunciona}>
               ¿Cómo funciona?
             </button>
           </div>
@@ -101,7 +113,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* Cómo funciona */}
-      <section className="como-funciona">
+      <section ref={comoFuncionaRef} className="como-funciona">
         <div className="como-funciona-inner">
           <p className="como-funciona-label">Simple y rápido</p>
           <h2 className="como-funciona-titulo">¿Cómo funciona?</h2>
