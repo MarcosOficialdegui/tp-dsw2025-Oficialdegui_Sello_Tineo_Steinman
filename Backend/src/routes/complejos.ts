@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getComplejoById, getComplejos, getServiciosDisponibles, crearComplejo, eliminarComplejo, getReservasPorComplejo, actualizarImagenComplejo, getDisponibilidad } from "../controllers/complejoController";
+import { getComplejoById, getServiciosDisponibles, crearComplejo, eliminarComplejo, getReservasPorComplejo, actualizarImagenComplejo, getDisponibilidad, getComplejos } from "../controllers/complejoController";
 import { authMiddleware } from "../middleware/authMiddleware";
 import { guardarComplejoEnUsuario } from "../controllers/usuarioController";
 import { rolMiddleware } from "../middleware/RolMiddleware";
@@ -7,7 +7,7 @@ import { upload } from "../middleware/uploadMiddleware";
 
 const router = Router();
 
-router.get("/", getComplejos);
+router.get("/", getComplejos); 
 router.get("/servicios", getServiciosDisponibles); // Debe ir ANTES de /:id
 router.get("/:id", getComplejoById);
 router.get("/:id/disponibilidad", authMiddleware, getDisponibilidad);

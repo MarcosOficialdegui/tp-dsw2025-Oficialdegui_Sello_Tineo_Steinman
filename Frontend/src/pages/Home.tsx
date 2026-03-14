@@ -10,18 +10,22 @@ type Complejo = {
   ciudad?: { _id: string; nombre: string; };
   imagen?: string; canchas?: Cancha[];
 };
-type Filtros = { ciudad: string; tipoCancha: string; fecha: string; };
+type Filtros = { nombre: string, ciudad: string; tipoCancha: string; fecha: string; };
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const searchRef = useRef<HTMLDivElement>(null);
   const comoFuncionaRef = useRef<HTMLElement>(null);
 
-  const [filters, setFilters] = useState<Filtros>({ ciudad: "", tipoCancha: "", fecha: "" });
+  const [filters, setFilters] = useState<Filtros>({ nombre: "", ciudad: "", tipoCancha: "", fecha: "" });
   const [complejos, setComplejos] = useState<Complejo[]>([]);
   const [loading, setLoading] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [mostrarPasos, setMostrarPasos] = useState(false);
+
+  const [paginaActual, setPaginaActual] = useState(1);
+  const [totalPaginas, setTotalPaginas] = useState(0);
+  const [totalComplejos, setTotalComplejos] = useState(0);
 
   const heroImages = [
     "/images/vista-de-pelota-mirando-hacia-porteria.jpg",
@@ -65,23 +69,27 @@ const Home: React.FC = () => {
   const handleFilterChange = (name: keyof Filtros, value: string) =>
     setFilters((prev) => ({ ...prev, [name]: value }));
 
-  const buildUrl = (f: Filtros) => {
+  const buildUrl = (f: Filtros, pagina: number = 1) => {
     const base = "http://localhost:3000/api/complejos";
     const params = new URLSearchParams();
-    if (f.ciudad) params.append("ciudad", f.ciudad);
+    if (f.nombre)     params.append("nombre", f.nombre);
+    if (f.ciudad)     params.append("ciudad", f.ciudad);
     if (f.tipoCancha) params.append("tipoCancha", f.tipoCancha);
-    if (f.fecha) params.append("fecha", f.fecha);
-    const qs = params.toString();
-    return qs ? `${base}?${qs}` : base;
+    params.append("page", pagina.toString());
+    params.append("limit", "5");
+    return `${base}?${params}`;
   };
 
-  const buscarComplejos = async (filtros: Filtros) => {
+  const buscarComplejos = async (filtros: Filtros, pagina: number = 1) => {
     setLoading(true);
     try {
-      const res = await fetch(buildUrl(filtros));
+      const res = await fetch(buildUrl(filtros, pagina));
       if (!res.ok) { setComplejos([]); return; }
       const data = await res.json();
-      setComplejos(Array.isArray(data) ? data : []);
+      setComplejos(data.complejos ?? []);
+      setTotalPaginas(data.paginas);
+      setTotalComplejos(data.total);
+      setPaginaActual(pagina);
     } catch (e) {
       console.error(e);
       setComplejos([]);
@@ -113,10 +121,7 @@ const Home: React.FC = () => {
             style={{ backgroundImage: `url(${img})` }}
           />
         ))}
-
-        {/* El overlay oscuro */}
         <div className="hero-overlay" />
-
         <div className="hero-content">
           <span className="hero-eyebrow">⚽ Reservas online · Fútbol y Pádel</span>
           <h1 className="hero-title">
@@ -162,6 +167,7 @@ const Home: React.FC = () => {
           onChange={handleFilterChange}
           onSearch={() => buscarComplejos(filters)}
         />
+
         <section style={{ marginTop: "2rem" }}>
           {loading ? (
             <p className="loading-message">Cargando complejos...</p>
@@ -175,6 +181,28 @@ const Home: React.FC = () => {
             />
           )}
         </section>
+
+        {totalPaginas > 1 && (
+          <div className="pagination">
+            <button
+              onClick={() => buscarComplejos(filters, paginaActual - 1)}
+              disabled={paginaActual === 1}
+            >
+              Anterior
+            </button>
+            <div className="pagination-info">
+              <strong>{paginaActual}</strong>
+              <span>de</span>
+              <strong>{totalPaginas}</strong>
+            </div>
+            <button
+              onClick={() => buscarComplejos(filters, paginaActual + 1)}
+              disabled={paginaActual === totalPaginas}
+            >
+              Siguiente
+            </button>
+          </div>
+        )}
       </div>
     </>
   );

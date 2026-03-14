@@ -5,16 +5,19 @@ import Reserva from "../models/Reserva";
 
 export const getComplejos = async (req: Request, res: Response) => {
   try {
-    const { ciudad, tipoCancha } = req.query;
+    const { nombre, ciudad, tipoCancha, page = "1", limit = "5" } = req.query;
 
     const query: any = {};
 
+    if (nombre) {
+      query.nombre = new RegExp(nombre as string, 'i');
+    }
+
+
     if (ciudad) {
-      // Si ciudad es un ObjectId, buscar por ID, si no, buscar por nombre
-      if (ciudad.length === 24) { // ObjectId tiene 24 caracteres
+      if ((ciudad as string).length === 24) {
         query.ciudad = ciudad;
       } else {
-        // Buscar ciudades que coincidan con el nombre
         const Ciudad = (await import('../models/Ciudad')).default;
         const ciudadEncontrada = await Ciudad.findOne({
           nombre: new RegExp(ciudad as string, 'i')
@@ -22,8 +25,7 @@ export const getComplejos = async (req: Request, res: Response) => {
         if (ciudadEncontrada) {
           query.ciudad = ciudadEncontrada._id;
         } else {
-          // Si no encuentra la ciudad, devolver array vacío
-          return res.json([]);
+          return res.json({ complejos: [], total: 0, paginas: 0 });
         }
       }
     }
@@ -32,11 +34,23 @@ export const getComplejos = async (req: Request, res: Response) => {
       query["canchas.tipoCancha"] = tipoCancha;
     }
 
-    const complejos = await Complejo.find(query)
-      .populate('ciudad', 'nombre') // Populate ciudad con solo el nombre
-      .exec();
+    const pageNum = parseInt(page as string);
+    const limitNum = parseInt(limit as string);
+    const skip = (pageNum - 1) * limitNum;
 
-    res.json(complejos);
+    // Ejecutar ambas queries en paralelo
+    const [complejos, total] = await Promise.all([
+      Complejo.find(query).populate('ciudad', 'nombre').skip(skip).limit(limitNum).exec(),
+      Complejo.countDocuments(query)
+    ]);
+
+    res.json({
+      complejos,
+      total,
+      pagina: pageNum,
+      paginas: Math.ceil(total / limitNum)
+    });
+
   } catch (error) {
     console.error('Error al obtener complejos:', error);
     res.status(500).json({ error: "Error al obtener complejos" });
@@ -157,26 +171,26 @@ export const getReservasPorComplejo = async (req: Request, res: Response): Promi
   try {
     const { id } = req.params;
     const { fecha } = req.query;
- 
+
     const complejo = await Complejo.findById(id);
     if (!complejo) {
       res.status(404).json({ error: 'Complejo no encontrado' });
       return;
     }
- 
+
     // Filtrar por rango del día completo para evitar problemas con horas
     const fechaInicio = new Date(fecha as string);
     fechaInicio.setHours(0, 0, 0, 0);
     const fechaFin = new Date(fecha as string);
     fechaFin.setHours(23, 59, 59, 999);
- 
+
     const reservas = await Reserva.find({
       complejo: id,
       fecha: { $gte: fechaInicio, $lte: fechaFin }
     })
       .populate('user', 'nombre apellido telefono')
       .exec();
- 
+
     res.json(reservas);
   } catch (error) {
     console.error('Error al obtener reservas:', error);

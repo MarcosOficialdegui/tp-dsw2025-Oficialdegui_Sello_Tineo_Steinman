@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
 import ComplejoList from "../components/ComplejoList";
-import { MdSort, MdFilterList } from "react-icons/md";
+import { MdSort, MdFilterList, MdChevronLeft, MdChevronRight } from "react-icons/md";
 import "./Complejos.css";
 
+
 type Filtros = {
+  nombre: string;
   ciudad: string;
   tipoCancha: string;
   fecha: string;
@@ -33,113 +35,98 @@ type OrdenType = "nombre" | "ciudad" | "relevancia";
 export default function Complejos() {
   const navigate = useNavigate();
   const [complejos, setComplejos] = useState<Complejo[]>([]);
-  const [complejosFiltrados, setComplejosFiltrados] = useState<Complejo[]>([]);
   const [ordenActual, setOrdenActual] = useState<OrdenType>("relevancia");
   const [mostrarFiltros, setMostrarFiltros] = useState(true);
   const [filters, setFilters] = useState<Filtros>({
+    nombre: "",
     ciudad: "",
     tipoCancha: "",
     fecha: "",
   });
+  const [paginaActual, setPaginaActual] = useState(1);
+  const [totalPaginas, setTotalPaginas] = useState(0);
+  const [totalComplejos, setTotalComplejos] = useState(0);
 
-  // Cargar todos los complejos al inicio
-  useEffect(() => {
-    const fetchComplejos = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/api/complejos");
-        if (response.ok) {
-          const data = await response.json();
-          setComplejos(data);
-          setComplejosFiltrados(data);
-        }
-      } catch (error) {
-        console.error("Error al cargar complejos:", error);
-      }
-    };
-
-    fetchComplejos();
-  }, []);
-
-  // Manejar cambios en los filtros
-  const handleFilterChange = (name: keyof Filtros, value: string) => {
-    setFilters((prev) => ({ ...prev, [name]: value }));
-  };
-
-  // Aplicar filtros de búsqueda
-  const handleSearch = () => {
-    let resultados = [...complejos];
-
-    // Filtrar por ciudad
-    if (filters.ciudad) {
-      resultados = resultados.filter((complejo) =>
-        complejo.ciudad?.nombre.toLowerCase().includes(filters.ciudad.toLowerCase())
-      );
-    }
-
-    // Filtrar por tipo de cancha
-    if (filters.tipoCancha) {
-      resultados = resultados.filter((complejo) =>
-        complejo.canchas?.some((cancha) => cancha.tipoCancha === filters.tipoCancha)
-      );
-    }
-
-    setComplejosFiltrados(aplicarOrden(resultados, ordenActual));
-  };
-
-  // Aplicar ordenamiento
   const aplicarOrden = (lista: Complejo[], orden: OrdenType): Complejo[] => {
     const copia = [...lista];
-    
     switch (orden) {
       case "nombre":
         return copia.sort((a, b) => a.nombre.localeCompare(b.nombre));
       case "ciudad":
-        return copia.sort((a, b) => 
+        return copia.sort((a, b) =>
           (a.ciudad?.nombre || "").localeCompare(b.ciudad?.nombre || "")
         );
-      case "relevancia":
       default:
         return copia;
     }
   };
 
-  // Cambiar orden
-  const handleOrdenChange = (nuevoOrden: OrdenType) => {
-    setOrdenActual(nuevoOrden);
-    setComplejosFiltrados(aplicarOrden(complejosFiltrados, nuevoOrden));
+  const buscarComplejos = async (filtrosActuales: Filtros = filters, pagina: number = 1) => {
+    try {
+      const params = new URLSearchParams();
+      if (filtrosActuales.nombre) params.append("nombre", filtrosActuales.nombre);
+      if (filtrosActuales.ciudad) params.append("ciudad", filtrosActuales.ciudad);
+      if (filtrosActuales.tipoCancha) params.append("tipoCancha", filtrosActuales.tipoCancha);
+      params.append("page", pagina.toString());
+      params.append("limit", "5");
+
+      const res = await fetch(`http://localhost:3000/api/complejos?${params}`);
+      if (!res.ok) throw new Error("Error al buscar complejos");
+
+      const data = await res.json();
+      setComplejos(aplicarOrden(data.complejos, ordenActual));
+      setTotalPaginas(data.paginas);
+      setTotalComplejos(data.total);
+      setPaginaActual(pagina);
+    } catch (error) {
+      console.error("Error al buscar complejos:", error);
+    }
   };
 
-  // Navegar al detalle del complejo
+  useEffect(() => {
+    buscarComplejos();
+  }, []);
+
+  const handleFilterChange = (name: keyof Filtros, value: string) => {
+    setFilters((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleOrdenChange = (nuevoOrden: OrdenType) => {
+    setOrdenActual(nuevoOrden);
+    setComplejos((prev) => aplicarOrden(prev, nuevoOrden));
+  };
+
   const handleComplejoClick = (complejoId: string) => {
     navigate(`/complejo/${complejoId}`);
   };
 
   return (
     <div className="complejos-page">
-      {/* Barra de búsqueda */}
+
+
       {mostrarFiltros && (
         <div className="search-section">
           <SearchBar
             filters={filters}
             onChange={handleFilterChange}
-            onSearch={handleSearch}
+            onSearch={() => buscarComplejos(filters)}
           />
         </div>
       )}
 
-      {/* Barra de controles */}
       <div className="controls-bar">
         <div className="controls-left">
-          <button 
+          <button
             className="filter-toggle"
             onClick={() => setMostrarFiltros(!mostrarFiltros)}
           >
             <MdFilterList size={20} />
             {mostrarFiltros ? "Ocultar filtros" : "Mostrar filtros"}
           </button>
-          
+
           <div className="results-count">
-            <strong>{complejosFiltrados.length}</strong> {complejosFiltrados.length === 1 ? "complejo encontrado" : "complejos encontrados"}
+            <strong>{totalComplejos}</strong>{" "}
+            {totalComplejos === 1 ? "complejo encontrado" : "complejos encontrados"}
             {filters.ciudad && ` en ${filters.ciudad}`}
           </div>
         </div>
@@ -148,8 +135,8 @@ export default function Complejos() {
           <div className="sort-controls">
             <MdSort size={20} />
             <span className="sort-label">Ordenar:</span>
-            <select 
-              value={ordenActual} 
+            <select
+              value={ordenActual}
               onChange={(e) => handleOrdenChange(e.target.value as OrdenType)}
               className="sort-select"
             >
@@ -161,15 +148,38 @@ export default function Complejos() {
         </div>
       </div>
 
-      {/* Línea divisoria */}
       <div className="divider"></div>
 
-      {/* Lista de complejos */}
       <ComplejoList
-        complejos={complejosFiltrados}
+        complejos={complejos}
         onComplejoClick={handleComplejoClick}
         nombreLista=""
       />
+
+      <div className="pagination">
+        <button
+          onClick={() => buscarComplejos(filters, paginaActual - 1)}
+          disabled={paginaActual === 1}
+        >
+          <MdChevronLeft size={18} />
+          Anterior
+        </button>
+
+        <div className="pagination-info">
+          <strong>{paginaActual}</strong>
+          <span>de</span>
+          <strong>{totalPaginas}</strong>
+        </div>
+
+        <button
+          onClick={() => buscarComplejos(filters, paginaActual + 1)}
+          disabled={paginaActual === totalPaginas}
+        >
+          Siguiente
+          <MdChevronRight size={18} />
+        </button>
+      </div>
+
     </div>
   );
 }
