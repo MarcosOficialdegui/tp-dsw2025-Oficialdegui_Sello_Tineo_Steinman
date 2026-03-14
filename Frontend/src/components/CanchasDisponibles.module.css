@@ -1,0 +1,510 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+
+.wrapper {
+  font-family: 'Nunito', 'Segoe UI', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  animation: fadeIn 0.25s ease both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stickySentinel {
+  width: 100%;
+  height: 1px;
+}
+
+.slotBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1.25rem;
+  background: #edf7ed;
+  border: 1.5px solid #c8e6c9;
+  border-radius: 14px;
+}
+
+.slotBannerStuck {
+  box-shadow: 0 8px 20px rgba(45, 106, 53, 0.18);
+}
+
+.slotInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.slotBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #2d6a35;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.slotTexto {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.slotLabel {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #6a9e6b;
+  margin: 0;
+}
+
+.slotValor {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #1b3d1f;
+  text-transform: capitalize;
+  margin: 0;
+}
+
+.cambiarBtn,
+.cambiarHorarioBtn,
+.sugerenciaChip,
+.reservarBtn {
+  font-family: 'Nunito', sans-serif;
+}
+
+.cambiarBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0.4rem 0.9rem;
+  border: 1.5px solid #a5d6a7;
+  border-radius: 8px;
+  background: transparent;
+  color: #2d6a35;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease,
+    transform 0.2s ease;
+}
+
+.cambiarBtn:hover {
+  background: #c8e6c9;
+  border-color: #81c784;
+  transform: translateY(-1px);
+}
+
+.cambiarBtn:focus {
+  outline: none;
+}
+
+.cambiarBtn:focus-visible {
+  outline: 2px solid #4caf50;
+  outline-offset: 2px;
+}
+
+.resumenDisponibilidad {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #6a9e6b;
+  margin: 0;
+  padding-left: 2px;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.35rem;
+  border: 1.5px solid #e2efe3;
+  border-radius: 12px;
+  background: #f8fcf8;
+  padding: 1.1rem;
+}
+
+.emptyState > svg {
+  color: #c8e6c9;
+}
+
+.emptyTitle {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #2d6a35;
+}
+
+.emptySubtext {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #9ebc9f;
+  font-weight: 700;
+}
+
+.emptyActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.45rem;
+  margin-top: 0.4rem;
+}
+
+.sugerenciaChip,
+.cambiarHorarioBtn {
+  border-radius: 999px;
+  border: 1.5px solid #a5d6a7;
+  background: #fff;
+  color: #2d6a35;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.36rem 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease,
+    transform 0.2s ease;
+}
+
+.sugerenciaChip:hover,
+.cambiarHorarioBtn:hover {
+  background: #edf7ed;
+  border-color: #4caf50;
+  transform: translateY(-1px);
+}
+
+.sugerenciaChip:focus,
+.cambiarHorarioBtn:focus,
+.reservarBtn:focus {
+  outline: none;
+}
+
+.sugerenciaChip:focus-visible,
+.cambiarHorarioBtn:focus-visible,
+.reservarBtn:focus-visible {
+  outline: 2px solid #4caf50;
+  outline-offset: 2px;
+}
+
+.canchasGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  border: 1.5px solid #e2efe3;
+  border-radius: 14px;
+  background: #fff;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease,
+    transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover:not(.cardOcupada) {
+  transform: translateY(-3px);
+  border-color: #a5d6a7;
+}
+
+.card:focus-within:not(.cardOcupada) {
+  outline: 2px solid #4caf50;
+  outline-offset: 1px;
+}
+
+.cardOcupada {
+  cursor: default;
+  opacity: 0.58;
+  filter: grayscale(0.3);
+}
+
+.stripe {
+  height: 3px;
+}
+
+.stripeVerde {
+  background: linear-gradient(90deg, #4caf50, #81c784);
+}
+
+.stripeGris {
+  background: #d6ded7;
+}
+
+.cardBody {
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  flex: 1;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.iconWrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.iconVerde {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4caf50;
+}
+
+.iconGris {
+  background: #f0f0f0;
+  color: #a7a7a7;
+}
+
+.nameGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.tipoTag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: #9ebc9f;
+  font-weight: 500;
+}
+
+.tipoTagVerde {
+  color: #4caf50;
+}
+
+.canchaNombre {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1b3d1f;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.estadoBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  border-radius: 20px;
+  padding: 3px 9px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.estadoDisponible {
+  background: rgba(76, 175, 80, 0.1);
+  color: #2d6a35;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.estadoOcupada {
+  background: rgba(158, 158, 158, 0.1);
+  color: #888;
+  border: 1px solid rgba(158, 158, 158, 0.25);
+}
+
+.specs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.75rem;
+  background: #f7fbf7;
+  border-radius: 9px;
+}
+
+.specItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.77rem;
+  color: #5f7461;
+}
+
+.specItem svg {
+  color: #81c784;
+  flex-shrink: 0;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.35rem;
+  border-top: 1px solid #eef5ef;
+  margin-top: auto;
+}
+
+.precioLabel {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9ebc9f;
+  margin: 0;
+}
+
+.precio {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: #1b3d1f;
+  margin: 0;
+}
+
+.reservarBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: none;
+  border-radius: 9px;
+  background: #4caf50;
+  color: #fff;
+  padding: 0.45rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.2s ease;
+}
+
+.reservarBtn:hover {
+  background: #43a047;
+  transform: translateX(2px);
+}
+
+.skeletonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1rem;
+}
+
+.skeletonCard {
+  border: 1.5px solid #e8ede8;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.skeletonStripe {
+  height: 3px;
+  background: #e8ede8;
+}
+
+.skeletonBody {
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.skeletonLine,
+.skeletonBlock {
+  background: linear-gradient(90deg, #f0f4f0 0%, #e4ece4 50%, #f0f4f0 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeletonLine {
+  height: 12px;
+  border-radius: 6px;
+}
+
+.skeletonLineShort {
+  width: 40%;
+}
+
+.skeletonLineLong {
+  width: 70%;
+}
+
+.skeletonBlock {
+  height: 64px;
+  border-radius: 9px;
+  animation-delay: 0.2s;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .slotBanner {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-radius: 10px;
+    background: rgba(237, 247, 237, 0.9);
+    backdrop-filter: blur(8px);
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .slotBannerStuck {
+    box-shadow: 0 8px 20px rgba(45, 106, 53, 0.18);
+  }
+
+  .canchasGrid,
+  .skeletonGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .cambiarBtn {
+    align-self: flex-start;
+  }
+}
+
+@media (min-width: 768px) {
+  .slotBanner {
+    position: static;
+  }
+
+  .slotBannerStuck {
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

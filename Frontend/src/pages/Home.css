@@ -169,15 +169,65 @@
 
 /* ── Cómo funciona ── */
 .como-funciona {
-  background: var(--white);
-  border-bottom: 1px solid #e8f0e8;
-  padding: 5rem 1.5rem;
+  position: relative;
+  min-height: 100svh;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(76, 175, 80, 0.18) 0%, rgba(76, 175, 80, 0) 42%),
+    radial-gradient(circle at 84% 78%, rgba(27, 94, 32, 0.14) 0%, rgba(27, 94, 32, 0) 38%),
+    linear-gradient(160deg, #ffffff 0%, #f1faef 55%, #e8f5e9 100%);
+  border-top: 1px solid #e8f0e8;
+  border-bottom: 1px solid #dceadf;
+  padding: 4.5rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  isolation: isolate;
+  scroll-margin-top: 64px;
+}
+
+.como-funciona::before,
+.como-funciona::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.como-funciona::before {
+  width: 460px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  top: -170px;
+  left: -120px;
+  background: radial-gradient(circle, rgba(165, 214, 167, 0.42) 0%, rgba(165, 214, 167, 0) 72%);
+  filter: blur(2px);
+}
+
+.como-funciona::after {
+  width: 520px;
+  height: 520px;
+  right: -170px;
+  bottom: -200px;
+  border-radius: 42% 58% 53% 47% / 46% 36% 64% 54%;
+  background:
+    repeating-linear-gradient(
+      40deg,
+      rgba(27, 94, 32, 0.1) 0,
+      rgba(27, 94, 32, 0.1) 2px,
+      rgba(27, 94, 32, 0) 2px,
+      rgba(27, 94, 32, 0) 13px
+    ),
+    linear-gradient(160deg, rgba(165, 214, 167, 0.3) 0%, rgba(76, 175, 80, 0.06) 100%);
+  transform: rotate(-8deg);
 }
 
 .como-funciona-inner {
   max-width: 1080px;
   margin: 0 auto;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .como-funciona-label {
@@ -216,6 +266,7 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   position: relative;
+  margin-top: 0.5rem;
 }
 
 /* línea conectora entre pasos */
@@ -231,8 +282,8 @@
 }
 
 .paso-card {
-  background: var(--white);
-  border: 1px solid #e4f0e4;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid #d9ebda;
   border-radius: var(--radius);
   padding: 2.2rem 1.5rem 1.8rem;
   display: flex;
@@ -241,8 +292,28 @@
   gap: 0.7rem;
   position: relative;
   z-index: 1;
-  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  opacity: 0;
+  transform: translateY(26px) scale(0.98);
+  transition:
+    opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+  transition-delay: var(--paso-delay, 0ms);
+  backdrop-filter: blur(4px);
 }
+
+.como-funciona.is-visible .paso-card {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.paso-card:nth-child(1) { --paso-delay: 180ms; }
+.paso-card:nth-child(2) { --paso-delay: 430ms; }
+.paso-card:nth-child(3) { --paso-delay: 680ms; }
+.paso-card:nth-child(4) { --paso-delay: 930ms; }
+.paso-card:nth-child(5) { --paso-delay: 1180ms; }
+.paso-card:nth-child(6) { --paso-delay: 1430ms; }
 
 .paso-card:hover {
   transform: translateY(-5px);
@@ -365,7 +436,21 @@
   }
 
   .como-funciona {
-    padding: 3rem 1rem;
+    min-height: auto;
+    padding: 4rem 1rem;
+  }
+
+  .como-funciona::before {
+    width: 300px;
+    top: -130px;
+    left: -120px;
+  }
+
+  .como-funciona::after {
+    width: 320px;
+    height: 320px;
+    right: -130px;
+    bottom: -140px;
   }
 
   .como-funciona-titulo {
@@ -406,12 +491,29 @@
   }
 
   .como-funciona {
-    padding: 3.5rem 1.5rem;
+    min-height: auto;
+    padding: 4.25rem 1.5rem;
+  }
+
+  .como-funciona::after {
+    width: 410px;
+    height: 410px;
+    right: -120px;
+    bottom: -180px;
   }
 }
 
 @media (min-width: 1024px) {
   .hero {
     background-attachment: fixed;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .paso-card,
+  .como-funciona.is-visible .paso-card {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }

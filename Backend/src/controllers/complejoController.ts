@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import Complejo, { SERVICIOS_DISPONIBLES } from "../models/Complejo";
 import Usuario from "../models/Usuario";
 import Reserva from "../models/Reserva";
-import Cancha from "../models/Cancha";
 
 export const getComplejos = async (req: Request, res: Response) => {
   try {
@@ -229,5 +228,54 @@ export const actualizarImagenComplejo = async (req: Request, res: Response): Pro
   } catch (error) {
     console.error('Error al actualizar imagen:', error);
     res.status(500).json({ error: 'Error al actualizar la imagen del complejo' });
+  }
+};
+
+export const getDisponibilidad = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const fecha = String(req.query.fecha ?? "");
+    const hora = String(req.query.hora ?? "");
+
+    if (!fecha || !hora) {
+      res.status(400).json({ error: "Faltan parámetros: fecha y hora" });
+      return;
+    }
+
+    const complejo = await Complejo.findById(id).exec();
+    if (!complejo) {
+      res.status(404).json({ error: "Complejo no encontrado" });
+      return;
+    }
+
+    const fechaInicio = new Date(fecha);
+    fechaInicio.setHours(0, 0, 0, 0);
+    const fechaFin = new Date(fecha);
+    fechaFin.setHours(23, 59, 59, 999);
+
+    const reservas = await Reserva.find({
+      complejo: id,
+      fecha: { $gte: fechaInicio, $lte: fechaFin },
+      horaInicio: hora,
+    }).exec();
+
+    const ocupadas = new Set(reservas.map((r) => r.canchaId));
+    const canchasDisponibles = complejo.canchas.reduce<string[]>((acc, cancha) => {
+      if (cancha.disponible === false || !cancha._id) {
+        return acc;
+      }
+
+      const canchaId = cancha._id.toString();
+      if (!ocupadas.has(canchaId)) {
+        acc.push(canchaId);
+      }
+
+      return acc;
+    }, []);
+
+    res.status(200).json({ canchasDisponibles });
+  } catch (error) {
+    console.error("Error al obtener disponibilidad:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
   }
 };

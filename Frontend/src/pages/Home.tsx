@@ -15,12 +15,13 @@ type Filtros = { ciudad: string; tipoCancha: string; fecha: string; };
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const searchRef = useRef<HTMLDivElement>(null);
-  const comoFuncionaRef = useRef<HTMLDivElement>(null);
+  const comoFuncionaRef = useRef<HTMLElement>(null);
 
   const [filters, setFilters] = useState<Filtros>({ ciudad: "", tipoCancha: "", fecha: "" });
   const [complejos, setComplejos] = useState<Complejo[]>([]);
   const [loading, setLoading] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [mostrarPasos, setMostrarPasos] = useState(false);
 
   const heroImages = [
     "/images/vista-de-pelota-mirando-hacia-porteria.jpg",
@@ -36,6 +37,29 @@ const Home: React.FC = () => {
       setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
     }, 4500);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const section = comoFuncionaRef.current;
+    if (!section) return;
+
+    if (!("IntersectionObserver" in window)) {
+      setMostrarPasos(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setMostrarPasos(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.35 }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
   }, []);
 
   const handleFilterChange = (name: keyof Filtros, value: string) =>
@@ -113,7 +137,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* Cómo funciona */}
-      <section ref={comoFuncionaRef} className="como-funciona">
+      <section ref={comoFuncionaRef} className={`como-funciona ${mostrarPasos ? "is-visible" : ""}`}>
         <div className="como-funciona-inner">
           <p className="como-funciona-label">Simple y rápido</p>
           <h2 className="como-funciona-titulo">¿Cómo funciona?</h2>

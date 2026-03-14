@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 interface ICancha {
+  _id?: mongoose.Types.ObjectId;
   tipoCancha: string;
   precioHora: number;
   disponible: boolean;
