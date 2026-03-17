@@ -33,7 +33,17 @@ interface Props {
   nombreLista: string;
   onEliminarComplejo?: (complejoId: string) => void;
 }
-  
+
+function formatearTipoCancha(tipo: string): string {
+  const map: Record<string, string> = {
+    "futbol5": "Fútbol 5",
+    "futbol 5": "Fútbol 5",
+    "futbol7": "Fútbol 7",
+    "futbol 7": "Fútbol 7",
+    "padel": "Pádel",
+  };
+  return map[tipo.toLowerCase().trim()] ?? tipo;
+}
 
 function ComplejoList({ complejos, onComplejoClick, nombreLista, onEliminarComplejo }: Props) {
   return (
@@ -42,7 +52,7 @@ function ComplejoList({ complejos, onComplejoClick, nombreLista, onEliminarCompl
       <div className="complejos-grid">
         {complejos.map((complejo) => (
           <div className="complejo-card" key={complejo._id}
-          onClick={() => onComplejoClick(complejo._id)}>
+            onClick={() => onComplejoClick(complejo._id)}>
 
             <img
               src={construirUrlImagen(complejo.imagen, complejo.canchas?.[0]?.tipoCancha)}
@@ -65,8 +75,8 @@ function ComplejoList({ complejos, onComplejoClick, nombreLista, onEliminarCompl
               </p>
               <p>
                 <MdSportsSoccer size={16} color="#4CAF50" />
-                &nbsp;Tipos de canchas:{" "}
-                {complejo.canchas?.map((c) => c.tipoCancha).join(", ") || "—"}
+                &nbsp;Tipos de canchas:{" "}  
+                {complejo.canchas?.map((c) => formatearTipoCancha(c.tipoCancha)).join(", ") || "—"}
               </p>
               {onEliminarComplejo && (
                 <button

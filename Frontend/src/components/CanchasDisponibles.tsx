@@ -248,9 +248,8 @@ export default function CanchasDisponibles({
                   <div className={styles.cardBody}>
                     <div className={styles.cardHeader}>
                       <div
-                        className={`${styles.iconWrap} ${
-                          disponible ? styles.iconVerde : styles.iconGris
-                        }`}
+                        className={`${styles.iconWrap} ${disponible ? styles.iconVerde : styles.iconGris
+                          }`}
                       >
                         {getIcono(cancha.tipoCancha)}
                       </div>
@@ -263,9 +262,8 @@ export default function CanchasDisponibles({
                       </div>
 
                       <div
-                        className={`${styles.estadoBadge} ${
-                          disponible ? styles.estadoDisponible : styles.estadoOcupada
-                        }`}
+                        className={`${styles.estadoBadge} ${disponible ? styles.estadoDisponible : styles.estadoOcupada
+                          }`}
                         aria-label={disponible ? "Disponible" : "Ocupada en este horario"}
                       >
                         {disponible ? (

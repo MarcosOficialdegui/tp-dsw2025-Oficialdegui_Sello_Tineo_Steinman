@@ -28,8 +28,8 @@ interface Props {
 }
 
 const HORARIOS = [
-  "08:00","09:00","10:00","11:00","12:00","13:00","14:00",
-  "15:00","16:00","17:00","18:00","19:00","20:00","21:00"
+  "08:00", "09:00", "0:00", "11:00", "12:00", "13:00", "14:00",
+  "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00"
 ];
 
 export default function ReservasGrid({ complejoId }: Props) {
@@ -62,13 +62,17 @@ export default function ReservasGrid({ complejoId }: Props) {
   }, [complejoId, fechaSeleccionada]);
 
   const cargarReservas = async () => {
+   
     try {
       setCargando(true);
       const token = localStorage.getItem('token');
+     
       const res = await fetch(
         `http://localhost:3000/api/complejos/${complejoId}/reservas?fecha=${fechaSeleccionada}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
+
+      
       if (!res.ok) throw new Error('Error al cargar reservas');
       const data = await res.json();
       setReservas(data);

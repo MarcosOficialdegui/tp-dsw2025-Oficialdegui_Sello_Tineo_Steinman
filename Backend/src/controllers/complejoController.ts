@@ -31,12 +31,17 @@ export const getComplejos = async (req: Request, res: Response) => {
     }
 
     if (tipoCancha) {
-      query["canchas.tipoCancha"] = tipoCancha;
+      console.log(tipoCancha);
+      query["canchas.tipoCancha"] = { $regex: tipoCancha as string, $options: "i" };
     }
+
 
     const pageNum = parseInt(page as string);
     const limitNum = parseInt(limit as string);
     const skip = (pageNum - 1) * limitNum;
+
+
+
 
     // Ejecutar ambas queries en paralelo
     const [complejos, total] = await Promise.all([
@@ -44,6 +49,13 @@ export const getComplejos = async (req: Request, res: Response) => {
       Complejo.countDocuments(query)
     ]);
 
+
+    /*
+    console.log("Complejos encontrados:", total);
+    console.log("Query:", JSON.stringify(query));
+    console.log("tipoCancha recibido:", tipoCancha);
+    */
+    
     res.json({
       complejos,
       total,

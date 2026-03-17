@@ -46,9 +46,9 @@ const SearchBar: React.FC<Props> = ({ filters, onChange, onSearch }) => {
   };
 
   const deportes = [
-    { value: "Futbol 5", label: "Fútbol 5", icon: getIconoDeporte("Futbol 5") },
-    { value: "Futbol 7", label: "Fútbol 7", icon: getIconoDeporte("Futbol 7") },
-    { value: "Padel", label: "Pádel", icon: getIconoDeporte("Padel") }
+    { value: "futbol5", label: "Fútbol 5", icon: getIconoDeporte("Futbol 5") },
+    { value: "futbol7", label: "Fútbol 7", icon: getIconoDeporte("Futbol 7") },
+    { value: "padel", label: "Pádel", icon: getIconoDeporte("Padel") }
   ];
 
   useEffect(() => {
@@ -200,7 +200,7 @@ const SearchBar: React.FC<Props> = ({ filters, onChange, onSearch }) => {
                   onClick={() => seleccionarDeporte(deporte.value)}
                 >
                   <span className={styles.sportIcon}>{deporte.icon}</span>
-                  <span className={styles.sportName}>{deporte.value}</span>
+                  <span className={styles.sportName}>{deporte.label}</span>
                 </div>
               ))}
             </div>

@@ -12,7 +12,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
-        return res.status(401).json({ error: 'Token requerido' });
+        return res.status(401).json({ error: 'Se requiere iniciar sesión' });
     }
 
     try{

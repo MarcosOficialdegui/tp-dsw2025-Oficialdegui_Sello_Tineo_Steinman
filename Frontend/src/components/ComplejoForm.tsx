@@ -32,7 +32,7 @@ export default function ComplejoForm() {
   const [previsualizacion, setPrevisualizacion] = useState<string>(""); // Data URL para previsualización
 
   const [canchas, setCanchas] = useState([
-    { tipoCancha: "Fútbol 5", precioHora: "", disponible: true },
+    { tipoCancha: "futbol5", precioHora: "", disponible: true },
   ]);
 
   useEffect(() => {
@@ -137,7 +137,7 @@ export default function ComplejoForm() {
         mostrarError('Por favor selecciona un archivo de imagen válido');
         return;
       }
-      
+
       // Validar tamaño (máximo 5MB)
       if (file.size > 5 * 1024 * 1024) {
         mostrarError('La imagen no debe superar los 5MB');
@@ -145,7 +145,7 @@ export default function ComplejoForm() {
       }
 
       setImagenSeleccionada(file);
-      
+
       // Crear previsualización
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -161,7 +161,7 @@ export default function ComplejoForm() {
     setPrevisualizacion("");
   };
   const agregarCancha = () => {
-    setCanchas([...canchas, { tipoCancha: "Fútbol 5", precioHora: "", disponible: true }]);
+    setCanchas([...canchas, { tipoCancha: "futbol5", precioHora: "", disponible: true }]);
   };
 
   const eliminarCancha = (index: number) => {
@@ -235,6 +235,7 @@ export default function ComplejoForm() {
     }
 
     try {
+      
       const res = await fetch("http://localhost:3000/api/complejos", {
         method: "POST",
         headers: {
@@ -249,7 +250,7 @@ export default function ComplejoForm() {
         mostrarExito("Complejo creado con éxito");
         setFormData({ nombre: "", direccion: "", ciudad: "", ciudadId: "", horarioApertura: "08:00", horarioCierre: "22:00" });
         setServiciosSeleccionados([]);
-        setCanchas([{ tipoCancha: "Fútbol 5", precioHora: "", disponible: true }]);
+        setCanchas([{ tipoCancha: "futbol5", precioHora: "", disponible: true }]);
         setImagenSeleccionada(null);
         setPrevisualizacion("");
         window.location.reload();
@@ -366,16 +367,16 @@ export default function ComplejoForm() {
         {/* Sección de carga de imagen */}
         <div className={styles.imagenContainer}>
           <label className={styles.imagenLabel}>Imagen del complejo (opcional)</label>
-          
+
           {previsualizacion ? (
             <div className={styles.previsualizacionContainer}>
-              <img 
-                src={previsualizacion} 
-                alt="Previsualización" 
+              <img
+                src={previsualizacion}
+                alt="Previsualización"
                 className={styles.previsualizacion}
               />
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={eliminarImagen}
                 className={styles.eliminarImagenBtn}
               >
