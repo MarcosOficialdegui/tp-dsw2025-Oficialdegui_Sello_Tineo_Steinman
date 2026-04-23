@@ -20,7 +20,6 @@ export const getComplejos = async (req: Request, res: Response) => {
       query.nombre = new RegExp(nombre as string, 'i');
     }
 
-
     if (ciudad) {
       if ((ciudad as string).length === 24) {
         query.ciudad = ciudad;
@@ -38,31 +37,18 @@ export const getComplejos = async (req: Request, res: Response) => {
     }
 
     if (tipoCancha) {
-      console.log(tipoCancha);
       query["canchas.tipoCancha"] = { $regex: tipoCancha as string, $options: "i" };
     }
-
 
     const pageNum = parseInt(page as string);
     const limitNum = parseInt(limit as string);
     const skip = (pageNum - 1) * limitNum;
 
-
-
-
-    // Ejecutar ambas queries en paralelo
     const [complejos, total] = await Promise.all([
       Complejo.find(query).populate('ciudad', 'nombre').skip(skip).limit(limitNum).exec(),
       Complejo.countDocuments(query)
     ]);
 
-
-    /*
-    console.log("Complejos encontrados:", total);
-    console.log("Query:", JSON.stringify(query));
-    console.log("tipoCancha recibido:", tipoCancha);
-    */
-    
     res.json({
       complejos,
       total,
@@ -79,10 +65,8 @@ export const getComplejos = async (req: Request, res: Response) => {
 export const getComplejoById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-
-    // Buscar complejo por ID y hacer populate de la ciudad
     const complejo = await Complejo.findById(id)
-      .populate('ciudad', 'nombre') // Populate ciudad con solo el nombre
+      .populate('ciudad', 'nombre')
       .exec();
 
     if (!complejo) {
@@ -96,7 +80,6 @@ export const getComplejoById = async (req: Request, res: Response) => {
   }
 };
 
-// Obtener lista de servicios disponibles
 export const getServiciosDisponibles = async (req: Request, res: Response) => {
   try {
     res.json(SERVICIOS_DISPONIBLES);
@@ -111,32 +94,27 @@ export const crearComplejo = async (req: Request, res: Response, next: Function)
     const { nombre, direccion, ciudad, servicios, canchas, horarioApertura, horarioCierre } = req.body;
 
     if (!nombre || !direccion || !ciudad) {
-      console.log(req.body)
+      console.log(req.body);
       return res.status(400).json({ error: "Faltan datos obligatorios" });
     }
 
-    // Parsear servicios y canchas si vienen como strings (desde FormData)
     let serviciosParsed = servicios;
     let canchasParsed = canchas;
 
     if (typeof servicios === 'string') {
-      try {
-        serviciosParsed = JSON.parse(servicios);
-      } catch (e) {
-        serviciosParsed = [];
-      }
+      try { serviciosParsed = JSON.parse(servicios); } catch { serviciosParsed = []; }
     }
 
     if (typeof canchas === 'string') {
-      try {
-        canchasParsed = JSON.parse(canchas);
-      } catch (e) {
-        canchasParsed = [];
-      }
+      try { canchasParsed = JSON.parse(canchas); } catch { canchasParsed = []; }
     }
 
-    // Obtener la ruta de la imagen si se subió
-    const imagen = (req as any).file ? `/uploads/${(req as any).file.filename}` : undefined;
+    // Obtener URLs de Cloudinary (upload.array devuelve array en req.files)
+    const filesArray = (req as any).files as Express.Multer.File[];
+    const imagenes: string[] = filesArray
+      ? filesArray.map((f: any) => f.path) // Cloudinary devuelve la URL en f.path
+      : [];
+    const imagen = imagenes[0] || undefined;
 
     const nuevoComplejo = new Complejo({
       nombre,
@@ -146,18 +124,20 @@ export const crearComplejo = async (req: Request, res: Response, next: Function)
       canchas: canchasParsed || [],
       horarioApertura: horarioApertura || "08:00",
       horarioCierre: horarioCierre || "22:00",
-      imagen
+      imagen,
+      imagenes,
     });
 
     const guardado = await nuevoComplejo.save();
     (req as any).complejoCreado = guardado;
-
+    console.log("complejoCreado:", (req as any).complejoCreado?._id);
     next();
 
   } catch (error) {
-    console.error("Error al crear complejo:", error);
-    res.status(500).json({ error: "Error al crear el complejo" });
+  console.error("crearComplejo error:", String(error), (error as any)?.message, (error as any)?.stack);
+  res.status(500).json({ error: "Error al crear el complejo" });
   }
+  
 };
 
 export const eliminarComplejo = async (req: Request, res: Response): Promise<void> => {
@@ -171,12 +151,7 @@ export const eliminarComplejo = async (req: Request, res: Response): Promise<voi
       return;
     }
 
-    //AGREGAR LOGICA PARA VERIFICAR QUE EL USUARIO SEA EL DUEÑO DEL COMPLEJO
-
-    await Usuario.findByIdAndUpdate(
-      userId,
-      { $pull: { complejos: complejoId } }
-    );
+    await Usuario.findByIdAndUpdate(userId, { $pull: { complejos: complejoId } });
     await Complejo.findByIdAndDelete(complejoId);
 
     res.json({ message: 'Complejo eliminado correctamente' });
@@ -224,38 +199,25 @@ export const actualizarImagenComplejo = async (req: Request, res: Response): Pro
     const { id } = req.params;
     const userId = (req as any).user.id;
 
-    // Verificar que se subió una imagen
     if (!(req as any).file) {
       res.status(400).json({ error: 'No se proporcionó ninguna imagen' });
       return;
     }
 
-    // Buscar el complejo
     const complejo = await Complejo.findById(id);
     if (!complejo) {
       res.status(404).json({ error: 'Complejo no encontrado' });
       return;
     }
 
-    // Verificar que el usuario es el propietario
     const usuario = await Usuario.findById(userId);
     if (!usuario || !usuario.complejos.some(complejoId => complejoId.toString() === id)) {
       res.status(403).json({ error: 'No tienes permiso para modificar este complejo' });
       return;
     }
 
-    // Eliminar imagen anterior si existe
-    if (complejo.imagen) {
-      const fs = require('fs');
-      const path = require('path');
-      const oldImagePath = path.join(__dirname, '../../', complejo.imagen);
-      if (fs.existsSync(oldImagePath)) {
-        fs.unlinkSync(oldImagePath);
-      }
-    }
-
-    // Actualizar con la nueva imagen
-    const nuevaImagen = `/uploads/${(req as any).file.filename}`;
+    // Con Cloudinary no hay archivo local que borrar
+    const nuevaImagen = (req as any).file.path; // Cloudinary URL
     complejo.imagen = nuevaImagen;
     await complejo.save();
 
@@ -302,22 +264,16 @@ export const getDisponibilidad = async (req: Request, res: Response): Promise<vo
 
     const ocupadas = new Set(
       reservas
-        .filter((reserva) => {
-          return seSuperponenIntervalos(hora, horaFinSolicitada, reserva.horaInicio, reserva.horaFin);
-        })
+        .filter((reserva) =>
+          seSuperponenIntervalos(hora, horaFinSolicitada, reserva.horaInicio, reserva.horaFin)
+        )
         .map((r) => r.canchaId)
     );
 
     const canchasDisponibles = complejo.canchas.reduce<string[]>((acc, cancha) => {
-      if (cancha.disponible === false || !cancha._id) {
-        return acc;
-      }
-
+      if (cancha.disponible === false || !cancha._id) return acc;
       const canchaId = cancha._id.toString();
-      if (!ocupadas.has(canchaId)) {
-        acc.push(canchaId);
-      }
-
+      if (!ocupadas.has(canchaId)) acc.push(canchaId);
       return acc;
     }, []);
 

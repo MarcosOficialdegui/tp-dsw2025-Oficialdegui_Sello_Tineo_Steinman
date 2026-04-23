@@ -15,7 +15,8 @@ export interface IComplejo extends Document {
   canchas: ICancha[];
   horarioApertura: string;
   horarioCierre: string;
-  imagen?: string; // Ruta de la imagen del complejo
+  imagen?: string;    // imagen principal (legacy)
+  imagenes?: string[]; // URLs de Cloudinary
 }
 
 const CanchaSchema = new Schema<ICancha>({
@@ -51,7 +52,8 @@ const ComplejoSchema = new Schema<IComplejo>({
     default: []
   }],
   canchas: [CanchaSchema],
-  imagen: { type: String, required: false }, // Ruta de la imagen
+  imagen:    { type: String, required: false },
+  imagenes:  [{ type: String }],
   horarioApertura: { type: String, required: true, default: "08:00" },
   horarioCierre:   { type: String, required: true, default: "22:00" },
 });

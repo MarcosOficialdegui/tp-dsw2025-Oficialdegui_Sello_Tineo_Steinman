@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./ComplejoForm.module.css";
-import { MapPin, Plus, Lightbulb, Loader2, Camera } from 'lucide-react';
+import { MapPin, Plus, Lightbulb, Loader2 } from 'lucide-react';
 import { mostrarExito, mostrarError, mostrarAdvertencia } from "../utils/notificaciones";
 
 type Ciudad = {
@@ -27,12 +27,11 @@ export default function ComplejoForm() {
   const [cargandoCiudades, setCargandoCiudades] = useState(false);
   const [creandoCiudad, setCreandoCiudad] = useState(false);
 
-  // Estados para el manejo de imágenes
-  const [imagenSeleccionada, setImagenSeleccionada] = useState<File | null>(null);
-  const [previsualizacion, setPrevisualizacion] = useState<string>(""); // Data URL para previsualización
+  const [imagenesFiles, setImagenesFiles] = useState<File[]>([]);
+  const [imagenesPreview, setImagenesPreview] = useState<string[]>([]);
 
   const [canchas, setCanchas] = useState([
-    { tipoCancha: "futbol5", precioTurno: "", disponible: true },
+    { tipoCancha: "Fútbol 5", precioHora: "", disponible: true },
   ]);
 
   useEffect(() => {
@@ -128,40 +127,8 @@ export default function ComplejoForm() {
     );
   };
 
-  // Manejar selección de imagen
-  const handleImagenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // Validar tipo de archivo
-      if (!file.type.startsWith('image/')) {
-        mostrarError('Por favor selecciona un archivo de imagen válido');
-        return;
-      }
-
-      // Validar tamaño (máximo 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        mostrarError('La imagen no debe superar los 5MB');
-        return;
-      }
-
-      setImagenSeleccionada(file);
-
-      // Crear previsualización
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPrevisualizacion(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  // Eliminar imagen seleccionada
-  const eliminarImagen = () => {
-    setImagenSeleccionada(null);
-    setPrevisualizacion("");
-  };
   const agregarCancha = () => {
-    setCanchas([...canchas, { tipoCancha: "futbol5", precioTurno: "", disponible: true }]);
+    setCanchas([...canchas, { tipoCancha: "Fútbol 5", precioHora: "", disponible: true }]);
   };
 
   const eliminarCancha = (index: number) => {
@@ -172,6 +139,23 @@ export default function ComplejoForm() {
     const nuevasCanchas = [...canchas];
     (nuevasCanchas[index] as any)[campo] = valor;
     setCanchas(nuevasCanchas);
+  };
+
+  const handleImagenesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length + imagenesFiles.length > 6) {
+      mostrarError("Máximo 6 imágenes");
+      return;
+    }
+    const nuevas = [...imagenesFiles, ...files].slice(0, 6);
+    setImagenesFiles(nuevas);
+    setImagenesPreview(nuevas.map(f => URL.createObjectURL(f)));
+  };
+
+  const eliminarImagen = (index: number) => {
+    const nuevas = imagenesFiles.filter((_, i) => i !== index);
+    setImagenesFiles(nuevas);
+    setImagenesPreview(nuevas.map(f => URL.createObjectURL(f)));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -215,33 +199,28 @@ export default function ComplejoForm() {
       return;
     }
 
-    // Crear FormData para enviar datos con imagen
-    const formDataToSend = new FormData();
-    formDataToSend.append('nombre', formData.nombre);
-    formDataToSend.append('direccion', formData.direccion);
-    formDataToSend.append('ciudad', ciudadFinal);
-    formDataToSend.append('servicios', JSON.stringify(serviciosSeleccionados));
-    formDataToSend.append('horarioApertura', formData.horarioApertura);
-    formDataToSend.append('horarioCierre', formData.horarioCierre);
-    formDataToSend.append('canchas', JSON.stringify(canchas.map(c => ({
+    const fd = new FormData();
+    fd.append("nombre", formData.nombre);
+    fd.append("direccion", formData.direccion);
+    fd.append("ciudad", ciudadFinal);
+    fd.append("horarioApertura", formData.horarioApertura);
+    fd.append("horarioCierre", formData.horarioCierre);
+    fd.append("servicios", JSON.stringify(serviciosSeleccionados));
+    fd.append("canchas", JSON.stringify(canchas.map(c => ({
       tipoCancha: c.tipoCancha,
-      precioTurno: Number(c.precioTurno),
+      precioTurno: Number(c.precioHora),
       disponible: c.disponible,
     }))));
-
-    // Agregar imagen si se seleccionó una
-    if (imagenSeleccionada) {
-      formDataToSend.append('imagen', imagenSeleccionada);
-    }
+    imagenesFiles.forEach(file => fd.append("imagenes", file));
 
     try {
-      
       const res = await fetch("http://localhost:3000/api/complejos", {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${localStorage.getItem("token") || ""}`,
+          // NO poner Content-Type — el browser lo setea automáticamente con el boundary
         },
-        body: formDataToSend,
+        body: fd,
       });
 
       const data = await res.json();
@@ -250,9 +229,9 @@ export default function ComplejoForm() {
         mostrarExito("Complejo creado con éxito");
         setFormData({ nombre: "", direccion: "", ciudad: "", ciudadId: "", horarioApertura: "08:00", horarioCierre: "22:00" });
         setServiciosSeleccionados([]);
-        setCanchas([{ tipoCancha: "futbol5", precioTurno: "", disponible: true }]);
-        setImagenSeleccionada(null);
-        setPrevisualizacion("");
+        setCanchas([{ tipoCancha: "Fútbol 5", precioHora: "", disponible: true }]);
+        setImagenesFiles([]);
+        setImagenesPreview([]);
         window.location.reload();
       } else {
         mostrarError(data.error || "Error al crear el complejo");
@@ -334,7 +313,6 @@ export default function ComplejoForm() {
           )}
         </div>
 
-
         {/* Horarios */}
         <h3 className={styles.subtitulo}>Horario de atención</h3>
         <div className={styles.canchaCampos}>
@@ -364,45 +342,6 @@ export default function ComplejoForm() {
           </div>
         </div>
 
-        {/* Sección de carga de imagen */}
-        <div className={styles.imagenContainer}>
-          <label className={styles.imagenLabel}>Imagen del complejo (opcional)</label>
-
-          {previsualizacion ? (
-            <div className={styles.previsualizacionContainer}>
-              <img
-                src={previsualizacion}
-                alt="Previsualización"
-                className={styles.previsualizacion}
-              />
-              <button
-                type="button"
-                onClick={eliminarImagen}
-                className={styles.eliminarImagenBtn}
-              >
-                Cambiar imagen
-              </button>
-            </div>
-          ) : (
-            <div className={styles.uploadContainer}>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImagenChange}
-                className={styles.inputFile}
-                id="imagen-upload"
-              />
-              <label htmlFor="imagen-upload" className={styles.uploadLabel}>
-                <span className={styles.uploadIcon}>
-                  <Camera size={48} strokeWidth={1.5} />
-                </span>
-                <span className={styles.uploadText}>Seleccionar imagen</span>
-                <span className={styles.uploadHint}>JPG, PNG, GIF o WEBP (máx. 5MB)</span>
-              </label>
-            </div>
-          )}
-        </div>
-
         {/* Canchas */}
         <h3 className={styles.subtitulo}>Canchas</h3>
         {canchas.map((cancha, index) => (
@@ -420,9 +359,9 @@ export default function ComplejoForm() {
               <input
                 className={styles.inputSmall}
                 type="number"
-                placeholder="Precio por turno"
-                value={cancha.precioTurno}
-                onChange={e => actualizarCancha(index, "precioTurno", e.target.value)}
+                placeholder="Precio por hora"
+                value={cancha.precioHora}
+                onChange={e => actualizarCancha(index, "precioHora", e.target.value)}
                 required
               />
               <label className={styles.disponibleCheck}>
@@ -462,6 +401,60 @@ export default function ComplejoForm() {
             </label>
           ))}
         </div>
+
+        {/* Imágenes */}
+        <h3 className={styles.subtitulo}>Fotos del complejo</h3>
+        <p style={{ fontSize: "0.8rem", color: "#888", marginBottom: "0.75rem" }}>
+          Hasta 6 fotos. La primera será la imagen principal.
+        </p>
+
+        {/* Previews */}
+        {imagenesPreview.length > 0 && (
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginBottom: "0.75rem" }}>
+            {imagenesPreview.map((src, i) => (
+              <div key={i} style={{ position: "relative", width: 90, height: 70 }}>
+                <img
+                  src={src}
+                  alt={`preview-${i}`}
+                  style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 8, border: "1.5px solid #c8e6c9" }}
+                />
+                <button
+                  type="button"
+                  onClick={() => eliminarImagen(i)}
+                  style={{
+                    position: "absolute", top: -6, right: -6,
+                    width: 20, height: 20, borderRadius: "50%",
+                    background: "#e53935", color: "#fff",
+                    border: "none", cursor: "pointer",
+                    fontSize: "0.7rem", fontWeight: 700,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}
+                >✕</button>
+                {i === 0 && (
+                  <span style={{
+                    position: "absolute", bottom: 3, left: 3,
+                    background: "rgba(76,175,80,0.85)", color: "#fff",
+                    fontSize: "0.55rem", fontWeight: 700,
+                    padding: "1px 5px", borderRadius: 4, textTransform: "uppercase"
+                  }}>Principal</span>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {imagenesFiles.length < 6 && (
+          <label className={styles.uploadLabel}>
+            <input
+              type="file"
+              accept="image/jpeg,image/jpg,image/png,image/webp"
+              multiple
+              style={{ display: "none" }}
+              onChange={handleImagenesChange}
+            />
+            <span>+ Agregar fotos</span>
+          </label>
+        )}
 
         <button type="submit" className={styles.button}>Guardar Complejo</button>
       </form>

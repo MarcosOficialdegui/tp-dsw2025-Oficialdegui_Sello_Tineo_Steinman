@@ -104,7 +104,8 @@ export const guardarComplejoEnUsuario = async (req: Request, res: Response): Pro
         res.status(200).json({ message: 'Complejo Registrado!' });
 
     } catch (error) {
-        res.status(500).json({ error: 'Error al guardar el complejo en el usuario' });
+    console.error("guardarComplejoEnUsuario error:", String(error), (error as any)?.message, (error as any)?.stack);
+  res.status(500).json({ error: 'Error al guardar el complejo en el usuario' });
     }
 }
 
