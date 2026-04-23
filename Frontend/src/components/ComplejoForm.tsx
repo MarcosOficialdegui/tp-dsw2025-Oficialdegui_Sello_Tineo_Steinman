@@ -421,14 +421,7 @@ export default function ComplejoForm() {
                 <button
                   type="button"
                   onClick={() => eliminarImagen(i)}
-                  style={{
-                    position: "absolute", top: -6, right: -6,
-                    width: 20, height: 20, borderRadius: "50%",
-                    background: "#e53935", color: "#fff",
-                    border: "none", cursor: "pointer",
-                    fontSize: "0.7rem", fontWeight: 700,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                  }}
+                    className={styles.eliminarImagenBtn}
                 >✕</button>
                 {i === 0 && (
                   <span style={{
