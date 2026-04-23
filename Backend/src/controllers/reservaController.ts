@@ -1,14 +1,45 @@
 import { NextFunction, Request, Response } from "express";
 import Reserva from "../models/Reserva";
+import {
+    fechaISOToUTCMediodia,
+    formatearFechaHoraArgentina,
+    getDuracionMinutosPorTipoCancha,
+    getRangoUTCDeFechaISO,
+    seSuperponenIntervalos,
+    sumarMinutosAHora,
+    validarHora,
+} from "../utils/reservaTime";
 
 export const buscarReserva = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { complejo, canchaId, fecha, horaInicio } = req.body;
-        const reservaEncontrada = await Reserva.findOne({ complejo, canchaId, fecha, horaInicio })
-        console.log(reservaEncontrada)
+        const { complejo, canchaId, canchaTipo, fecha, horaInicio } = req.body;
+
+        if (!complejo || !canchaId || !canchaTipo || !fecha || !horaInicio) {
+            return res.status(400).json({ error: "Faltan datos obligatorios" });
+        }
+
+        if (!validarHora(horaInicio)) {
+            return res.status(400).json({ error: "Hora invalida. Formato esperado: HH:mm" });
+        }
+
+        const duracionMinutos = getDuracionMinutosPorTipoCancha(canchaTipo);
+        const horaFinSolicitada = sumarMinutosAHora(horaInicio, duracionMinutos);
+        const { inicio: fechaInicio, fin: fechaFin } = getRangoUTCDeFechaISO(fecha);
+
+        const reservasDelDia = await Reserva.find({
+            complejo,
+            canchaId,
+            fecha: { $gte: fechaInicio, $lte: fechaFin },
+        });
+
+        const reservaEncontrada = reservasDelDia.find((reserva) => {
+            return seSuperponenIntervalos(horaInicio, horaFinSolicitada, reserva.horaInicio, reserva.horaFin);
+        });
+
         if (reservaEncontrada) {
             return (res.status(400).json({ error: "El horario esta reservado" }))
         }
+
         next();
     } catch (error) {
         console.error('Error al buscar reserva:', error);
@@ -49,17 +80,18 @@ export const obtenerHorariosOcupados = async (req: Request, res: Response) => {
             return res.status(400).json({ error: 'Faltan parámetros' });
         }
 
-        // Busca todas las reservas para esa cancha y fecha
-        const fechaInicio = new Date(fecha as string);
-        const fechaFin = new Date(fecha as string);
-        fechaFin.setDate(fechaFin.getDate() + 1);
+        const { inicio: fechaInicio, fin: fechaFin } = getRangoUTCDeFechaISO(String(fecha));
 
         const reservas = await Reserva.find({
             canchaId,
-            fecha: { $gte: fechaInicio, $lt: fechaFin }
+            fecha: { $gte: fechaInicio, $lte: fechaFin }
         });
 
-        const horariosOcupados = reservas.map(r => r.horaInicio);
+        const horariosOcupados = reservas.map((r) => ({
+            horaInicio: r.horaInicio,
+            horaFin: r.horaFin,
+        }));
+
         res.status(200).json({ horariosOcupados });
 
     } catch (error) {
@@ -78,7 +110,14 @@ export const crearReserva = async (req: Request, res: Response) => {
             return res.status(400).json({ error: 'Faltan datos obligatorios' });
         }
 
+        if (!validarHora(horaInicio)) {
+            return res.status(400).json({ error: "Hora invalida. Formato esperado: HH:mm" });
+        }
+
         const creadoEn = new Date();
+        const duracionMinutos = getDuracionMinutosPorTipoCancha(canchaTipo);
+        const horaFin = sumarMinutosAHora(horaInicio, duracionMinutos);
+        const fechaNormalizada = fechaISOToUTCMediodia(fecha);
 
         const user = (req as any).user.id;
 
@@ -92,8 +131,10 @@ export const crearReserva = async (req: Request, res: Response) => {
             complejo,
             canchaId,
             canchaTipo,
-            fecha,
+            fecha: fechaNormalizada,
             horaInicio,
+            horaFin,
+            duracionMinutos,
             creadoEn
         });
 
@@ -101,7 +142,19 @@ export const crearReserva = async (req: Request, res: Response) => {
 
 
 
-        console.log(user, complejo, canchaId, canchaTipo, fecha, horaInicio, creadoEn);
+        console.log(
+            "Reserva creada:",
+            {
+                user,
+                complejo,
+                canchaId,
+                canchaTipo,
+                fecha,
+                horaInicio,
+                horaFin,
+                creadoEnAR: formatearFechaHoraArgentina(creadoEn),
+            }
+        );
         res.status(201).json({ message: 'Reserva creada exitosamente' });
 
 

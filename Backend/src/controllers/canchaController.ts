@@ -43,12 +43,12 @@ export const getCanchaById = async (req: Request, res: Response): Promise<void> 
 // Crear una nueva cancha
 export const createCancha = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { nombre, tipoCancha, precioHora, complejo, disponible } = req.body;
+    const { nombre, tipoCancha, precioTurno, complejo, disponible } = req.body;
 
     // Validación básica
-    if (!nombre || !tipoCancha || !precioHora || !complejo) {
+    if (!nombre || !tipoCancha || !precioTurno || !complejo) {
       res.status(400).json({
-        error: 'Faltan campos obligatorios: nombre, tipo de cancha, precio por hora, complejo'
+        error: 'Faltan campos obligatorios: nombre, tipo de cancha, precio por turno, complejo'
       });
       return;
     }
@@ -56,7 +56,7 @@ export const createCancha = async (req: Request, res: Response): Promise<void> =
     const nuevaCancha = new Cancha({
       nombre,
       tipoCancha,
-      precioHora,
+      precioTurno,
       complejo,
       disponible: disponible !== undefined ? disponible : true
     });
@@ -76,11 +76,11 @@ export const createCancha = async (req: Request, res: Response): Promise<void> =
 export const updateCancha = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const { nombre, tipoCancha, precioHora, complejo, disponible } = req.body;
+    const { nombre, tipoCancha, precioTurno, complejo, disponible } = req.body;
 
     const canchaActualizada = await Cancha.findByIdAndUpdate(
       id,
-      { nombre, tipoCancha, precioHora, complejo, disponible },
+      { nombre, tipoCancha, precioTurno, complejo, disponible },
       { new: true, runValidators: true }
     )
       .populate('tipoCancha')

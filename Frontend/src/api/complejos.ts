@@ -4,7 +4,7 @@ export interface Cancha {
   _id: string;
   nombre?: string;
   tipoCancha: string;
-  precioHora: number;
+  precioTurno: number;
   disponible: boolean;
 }
 
@@ -72,9 +72,15 @@ export async function fetchComplejo(id: string): Promise<Complejo> {
 export async function fetchDisponibilidad(
   complejoId: string,
   fecha: string,
-  hora: string
+  hora: string,
+  canchaTipo?: string | null
 ): Promise<string[]> {
-  const query = new URLSearchParams({ fecha, hora }).toString();
+  const queryParams = new URLSearchParams({ fecha, hora });
+  if (canchaTipo) {
+    queryParams.set("canchaTipo", canchaTipo);
+  }
+
+  const query = queryParams.toString();
   const response = await fetch(`${BASE}/complejos/${complejoId}/disponibilidad?${query}`, {
     headers: {
       ...getAuthHeaders(),

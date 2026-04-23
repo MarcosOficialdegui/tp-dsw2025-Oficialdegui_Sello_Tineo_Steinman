@@ -113,7 +113,7 @@ export default function PerfilComplejo() {
     canchasDisponibles,
     cargando: cargandoDisp,
     error: errorDisponibilidad,
-  } = useDisponibilidad(id, slot?.fecha ?? null, slot?.hora ?? null);
+  } = useDisponibilidad(id, slot?.fecha ?? null, slot?.hora ?? null, deporteSeleccionado);
 
   useEffect(() => {
     if (errorDisponibilidad) {

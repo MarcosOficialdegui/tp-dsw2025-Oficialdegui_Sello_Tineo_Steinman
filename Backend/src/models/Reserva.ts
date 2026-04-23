@@ -8,6 +8,8 @@ interface IReserva {
     canchaTipo: string; 
     fecha: Date; // Dia
     horaInicio: string; // Formato "HH:mm"
+    horaFin: string; // Formato "HH:mm"
+    duracionMinutos: number;
     creadoEn: Date;
 }
 
@@ -18,6 +20,8 @@ const reservaSchema = new mongoose.Schema<IReserva>({
     canchaTipo: {type: String, required: true},
     fecha: { type: Date, required: true },
     horaInicio: { type: String, required: true },
+    horaFin: { type: String, required: true },
+    duracionMinutos: { type: Number, required: true, min: 30 },
     creadoEn: { type: Date, default: Date.now }
 });
 

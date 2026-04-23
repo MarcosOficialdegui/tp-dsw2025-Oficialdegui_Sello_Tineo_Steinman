@@ -3,7 +3,7 @@ import mongoose, { Schema, Document } from "mongoose";
 interface ICancha {
   _id?: mongoose.Types.ObjectId;
   tipoCancha: string;
-  precioHora: number;
+  precioTurno: number;
   disponible: boolean;
 }
 
@@ -20,7 +20,7 @@ export interface IComplejo extends Document {
 
 const CanchaSchema = new Schema<ICancha>({
   tipoCancha: { type: String, required: true },
-  precioHora: { type: Number, required: true },
+  precioTurno: { type: Number, required: true },
   disponible: { type: Boolean, default: true },
 });
 

@@ -32,8 +32,8 @@ async function seed() {
         direccion: "Aca noma",
         ciudad: "Rosario",
         canchas: [
-          { tipoCancha: "futbol5", precioHora: 47000, disponible: true },
-          { tipoCancha: "padel", precioHora: 30000, disponible: true }
+          { tipoCancha: "futbol5", precioTurno: 47000, disponible: true },
+          { tipoCancha: "padel", precioTurno: 30000, disponible: true }
         ]
       },
       {
@@ -41,9 +41,9 @@ async function seed() {
         direccion: "en el medio de la villa",
         ciudad: "Buenos Aires",
         canchas: [
-          { tipoCancha: "futbol5", precioHora: 47000, disponible: true },
-          { tipoCancha: "futbol7", precioHora: 50000, disponible: false },
-          { tipoCancha: "padel", precioHora: 35000, disponible: true }
+          { tipoCancha: "futbol5", precioTurno: 47000, disponible: true },
+          { tipoCancha: "futbol7", precioTurno: 50000, disponible: false },
+          { tipoCancha: "padel", precioTurno: 35000, disponible: true }
         ]
       }
     ];
@@ -59,4 +59,5 @@ async function seed() {
 }
 
 seed(); 
+
 

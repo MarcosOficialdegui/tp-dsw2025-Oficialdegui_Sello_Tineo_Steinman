@@ -45,11 +45,19 @@ const PERIODO_ICONOS: Record<Periodo, IconType> = {
 
 function generarDias(cantidad = 14): DiaItem[] {
   const hoy = new Date();
+
+  const getIsoLocal = (d: Date) => {
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
   return Array.from({ length: cantidad }, (_, i) => {
     const d = new Date(hoy);
     d.setDate(hoy.getDate() + i);
     return {
-      iso: d.toISOString().split("T")[0],
+      iso: getIsoLocal(d),
       dia: d.getDate(),
       mes: d.toLocaleDateString("es-ES", { month: "short" }),
       semana: d.toLocaleDateString("es-ES", { weekday: "short" }),
@@ -58,18 +66,35 @@ function generarDias(cantidad = 14): DiaItem[] {
   });
 }
 
-function generarHorarios(apertura: string, cierre: string): string[] {
-  const [desde] = apertura.split(":").map(Number);
-  const [hasta] = cierre.split(":").map(Number);
+function horaToMinutos(hora: string): number {
+  const [hh, mm] = hora.split(":").map(Number);
+  return hh * 60 + mm;
+}
 
-  if (Number.isNaN(desde) || Number.isNaN(hasta) || hasta < desde) {
+function minutosToHora(total: number): string {
+  const hh = Math.floor(total / 60);
+  const mm = total % 60;
+  return `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
+}
+
+function getDuracionMinutos(deporteLabel?: string): number {
+  return deporteLabel && /padel/i.test(deporteLabel) ? 90 : 60;
+}
+
+function generarHorarios(apertura: string, cierre: string, duracionMinutos: number, pasoMinutos: number): string[] {
+  const desde = horaToMinutos(apertura);
+  const hasta = horaToMinutos(cierre);
+
+  if (Number.isNaN(desde) || Number.isNaN(hasta) || hasta < desde || duracionMinutos <= 0) {
     return [];
   }
 
-  return Array.from(
-    { length: hasta - desde + 1 },
-    (_, i) => `${String(desde + i).padStart(2, "0")}:00`
-  );
+  const slots: string[] = [];
+  for (let inicio = desde; inicio + duracionMinutos <= hasta; inicio += pasoMinutos) {
+    slots.push(minutosToHora(inicio));
+  }
+
+  return slots;
 }
 
 export default function SlotPicker({
@@ -86,7 +111,9 @@ export default function SlotPicker({
   const dias = useMemo(() => generarDias(14), []);
 
   const horariosPorPeriodo = useMemo(() => {
-    const todos = generarHorarios(horarioApertura, horarioCierre);
+    const duracionMinutos = getDuracionMinutos(deporteLabel);
+    const pasoMinutos = duracionMinutos === 90 ? 30 : 60;
+    const todos = generarHorarios(horarioApertura, horarioCierre, duracionMinutos, pasoMinutos);
     const result: Partial<Record<Periodo, string[]>> = {};
 
     (Object.entries(PERIODO_RANGOS) as Array<[Periodo, [number, number]]>).forEach(
@@ -103,7 +130,7 @@ export default function SlotPicker({
     );
 
     return result;
-  }, [horarioApertura, horarioCierre]);
+  }, [deporteLabel, horarioApertura, horarioCierre]);
 
   useEffect(() => {
     if (!fechaInicial) return;

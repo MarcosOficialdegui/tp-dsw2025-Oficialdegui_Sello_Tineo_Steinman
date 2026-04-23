@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Reserva from "../models/Reserva";
 import Complejo from "../models/Complejo";
+import { formatearFechaISOArgentina } from "../utils/reservaTime";
 
 export const getEstadisticasComplejo = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -20,7 +21,7 @@ export const getEstadisticasComplejo = async (req: Request, res: Response): Prom
     // ── Ganancias totales ──
     const gananciaTotal = todasLasReservas.reduce((acc, r) => {
       const cancha = complejo.canchas.find(c => c.tipoCancha === r.canchaTipo);
-      return acc + (cancha?.precioHora || 0);
+      return acc + (cancha?.precioTurno || 0);
     }, 0);
 
     // ── Reservas últimos 7 días ──
@@ -32,15 +33,15 @@ export const getEstadisticasComplejo = async (req: Request, res: Response): Prom
     for (let i = 6; i >= 0; i--) {
       const dia = new Date();
       dia.setDate(hoy.getDate() - i);
-      const diaStr = dia.toISOString().split("T")[0];
+      const diaStr = formatearFechaISOArgentina(dia);
 
       const reservasDelDia = todasLasReservas.filter(r => {
-        return new Date(r.fecha).toISOString().split("T")[0] === diaStr;
+        return formatearFechaISOArgentina(new Date(r.fecha)) === diaStr;
       });
 
       const gananciasDelDia = reservasDelDia.reduce((acc, r) => {
         const cancha = complejo.canchas.find(c => c.tipoCancha === r.canchaTipo);
-        return acc + (cancha?.precioHora || 0);
+        return acc + (cancha?.precioTurno || 0);
       }, 0);
 
       reservasPorDia.push({
@@ -74,7 +75,7 @@ export const getEstadisticasComplejo = async (req: Request, res: Response): Prom
     const reservasMesActual = todasLasReservas.filter(r => new Date(r.fecha) >= inicioMes);
     const gananciasMesActual = reservasMesActual.reduce((acc, r) => {
       const cancha = complejo.canchas.find(c => c.tipoCancha === r.canchaTipo);
-      return acc + (cancha?.precioHora || 0);
+      return acc + (cancha?.precioTurno || 0);
     }, 0);
 
     // ── Próximas reservas ──

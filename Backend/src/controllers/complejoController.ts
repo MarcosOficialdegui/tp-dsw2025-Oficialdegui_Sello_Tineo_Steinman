@@ -2,6 +2,13 @@ import { Request, Response } from "express";
 import Complejo, { SERVICIOS_DISPONIBLES } from "../models/Complejo";
 import Usuario from "../models/Usuario";
 import Reserva from "../models/Reserva";
+import {
+  getDuracionMinutosPorTipoCancha,
+  getRangoUTCDeFechaISO,
+  seSuperponenIntervalos,
+  sumarMinutosAHora,
+  validarHora,
+} from "../utils/reservaTime";
 
 export const getComplejos = async (req: Request, res: Response) => {
   try {
@@ -184,17 +191,19 @@ export const getReservasPorComplejo = async (req: Request, res: Response): Promi
     const { id } = req.params;
     const { fecha } = req.query;
 
+    if (!fecha) {
+      res.status(400).json({ error: "Falta el parámetro fecha" });
+      return;
+    }
+
     const complejo = await Complejo.findById(id);
     if (!complejo) {
       res.status(404).json({ error: 'Complejo no encontrado' });
       return;
     }
 
-    // Filtrar por rango del día completo para evitar problemas con horas
-    const fechaInicio = new Date(fecha as string);
-    fechaInicio.setHours(0, 0, 0, 0);
-    const fechaFin = new Date(fecha as string);
-    fechaFin.setHours(23, 59, 59, 999);
+    const fechaTexto = String(fecha ?? "");
+    const { inicio: fechaInicio, fin: fechaFin } = getRangoUTCDeFechaISO(fechaTexto);
 
     const reservas = await Reserva.find({
       complejo: id,
@@ -262,9 +271,15 @@ export const getDisponibilidad = async (req: Request, res: Response): Promise<vo
     const { id } = req.params;
     const fecha = String(req.query.fecha ?? "");
     const hora = String(req.query.hora ?? "");
+    const canchaTipo = String(req.query.canchaTipo ?? "");
 
     if (!fecha || !hora) {
       res.status(400).json({ error: "Faltan parámetros: fecha y hora" });
+      return;
+    }
+
+    if (!validarHora(hora)) {
+      res.status(400).json({ error: "Hora invalida. Formato esperado: HH:mm" });
       return;
     }
 
@@ -274,18 +289,25 @@ export const getDisponibilidad = async (req: Request, res: Response): Promise<vo
       return;
     }
 
-    const fechaInicio = new Date(fecha);
-    fechaInicio.setHours(0, 0, 0, 0);
-    const fechaFin = new Date(fecha);
-    fechaFin.setHours(23, 59, 59, 999);
+    const duracionSolicitada = canchaTipo
+      ? getDuracionMinutosPorTipoCancha(canchaTipo)
+      : 60;
+    const horaFinSolicitada = sumarMinutosAHora(hora, duracionSolicitada);
+    const { inicio: fechaInicio, fin: fechaFin } = getRangoUTCDeFechaISO(fecha);
 
     const reservas = await Reserva.find({
       complejo: id,
       fecha: { $gte: fechaInicio, $lte: fechaFin },
-      horaInicio: hora,
     }).exec();
 
-    const ocupadas = new Set(reservas.map((r) => r.canchaId));
+    const ocupadas = new Set(
+      reservas
+        .filter((reserva) => {
+          return seSuperponenIntervalos(hora, horaFinSolicitada, reserva.horaInicio, reserva.horaFin);
+        })
+        .map((r) => r.canchaId)
+    );
+
     const canchasDisponibles = complejo.canchas.reduce<string[]>((acc, cancha) => {
       if (cancha.disponible === false || !cancha._id) {
         return acc;

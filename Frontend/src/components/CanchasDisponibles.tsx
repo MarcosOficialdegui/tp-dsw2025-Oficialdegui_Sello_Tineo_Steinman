@@ -86,6 +86,10 @@ function toHoraLabel(hora: number): string {
   return `${String(hora).padStart(2, "0")}:00`;
 }
 
+function getPrecioTurno(cancha: Cancha): number {
+  return cancha.precioTurno;
+}
+
 function Skeleton() {
   return (
     <div className={styles.skeletonGrid}>
@@ -297,8 +301,8 @@ export default function CanchasDisponibles({
 
                     <div className={styles.cardFooter}>
                       <div>
-                        <p className={styles.precioLabel}>por hora</p>
-                        <p className={styles.precio}>${cancha.precioHora.toLocaleString("es-AR")}</p>
+                        <p className={styles.precioLabel}>por turno</p>
+                        <p className={styles.precio}>${getPrecioTurno(cancha).toLocaleString("es-AR")}</p>
                       </div>
 
                       {disponible && (

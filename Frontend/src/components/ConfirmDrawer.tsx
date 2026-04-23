@@ -39,6 +39,25 @@ function formatearFechaLarga(iso: string) {
   });
 }
 
+function horaToMinutos(hora: string): number {
+  const [hh, mm] = hora.split(":").map(Number);
+  return hh * 60 + mm;
+}
+
+function minutosToHora(total: number): string {
+  const hh = Math.floor(total / 60);
+  const mm = total % 60;
+  return `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
+}
+
+function getDuracionMinutos(tipoCancha: string): number {
+  return /padel/i.test(tipoCancha) ? 90 : 60;
+}
+
+function getPrecioTurno(cancha: Cancha): number {
+  return cancha.precioTurno;
+}
+
 // ─── componente ──────────────────────────────────────────────────────────────
 
 export default function ConfirmDrawer({
@@ -106,6 +125,10 @@ export default function ConfirmDrawer({
 
   if (!open || !cancha || !slot) return null;
 
+  const duracionMinutos = getDuracionMinutos(cancha.tipoCancha);
+  const horaFin = minutosToHora(horaToMinutos(slot.hora) + duracionMinutos);
+  const precioTurno = getPrecioTurno(cancha);
+
   return (
     <>
       {/* Overlay */}
@@ -157,7 +180,7 @@ export default function ConfirmDrawer({
               <MdAccessTime size={18} className={styles.resumenIcon} />
               <div>
                 <p className={styles.resumenLabel}>Hora</p>
-                <p className={styles.resumenValor}>{slot.hora}hs — {String(parseInt(slot.hora) + 1).padStart(2, "0")}:00hs</p>
+                <p className={styles.resumenValor}>{slot.hora}hs — {horaFin}hs</p>
               </div>
             </div>
 
@@ -178,7 +201,7 @@ export default function ConfirmDrawer({
           <div className={styles.precioRow}>
             <span className={styles.precioLabel}>Total estimado</span>
             <span className={styles.precioValor}>
-              ${cancha.precioHora.toLocaleString("es-AR")}
+              ${precioTurno.toLocaleString("es-AR")}
             </span>
           </div>
 

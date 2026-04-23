@@ -32,7 +32,7 @@ export default function ComplejoForm() {
   const [previsualizacion, setPrevisualizacion] = useState<string>(""); // Data URL para previsualización
 
   const [canchas, setCanchas] = useState([
-    { tipoCancha: "futbol5", precioHora: "", disponible: true },
+    { tipoCancha: "futbol5", precioTurno: "", disponible: true },
   ]);
 
   useEffect(() => {
@@ -161,7 +161,7 @@ export default function ComplejoForm() {
     setPrevisualizacion("");
   };
   const agregarCancha = () => {
-    setCanchas([...canchas, { tipoCancha: "futbol5", precioHora: "", disponible: true }]);
+    setCanchas([...canchas, { tipoCancha: "futbol5", precioTurno: "", disponible: true }]);
   };
 
   const eliminarCancha = (index: number) => {
@@ -225,7 +225,7 @@ export default function ComplejoForm() {
     formDataToSend.append('horarioCierre', formData.horarioCierre);
     formDataToSend.append('canchas', JSON.stringify(canchas.map(c => ({
       tipoCancha: c.tipoCancha,
-      precioHora: Number(c.precioHora),
+      precioTurno: Number(c.precioTurno),
       disponible: c.disponible,
     }))));
 
@@ -250,7 +250,7 @@ export default function ComplejoForm() {
         mostrarExito("Complejo creado con éxito");
         setFormData({ nombre: "", direccion: "", ciudad: "", ciudadId: "", horarioApertura: "08:00", horarioCierre: "22:00" });
         setServiciosSeleccionados([]);
-        setCanchas([{ tipoCancha: "futbol5", precioHora: "", disponible: true }]);
+        setCanchas([{ tipoCancha: "futbol5", precioTurno: "", disponible: true }]);
         setImagenSeleccionada(null);
         setPrevisualizacion("");
         window.location.reload();
@@ -420,9 +420,9 @@ export default function ComplejoForm() {
               <input
                 className={styles.inputSmall}
                 type="number"
-                placeholder="Precio por hora"
-                value={cancha.precioHora}
-                onChange={e => actualizarCancha(index, "precioHora", e.target.value)}
+                placeholder="Precio por turno"
+                value={cancha.precioTurno}
+                onChange={e => actualizarCancha(index, "precioTurno", e.target.value)}
                 required
               />
               <label className={styles.disponibleCheck}>

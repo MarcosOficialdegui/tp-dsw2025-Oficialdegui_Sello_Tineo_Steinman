@@ -10,7 +10,8 @@ interface UseDisponibilidadState {
 export function useDisponibilidad(
   complejoId?: string | null,
   fecha?: string | null,
-  hora?: string | null
+  hora?: string | null,
+  canchaTipo?: string | null
 ): UseDisponibilidadState {
   const [canchasDisponibles, setCanchasDisponibles] = useState<string[]>([]);
   const [cargando, setCargando] = useState<boolean>(false);
@@ -31,7 +32,7 @@ export function useDisponibilidad(
       setError(null);
 
       try {
-        const data = await fetchDisponibilidad(complejoId, fecha, hora);
+        const data = await fetchDisponibilidad(complejoId, fecha, hora, canchaTipo);
         if (!cancelled) {
           setCanchasDisponibles(data);
         }
@@ -53,7 +54,7 @@ export function useDisponibilidad(
     return () => {
       cancelled = true;
     };
-  }, [complejoId, fecha, hora]);
+  }, [complejoId, fecha, hora, canchaTipo]);
 
   return { canchasDisponibles, cargando, error };
 }

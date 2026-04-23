@@ -15,12 +15,12 @@ const complejosEjemplo = [
     canchas: [
       {
         tipoCancha: "Futbol 5",
-        precioHora: 25000,
+        precioTurno: 25000,
         disponible: true
       },
       {
         tipoCancha: "Futbol 7",
-        precioHora: 30000,
+        precioTurno: 30000,
         disponible: true
       }
     ]
@@ -33,12 +33,12 @@ const complejosEjemplo = [
     canchas: [
       {
         tipoCancha: "Futbol 5",
-        precioHora: 22000,
+        precioTurno: 22000,
         disponible: true
       },
       {
         tipoCancha: "Padel",
-        precioHora: 18000,
+        precioTurno: 18000,
         disponible: true
       }
     ]
@@ -51,7 +51,7 @@ const complejosEjemplo = [
     canchas: [
       {
         tipoCancha: "Futbol 5",
-        precioHora: 20000,
+        precioTurno: 20000,
         disponible: true
       }
     ]
@@ -64,17 +64,17 @@ const complejosEjemplo = [
     canchas: [
       {
         tipoCancha: "Futbol 5",
-        precioHora: 35000,
+        precioTurno: 35000,
         disponible: true
       },
       {
         tipoCancha: "Futbol 7",
-        precioHora: 45000,
+        precioTurno: 45000,
         disponible: true
       },
       {
         tipoCancha: "Padel",
-        precioHora: 28000,
+        precioTurno: 28000,
         disponible: true
       }
     ]
@@ -87,12 +87,12 @@ const complejosEjemplo = [
     canchas: [
       {
         tipoCancha: "Futbol 5",
-        precioHora: 18000,
+        precioTurno: 18000,
         disponible: true
       },
       {
         tipoCancha: "Padel",
-        precioHora: 15000,
+        precioTurno: 15000,
         disponible: true
       }
     ]
@@ -105,7 +105,7 @@ const complejosEjemplo = [
     canchas: [
       {
         tipoCancha: "Futbol 7",
-        precioHora: 26000,
+        precioTurno: 26000,
         disponible: true
       }
     ]
@@ -118,22 +118,22 @@ const complejosEjemplo = [
     canchas: [
       {
         tipoCancha: "Futbol 5",
-        precioHora: 24000,
+        precioTurno: 24000,
         disponible: true
       },
       {
         tipoCancha: "Futbol 7",
-        precioHora: 32000,
+        precioTurno: 32000,
         disponible: true
       },
       {
         tipoCancha: "Padel",
-        precioHora: 20000,
+        precioTurno: 20000,
         disponible: true
       },
       {
         tipoCancha: "Padel",
-        precioHora: 20000,
+        precioTurno: 20000,
         disponible: true
       }
     ]
@@ -146,17 +146,17 @@ const complejosEjemplo = [
     canchas: [
       {
         tipoCancha: "Padel",
-        precioHora: 22000,
+        precioTurno: 22000,
         disponible: true
       },
       {
         tipoCancha: "Padel",
-        precioHora: 22000,
+        precioTurno: 22000,
         disponible: true
       },
       {
         tipoCancha: "Padel",
-        precioHora: 25000,
+        precioTurno: 25000,
         disponible: true
       }
     ]
@@ -210,3 +210,4 @@ async function seedComplejos() {
 
 // Ejecutar el script
 seedComplejos();
+

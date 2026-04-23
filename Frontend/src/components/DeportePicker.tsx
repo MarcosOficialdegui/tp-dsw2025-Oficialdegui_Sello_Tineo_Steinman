@@ -111,8 +111,8 @@ export default function DeportePicker({ canchas, onDeporteSeleccionado }: Deport
           const canchasTipo = canchasPorTipo.get(tipoCancha) ?? [];
           const disponibles = canchasTipo.filter((cancha) => cancha.disponible).length;
           const precioMinimo = canchasTipo.reduce<number | null>((min, cancha) => {
-            if (min === null) return cancha.precioHora;
-            return cancha.precioHora < min ? cancha.precioHora : min;
+            if (min === null) return cancha.precioTurno;
+            return cancha.precioTurno < min ? cancha.precioTurno : min;
           }, null);
 
           const disabled = disponibles === 0;
@@ -153,7 +153,7 @@ export default function DeportePicker({ canchas, onDeporteSeleccionado }: Deport
               {jugadores && <p className={styles.players}>{jugadores}</p>}
 
               {precioMinimo !== null && (
-                <p className={styles.price}>{`$${precioMinimo.toLocaleString("es-AR")} / hora`}</p>
+                <p className={styles.price}>{`$${precioMinimo.toLocaleString("es-AR")} / turno`}</p>
               )}
             </div>
           );

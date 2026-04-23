@@ -5,6 +5,7 @@ interface Reserva {
   _id: string;
   fecha: string;
   horaInicio: string;
+  horaFin?: string;
   canchaTipo: string;
   canchaId: string;
   user: {
@@ -19,7 +20,7 @@ interface Cancha {
   _id: string;
   nombre?: string;
   tipoCancha: string;
-  precioHora: number;
+  precioTurno: number;
   disponible: boolean;
 }
 
@@ -28,16 +29,36 @@ interface Props {
 }
 
 const HORARIOS = [
-  "08:00", "09:00", "0:00", "11:00", "12:00", "13:00", "14:00",
+  "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00",
   "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00"
 ];
+
+function getIsoLocal(date: Date): string {
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+function horaToMinutos(hora: string): number {
+  const [hh, mm] = hora.split(":").map(Number);
+  return hh * 60 + mm;
+}
+
+function seSolapan(inicioA: string, finA: string, inicioB: string, finB: string): boolean {
+  const aInicio = horaToMinutos(inicioA);
+  const aFin = horaToMinutos(finA);
+  const bInicio = horaToMinutos(inicioB);
+  const bFin = horaToMinutos(finB);
+  return aInicio < bFin && bInicio < aFin;
+}
 
 export default function ReservasGrid({ complejoId }: Props) {
   const [reservas, setReservas] = useState<Reserva[]>([]);
   const [canchas, setCanchas] = useState<Cancha[]>([]);
   const [cargando, setCargando] = useState(true);
   const [fechaSeleccionada, setFechaSeleccionada] = useState(
-    new Date().toISOString().split('T')[0]
+    getIsoLocal(new Date())
   );
 
   // Cargar canchas del complejo
@@ -96,13 +117,18 @@ export default function ReservasGrid({ complejoId }: Props) {
 
   // Buscar reserva para una cancha + horario específico
   const getReserva = (canchaId: string, hora: string): Reserva | undefined => {
-    return reservas.find(r => r.canchaId === canchaId && r.horaInicio === hora);
+    const horaFinCelda = `${String(Number(hora.split(":")[0]) + 1).padStart(2, '0')}:00`;
+    return reservas.find((r) => {
+      if (r.canchaId !== canchaId) return false;
+      const horaFinReserva = r.horaFin ?? `${String(Number(r.horaInicio.split(":")[0]) + 1).padStart(2, '0')}:00`;
+      return seSolapan(hora, horaFinCelda, r.horaInicio, horaFinReserva);
+    });
   };
 
   const totalReservas = reservas.length;
   const totalGanancias = reservas.reduce((acc, r) => {
     const cancha = canchas.find(c => c._id === r.canchaId);
-    return acc + (cancha?.precioHora || 0);
+    return acc + (cancha?.precioTurno || 0);
   }, 0);
 
   const dias = obtenerProximosDias();
@@ -113,7 +139,7 @@ export default function ReservasGrid({ complejoId }: Props) {
       {/* Selector de días */}
       <div className={styles.diasRow}>
         {dias.map((fecha, i) => {
-          const dateStr = fecha.toISOString().split('T')[0];
+          const dateStr = getIsoLocal(fecha);
           const esHoy = i === 0;
           const seleccionada = dateStr === fechaSeleccionada;
           return (
@@ -186,7 +212,7 @@ export default function ReservasGrid({ complejoId }: Props) {
                       <span className={styles.canchaNombre}>{cancha.nombre}</span>
                     )}
                     <span className={styles.canchaPrecio}>
-                      ${cancha.precioHora.toLocaleString('es-AR')}/h
+                      ${cancha.precioTurno.toLocaleString('es-AR')}/turno
                     </span>
                   </td>
 

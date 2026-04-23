@@ -4,6 +4,8 @@
   "main": "src/index.ts",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "clear:reservas": "ts-node src/scripts/clearReservas.ts",
+    "migrate:legacy": "ts-node src/scripts/migrateLegacyData.ts",
     "seed:complejos": "ts-node src/scripts/seedComplejos.ts",
     "seed:ciudades": "ts-node src/scripts/seedCiudades.ts",
     "seed:all": "npm run seed:ciudades && npm run seed:complejos"

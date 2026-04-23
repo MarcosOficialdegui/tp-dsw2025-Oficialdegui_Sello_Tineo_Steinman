@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 interface ICancha extends mongoose.Document {
   nombre: string;
   tipoCancha: 'Futbol 5' | 'Futbol 7' | 'Padel';
-  precioHora: number;
+  precioTurno: number;
   complejo: mongoose.Schema.Types.ObjectId;
   disponible: boolean;
 }
@@ -21,7 +21,7 @@ const canchaSchema = new mongoose.Schema({
     enum: ['Futbol 5', 'Futbol 7', 'Padel'], 
     trim: true
   },
-  precioHora: {
+  precioTurno: {
     type: Number,
     required: true,
     min: 0
